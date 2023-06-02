@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mjc-winforms", "mjc-winforms\mjc-winforms.csproj", "{5D3FF296-A570-4629-87FC-78E9A8F3EB8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D3FF296-A570-4629-87FC-78E9A8F3EB8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3FF296-A570-4629-87FC-78E9A8F3EB8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3FF296-A570-4629-87FC-78E9A8F3EB8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3FF296-A570-4629-87FC-78E9A8F3EB8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B61660C4-6EE5-41D6-8483-BFC36E7AC2DB}
+	EndGlobalSection
+EndGlobal
