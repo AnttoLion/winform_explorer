@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C30C0798-FF97-4021-8842-73B71A95F10B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>mjc_dev</RootNamespace>
+    <AssemblyName>mjc-dev</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="common\BasicLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="common\BasicLayout.Designer.cs">
+      <DependentUpon>BasicLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="common\NavigationHistory.cs" />
+    <Compile Include="common\components\NavigationButton.cs" />
+    <Compile Include="common\components\HotkeyButton.cs" />
+    <Compile Include="common\GlobalLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="common\GlobalLayout.Designer.cs">
+      <DependentUpon>GlobalLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\DepleteInventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\DepleteInventory.Designer.cs">
+      <DependentUpon>DepleteInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\CategoryMargin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\CategoryMargin.Designer.cs">
+      <DependentUpon>CategoryMargin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\CustomerList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\CustomerList.Designer.cs">
+      <DependentUpon>CustomerList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\CreditCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\CreditCodes.Designer.cs">
+      <DependentUpon>CreditCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\CustomerProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\CustomerProfile.Designer.cs">
+      <DependentUpon>CustomerProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\Reconcilliation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\Reconcilliation.Designer.cs">
+      <DependentUpon>Reconcilliation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\ZoneChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\ZoneChart.Designer.cs">
+      <DependentUpon>ZoneChart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\SalesTaxCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\SalesTaxCodes.Designer.cs">
+      <DependentUpon>SalesTaxCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\SalesCostCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\SalesCostCodes.Designer.cs">
+      <DependentUpon>SalesCostCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\PriceTiers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\PriceTiers.Designer.cs">
+      <DependentUpon>PriceTiers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\Invocies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\Invocies.Designer.cs">
+      <DependentUpon>Invocies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\ReceivePayment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\ReceivePayment.Designer.cs">
+      <DependentUpon>ReceivePayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\ModuleInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\ModuleInformation.Designer.cs">
+      <DependentUpon>ModuleInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\Recorder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\Recorder.Designer.cs">
+      <DependentUpon>Recorder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\VendorList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\VendorList.Designer.cs">
+      <DependentUpon>VendorList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\PriceChange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\PriceChange.Designer.cs">
+      <DependentUpon>PriceChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\ReceiveInventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\ReceiveInventory.Designer.cs">
+      <DependentUpon>ReceiveInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\SKUList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\SKUList.Designer.cs">
+      <DependentUpon>SKUList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\SystemSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\SystemSettings.Designer.cs">
+      <DependentUpon>SystemSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\Users.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\Users.Designer.cs">
+      <DependentUpon>Users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\ReceivableDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\ReceivableDashboard.Designer.cs">
+      <DependentUpon>ReceivableDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\InventoryDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\InventoryDashboard.Designer.cs">
+      <DependentUpon>InventoryDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestForm.Designer.cs">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\OrderEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\OrderEntry.Designer.cs">
+      <DependentUpon>OrderEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="common\BasicLayout.resx">
+      <DependentUpon>BasicLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\Invocies.resx">
+      <DependentUpon>Invocies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\ReceivableDashboard.resx">
+      <DependentUpon>ReceivableDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestForm.resx">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\Dashboard.resx">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgs\hotkeyview.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
