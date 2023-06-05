@@ -22,7 +22,7 @@ namespace mjc_dev.common
         protected Color _textMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 
         // protected header & footer
-        protected Panel _header; // header panel 
+        protected Panel _header; // header panel
         protected Panel _footer; // footer panel
 
         // windows size
@@ -58,8 +58,8 @@ namespace mjc_dev.common
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(77)))), ((int)(((byte)(118)))));
             this.KeyPreview = true;
             this.ShowIcon = false;
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
+            //this.MinimizeBox = false;
+            //this.MaximizeBox = false;
             this._initBasicSize();
             this.Size = new System.Drawing.Size(_winHeight, _winWidth);
             this.WindowState = FormWindowState.Maximized;

@@ -25,11 +25,13 @@ namespace mjc_dev.common
             InitializeComponent();
             _initBasicSize();
         }
+
         public GlobalLayout(string title, string formDescription) : base(title, formDescription)
         {
             InitializeComponent();
             _initBasicSize();
         }
+
         protected void _initializeHKButtons(HotkeyButton[] hkButtons)
         {
             int startX = 20;
@@ -161,11 +163,13 @@ namespace mjc_dev.common
             }
             foreach (HotkeyButton button in hkButtons)
             {
-                if (e.KeyCode == button.GetKeys() && e.KeyCode != Keys.Enter && e.KeyCode != Keys.Escape)
+                if (e.KeyCode == button.GetKeys() && e.KeyCode != Keys.Escape)
                 {
                     button.GetButton().PerformClick();
                 }
             }
         }
+
+        
     }
 }

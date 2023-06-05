@@ -52,6 +52,15 @@
     <Compile Include="common\BasicLayout.Designer.cs">
       <DependentUpon>BasicLayout.cs</DependentUpon>
     </Compile>
+    <Compile Include="common\components\FormComponents.cs" />
+    <Compile Include="common\components\GridViewOrigin.cs" />
+    <Compile Include="common\BasicModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="common\BasicModal.Designer.cs">
+      <DependentUpon>BasicModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="common\components\ModalButton.cs" />
     <Compile Include="common\NavigationHistory.cs" />
     <Compile Include="common\components\NavigationButton.cs" />
     <Compile Include="common\components\HotkeyButton.cs" />
@@ -60,6 +69,19 @@
     </Compile>
     <Compile Include="common\GlobalLayout.Designer.cs">
       <DependentUpon>GlobalLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="config\DbConnection.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\DepleteInventory.cs">
       <SubType>Form</SubType>
@@ -90,6 +112,18 @@
     </Compile>
     <Compile Include="forms\CustomerProfile.Designer.cs">
       <DependentUpon>CustomerProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\modals\CategoryDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\modals\CategoryDetail.Designer.cs">
+      <DependentUpon>CategoryDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\modals\PriceTierDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\modals\PriceTierDetail.Designer.cs">
+      <DependentUpon>PriceTierDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\Reconcilliation.cs">
       <SubType>Form</SubType>
@@ -205,10 +239,14 @@
     <Compile Include="forms\OrderEntry.Designer.cs">
       <DependentUpon>OrderEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="model\model.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="common\BasicLayout.resx">
       <DependentUpon>BasicLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\Invocies.resx">
       <DependentUpon>Invocies.cs</DependentUpon>
@@ -245,5 +283,6 @@
   <ItemGroup>
     <None Include="imgs\hotkeyview.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

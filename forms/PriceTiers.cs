@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using mjc_dev.model;
+using mjc_dev.forms.modals;
 
 namespace mjc_dev.forms
 {
@@ -20,6 +22,10 @@ namespace mjc_dev.forms
         private HotkeyButton hkEdits = new HotkeyButton("Enter", "Edits", Keys.Enter);
         private HotkeyButton hkPreviousScreen = new HotkeyButton("Esc", "Previous Screen", Keys.Escape);
 
+        private GridViewOrigin priceTireGrid = new GridViewOrigin();
+        private DataGridView PTGridRefer;
+        private DashboardModel model = new DashboardModel();
+
         public PriceTiers() : base("Price Tiers", "Tiers of pricing to be assigned to a customer to calculate what prices they're charged")
         {
             InitializeComponent();
@@ -27,14 +33,96 @@ namespace mjc_dev.forms
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);
-            _addComingSoon();
+            AddHotKeyEvents();
 
-            foreach (HotkeyButton button in hkButtons)
+            InitPriceTierGrid();
+        }
+
+        private void AddHotKeyEvents()
+        {
+            hkAdds.GetButton().Click += (sender, e) =>
             {
-                if (button != hkPreviousScreen)
-                    button.GetButton().Click += new EventHandler(_hotkeyTest);
+                PriceTierDetail detailModal = new PriceTierDetail();
+                if (detailModal.ShowDialog() == DialogResult.OK)
+                {
+                    LoadPriceTierList();
+                }
+            };
+            hkDeletes.GetButton().Click += (sender, e) =>
+            {
+                int selectedPriceTierId = 0;
+                if (PTGridRefer.SelectedRows.Count > 0)
+                {
+                    foreach (DataGridViewRow row in PTGridRefer.SelectedRows)
+                    {
+                        selectedPriceTierId = (int)row.Cells[0].Value;
+                    }
+                }
+                bool refreshData = model.DeletePriceTier(selectedPriceTierId);
+                if (refreshData)
+                {
+                    LoadPriceTierList();
+                }
+            };
+            hkEdits.GetButton().Click += (sender, e) =>
+            {
+                updatePriceTier();
+            };
+        }
+
+        private void InitPriceTierGrid()
+        {
+            PTGridRefer = priceTireGrid.GetGrid();
+            PTGridRefer.Location = new Point(0, 95);
+            PTGridRefer.Width = this.Width;
+            PTGridRefer.Height = this.Height - 295;
+            this.Controls.Add(PTGridRefer);
+            this.PTGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.pricetierGridView_CellDoubleClick);
+
+            LoadPriceTierList();
+        }
+
+        private void LoadPriceTierList()
+        {
+            string filter = "";
+            var refreshData = model.LoadPriceTierData(filter);
+            if (refreshData)
+            {
+                PTGridRefer.DataSource = model.PriceTierDataList;
+                PTGridRefer.Columns[0].HeaderText = "Price Tier #";
+                PTGridRefer.Columns[0].Width = 300;
+                PTGridRefer.Columns[1].HeaderText = "Price Tier";
+                PTGridRefer.Columns[1].Width = 300;
+                PTGridRefer.Columns[2].HeaderText = "Profit Margin";
+                PTGridRefer.Columns[2].Width = 600;
+                PTGridRefer.Columns[3].Visible = false;
             }
-            hkPreviousScreen.GetButton().Click += new EventHandler(_navigateToPrev);
+        }
+
+        private void updatePriceTier()
+        {
+            PriceTierDetail detailModal = new PriceTierDetail();
+
+            int rowIndex = PTGridRefer.CurrentCell.RowIndex;
+            DataGridViewRow row = PTGridRefer.Rows[rowIndex];
+
+            int pricetierId = (int)row.Cells[0].Value;
+            string name = row.Cells[1].Value.ToString();
+
+            double profitmargin = Convert.ToDouble(row.Cells[2].Value.ToString());
+            string pricetiercode = row.Cells[3].Value.ToString();
+
+            detailModal.setDetails(name, profitmargin, pricetiercode, pricetierId);
+
+            if (detailModal.ShowDialog() == DialogResult.OK)
+            {
+                LoadPriceTierList();
+            }
+        }
+
+        private void pricetierGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            updatePriceTier();
         }
     }
 }
