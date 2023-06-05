@@ -22,6 +22,7 @@ namespace mjc_dev.forms
         public Reconcilliation() : base("Zone Chart", "Manage Zones to be used by the system")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[3] { hkClosesReport, hkValidateSale, hkAddPayment };
             _initializeHKButtons(hkButtons);

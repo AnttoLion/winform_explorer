@@ -21,6 +21,7 @@ namespace mjc_dev.forms
         public DepleteInventory() : base("Deplete Inventory", "Full out to deplete inventory")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkReceiveInv, hkCancel };
             _initializeHKButtons(hkButtons);

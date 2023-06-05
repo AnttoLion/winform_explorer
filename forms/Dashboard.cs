@@ -27,6 +27,7 @@ namespace mjc_dev.forms
         public Dashboard() : base("Dashboard", "Dashboard view")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkCloseProgramButton, hkOpenSelection };
             _initializeHKButtons(hkButtons);

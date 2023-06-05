@@ -20,6 +20,7 @@ namespace mjc_dev.forms
         public SystemSettings() : base("System Settings", "Manage system settings")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[1] { hkPreviousScreen };
             _initializeHKButtons(hkButtons);

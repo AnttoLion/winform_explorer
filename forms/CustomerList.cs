@@ -30,6 +30,7 @@ namespace mjc_dev.forms
         public CustomerList() : base("Customer List", "Manage customers in the system")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[11] { hkAdds, hkDeletes, hkSelects, hkCustSummary, Invocies, RecurringPayment, HistoryInv, OrderEntry, PaymentHistory, ReceivePayment, ArchivedCustomers };
             _initializeHKButtons(hkButtons);

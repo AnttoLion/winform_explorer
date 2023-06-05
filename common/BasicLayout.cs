@@ -25,6 +25,10 @@ namespace mjc_dev.common
         protected Panel _header; // header panel 
         protected Panel _footer; // footer panel
 
+        // windows size
+        private int _winHeight = 1920;
+        private int _winWidth = 1080;
+
         // basic components
         private Label _dateView;
         private Label _formTitle;
@@ -36,19 +40,29 @@ namespace mjc_dev.common
         public BasicLayout()
         {
             InitializeComponent();
+            this._initLayout();
+            this._initHeader("Form title");
+            this._initFooter("Form Description");
         }
         public BasicLayout(string title, string formDescription) : base()
         {
             this._initLayout();
             this._initHeader(title);
             this._initFooter(formDescription);
-            this.WindowState = FormWindowState.Maximized;
+        }
+        protected void _initBasicSize() { 
+            this.Size = new System.Drawing.Size(_winHeight, _winWidth);
         }
         private void _initLayout()
         {
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(77)))), ((int)(((byte)(118)))));
             this.KeyPreview = true;
             this.ShowIcon = false;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this._initBasicSize();
+            this.Size = new System.Drawing.Size(_winHeight, _winWidth);
+            this.WindowState = FormWindowState.Maximized;
         }
         private void _initHeader(string title)
         {
@@ -128,5 +142,6 @@ namespace mjc_dev.common
             this._formDescription.Location = new System.Drawing.Point((this.Width - this._formDescription.Width) / 2, 10);
             this._footer.Controls.Add(this._formDescription);
         }
+
     }
 }

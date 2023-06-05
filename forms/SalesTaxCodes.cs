@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public SalesTaxCodes() : base("Sales Tax Codes", "Manage sales tax codes used by the system")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);

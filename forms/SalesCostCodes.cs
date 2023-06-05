@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public SalesCostCodes() : base("Sales/Cost Codes", "Sales/cost codes on record")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);

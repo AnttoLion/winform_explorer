@@ -21,6 +21,7 @@ namespace mjc_dev.forms
         public PriceChange() : base("Price Change", "Change prices")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkReceiveInv, hkCancel };
             _initializeHKButtons(hkButtons);

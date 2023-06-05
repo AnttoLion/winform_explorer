@@ -22,6 +22,7 @@ namespace mjc_dev.forms
         public ReceivePayment() : base("Recieve Payment", "Fill out to receive payment")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[3] { hkReceivePayment, hkCancel, hkSearchCustomers };
             _initializeHKButtons(hkButtons);

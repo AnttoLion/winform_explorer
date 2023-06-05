@@ -29,6 +29,7 @@ namespace mjc_dev.forms
         public InventoryDashboard() : base("Inventory Dashboard", "Manage inventory")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkPreviousScreen, hkOpenSelection };
             _initializeHKButtons(hkButtons);

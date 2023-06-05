@@ -28,6 +28,7 @@ namespace mjc_dev.forms
         public SKUList() : base("SKU List", "Select a held order to open")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[9] { hkAdds, hkDeletes, hkSelects, hkCrossRefLookup, hkView, hkAdjustQty, hkSKUHistory, hkProfileHistory, hkArchivedSKUs };
             _initializeHKButtons(hkButtons);

@@ -21,6 +21,7 @@ namespace mjc_dev.forms
         public ReceiveInventory() : base("Recieve Inventory", "Full out to receive inventory")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkReceiveInv, hkCancel };
             _initializeHKButtons(hkButtons);

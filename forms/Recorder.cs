@@ -21,6 +21,7 @@ namespace mjc_dev.forms
         public Recorder() : base("SKU List", "SKU that are below critical quantity and need replenished")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkClosesReport, hkPrint };
             _initializeHKButtons(hkButtons);

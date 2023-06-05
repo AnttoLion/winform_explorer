@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public CategoryMargin() : base("Category Margins", "Manage category margins used to calcuate prices")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkSelects, hkSetsPrices };
             _initializeHKButtons(hkButtons);

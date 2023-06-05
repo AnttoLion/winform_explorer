@@ -31,6 +31,7 @@ namespace mjc_dev.forms
         public ReceivableDashboard() : base("Receivables Dashboard", "Manage receivables")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkPreviousScreen, hkOpenSelection };
             _initializeHKButtons(hkButtons);

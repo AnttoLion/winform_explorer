@@ -24,6 +24,7 @@ namespace mjc_dev.forms
         public VendorList() : base("Vendor List", "List of vendors")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[5] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen, hkArchivedVendors };
             _initializeHKButtons(hkButtons);

@@ -27,6 +27,7 @@ namespace mjc_dev.forms
         public OrderEntry() : base("Oder Entry - Select a Customer", "Select a customer to start an order for")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[8] { hkAdds, hkSelect, hkSwitchColumn, hkOpenCustomer, hkCheckStok, hkHeldOrders, hkProfiler, hkHeldOrdersForCustomer };
             _initializeHKButtons(hkButtons);

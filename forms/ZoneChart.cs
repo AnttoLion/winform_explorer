@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public ZoneChart() : base("Zone Chart", "Manage Zones to be used by the system")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);

@@ -21,6 +21,7 @@ namespace mjc_dev.forms
         public CustomerProfile() : base("Customer Profiler", "Profile view of customers and their history of purchases")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[2] { hkPreviousScreen, hkCustomerJump };
             _initializeHKButtons(hkButtons);

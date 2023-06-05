@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public PriceTiers() : base("Price Tiers", "Tiers of pricing to be assigned to a customer to calculate what prices they're charged")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);

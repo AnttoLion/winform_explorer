@@ -23,6 +23,7 @@ namespace mjc_dev.forms
         public Users() : base("Users", "Manage users on the system")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkEdits, hkPreviousScreen };
             _initializeHKButtons(hkButtons);

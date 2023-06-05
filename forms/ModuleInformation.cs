@@ -20,6 +20,7 @@ namespace mjc_dev.forms
         public ModuleInformation() : base("Vendor List", "List of vendors")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[1] { hkPreviousScreen };
             _initializeHKButtons(hkButtons);

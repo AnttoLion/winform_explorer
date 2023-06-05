@@ -28,6 +28,7 @@ namespace mjc_dev.forms
         public Invocies() : base("Invoice Lookup", "Displays invoices of a customer")
         {
             InitializeComponent();
+            _initBasicSize();
 
             HotkeyButton[] hkButtons = new HotkeyButton[9] { hkAdds, hkDeletes, hkEdits, hkInvocieDetails, hkCustomers, hkRecurringPymt, hkInvocies, hkOrderEntry, hkPymtHistory };
             _initializeHKButtons(hkButtons);

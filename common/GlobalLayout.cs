@@ -23,10 +23,12 @@ namespace mjc_dev.common
         public GlobalLayout()
         {
             InitializeComponent();
+            _initBasicSize();
         }
         public GlobalLayout(string title, string formDescription) : base(title, formDescription)
         {
             InitializeComponent();
+            _initBasicSize();
         }
         protected void _initializeHKButtons(HotkeyButton[] hkButtons)
         {
