@@ -119,6 +119,12 @@
     <Compile Include="forms\modals\CategoryDetail.Designer.cs">
       <DependentUpon>CategoryDetail.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\modals\SkuDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\modals\SkuDetail.Designer.cs">
+      <DependentUpon>SkuDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\modals\PriceTierDetail.cs">
       <SubType>Form</SubType>
     </Compile>
