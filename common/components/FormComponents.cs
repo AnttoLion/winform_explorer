@@ -8,6 +8,50 @@ using System.Windows.Forms;
 
 namespace mjc_dev.common.components
 {
+    public class ModalButton
+    {
+        private Button button;
+        private Label label;
+        protected Keys hotKey;
+
+        public ModalButton(string text, Keys hotKey)
+        {
+            this.hotKey = hotKey;
+
+            button = new Button();
+            button.Text = text;
+
+            button.AutoSize = true;
+            button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            button.BackColor = Color.FromArgb(223, 223, 223);
+            button.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold);
+            button.ForeColor = System.Drawing.Color.DimGray;
+            button.Margin = new System.Windows.Forms.Padding(0);
+            button.Size = new System.Drawing.Size(53, 32);
+            button.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            button.UseVisualStyleBackColor = false;
+            button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+
+            this.hotKey = hotKey;
+        }
+
+        public Button GetButton()
+        {
+            return button;
+        }
+
+        public Keys GetKeys()
+        {
+            return hotKey;
+        }
+
+        public void SetPosition(Point location)
+        {
+            button.Location = location;
+            label.Location = new Point(location.X + button.Width + 8, location.Y);
+        }
+    }
+    
     public class FInputBox
     {
         private TextBox textBox;
@@ -130,24 +174,13 @@ namespace mjc_dev.common.components
     public class FCheckBox
     {
         private CheckBox checkBox;
-        private Label label;
         public FCheckBox(string labeltext)
         {
             checkBox = new CheckBox();
-            //checkBox.Location = new Point(50, 50);
             checkBox.AutoSize = true;
+            checkBox.Text = labeltext;
             checkBox.Font = new Font("Segoe UI Semibold", 15.75F);
-
-            label = new Label();
-            label.Text = labeltext;
-
-            label.AutoSize = true;
-            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            label.BackColor = System.Drawing.Color.Transparent;
-            label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
-            label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.AutoSize = true;
-            label.AutoSize = true;
+            checkBox.ForeColor = System.Drawing.Color.WhiteSmoke;
         }
 
         public CheckBox GetCheckBox()
@@ -155,15 +188,10 @@ namespace mjc_dev.common.components
             return checkBox;
         }
 
-        public Label GetLabel()
-        {
-            return label;
-        }
 
         public void SetPosition(Point location)
         {
-            checkBox.Location = new Point(location.X + 10, location.Y + 10);
-            label.Location = new Point(location.X + 30, location.Y);
+            checkBox.Location = new Point(location.X, location.Y);
         }
     }
 
@@ -179,7 +207,7 @@ namespace mjc_dev.common.components
             label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 16.75F);
-            label.ForeColor = System.Drawing.Color.DarkGray;
+            label.ForeColor = System.Drawing.Color.FromArgb(255, 255, 179);
             label.AutoSize = true;
             label.AutoSize = true;
         }

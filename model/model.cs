@@ -1070,7 +1070,7 @@ namespace mjc_dev.model
 
                     command.ExecuteNonQuery();
 
-                    MessageBox.Show("The Vendor was deleted.");
+                    MessageBox.Show("The Customer was deleted.");
                 }
 
                 return true;

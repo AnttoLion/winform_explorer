@@ -112,19 +112,15 @@ namespace mjc_dev.forms.modals
                 //checkbox
                 taxable.SetPosition(new Point(30, 430));
                 this.Controls.Add(taxable.GetCheckBox());
-                this.Controls.Add(taxable.GetLabel());
                 //checkbox
                 maintainQtys.SetPosition(new Point(220, 430));
                 this.Controls.Add(maintainQtys.GetCheckBox());
-                this.Controls.Add(maintainQtys.GetLabel());
                 //checkbox
                 allowDiscount.SetPosition(new Point(30, 480));
                 this.Controls.Add(allowDiscount.GetCheckBox());
-                this.Controls.Add(allowDiscount.GetLabel());
                 //checkbox
                 commissionable.SetPosition(new Point(220, 480));
                 this.Controls.Add(commissionable.GetCheckBox());
-                this.Controls.Add(commissionable.GetLabel());
 
                 orderForm.SetPosition(new Point(30, 530));
                 this.Controls.Add(orderForm.GetLabel());
@@ -181,7 +177,6 @@ namespace mjc_dev.forms.modals
                 this.Controls.Add(prices.GetLabel());
 
                 freezePrices.SetPosition(new Point(630, 530));
-                this.Controls.Add(freezePrices.GetLabel());
                 this.Controls.Add(freezePrices.GetCheckBox());
 
                 coreCost.SetPosition(new Point(630, 580));

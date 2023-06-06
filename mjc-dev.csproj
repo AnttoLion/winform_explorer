@@ -60,7 +60,6 @@
     <Compile Include="common\BasicModal.Designer.cs">
       <DependentUpon>BasicModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="common\components\ModalButton.cs" />
     <Compile Include="common\NavigationHistory.cs" />
     <Compile Include="common\components\NavigationButton.cs" />
     <Compile Include="common\components\HotkeyButton.cs" />
@@ -71,18 +70,6 @@
       <DependentUpon>GlobalLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="config\DbConnection.cs" />
-    <Compile Include="temp\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="temp\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="temp\Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="temp\Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </Compile>
     <Compile Include="forms\DepleteInventory.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +105,18 @@
     </Compile>
     <Compile Include="forms\modals\CategoryDetail.Designer.cs">
       <DependentUpon>CategoryDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\modals\CustomerDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\modals\CustomerDetail.Designer.cs">
+      <DependentUpon>CustomerDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\modals\VendorDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\modals\VendorDetail.Designer.cs">
+      <DependentUpon>VendorDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\modals\SkuDetail.cs">
       <SubType>Form</SubType>
@@ -250,9 +249,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="common\BasicLayout.resx">
       <DependentUpon>BasicLayout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="temp\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\Invocies.resx">
       <DependentUpon>Invocies.cs</DependentUpon>
