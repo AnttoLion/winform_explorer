@@ -19,12 +19,12 @@ namespace mjc_dev.forms
         private HotkeyButton hkSelect = new HotkeyButton("Enter", "Selects", Keys.Enter);
         private HotkeyButton hkSwitchColumn = new HotkeyButton("Alt + S", "Switch column", Keys.S);
         private HotkeyButton hkOpenCustomer = new HotkeyButton("F5", "Open Customer", Keys.F5);
-        private HotkeyButton hkCheckStok = new HotkeyButton("F6", "Check Stok", Keys.F6);
+        private HotkeyButton hkCheckStok = new HotkeyButton("F6", "Stok", Keys.F6);
         private HotkeyButton hkHeldOrders = new HotkeyButton("F7", "Held Orders", Keys.F7);
         private HotkeyButton hkProfiler = new HotkeyButton("F8", "Profiler", Keys.F8);
         private HotkeyButton hkHeldOrdersForCustomer = new HotkeyButton("F9", "Held Orders for Customer", Keys.F9);
 
-        public OrderEntry() : base("Oder Entry - Select a Customer", "Select a customer to start an order for")
+        public OrderEntry() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
         {
             InitializeComponent();
             _initBasicSize();

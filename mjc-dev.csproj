@@ -179,11 +179,11 @@
     <Compile Include="forms\ModuleInformation.Designer.cs">
       <DependentUpon>ModuleInformation.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\Recorder.cs">
+    <Compile Include="forms\Reorder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\Recorder.Designer.cs">
-      <DependentUpon>Recorder.cs</DependentUpon>
+    <Compile Include="forms\Reorder.Designer.cs">
+      <DependentUpon>Reorder.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\VendorList.cs">
       <SubType>Form</SubType>

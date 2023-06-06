@@ -15,10 +15,10 @@ namespace mjc_dev.forms
     public partial class DepleteInventory : GlobalLayout
     {
 
-        private HotkeyButton hkReceiveInv = new HotkeyButton("F8", "Receive Inv", Keys.F8);
+        private HotkeyButton hkReceiveInv = new HotkeyButton("F8", "Deplete Inv", Keys.F8);
         private HotkeyButton hkCancel = new HotkeyButton("Esc", "Cancel", Keys.Escape);
 
-        public DepleteInventory() : base("Deplete Inventory", "Full out to deplete inventory")
+        public DepleteInventory() : base("Deplete Inventory", "Fill out to deplete inventory")
         {
             InitializeComponent();
             _initBasicSize();

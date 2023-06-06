@@ -105,7 +105,7 @@ namespace mjc_dev.common
             this._companyName.BackColor = System.Drawing.Color.Transparent;
             this._companyName.Font = this._fontPoint4_1;
             this._companyName.ForeColor = this._textMainColor;
-            this._companyName.Text = "Marietta Joint && Cluth";
+            this._companyName.Text = "Marietta Joint && Clutch";
             this._companyName.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this._header.Controls.Add(this._companyName);
             this._companyName.Location = new System.Drawing.Point(this.Width - this._companyName.Width - 30, 15);
@@ -132,7 +132,7 @@ namespace mjc_dev.common
             //header/_formDescription
             this._formDescription = new System.Windows.Forms.Label();
             this._formDescription.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this._formDescription.Width = 500;
+            this._formDescription.Width = 700;
             this._formDescription.Height = 50;
             this._formDescription.BackColor = System.Drawing.Color.Transparent;
             this._formDescription.Font = _fontPoint4_2;

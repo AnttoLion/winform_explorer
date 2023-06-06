@@ -20,9 +20,9 @@ namespace mjc_dev.forms
         private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
         private HotkeyButton hkSelects = new HotkeyButton("Enter", "Selects", Keys.Enter);
         private HotkeyButton hkCrossRefLookup = new HotkeyButton("F2", "Cross Ref Lookup", Keys.F2);
-        private HotkeyButton hkView = new HotkeyButton("F3", "View", Keys.F3);
-        private HotkeyButton hkAdjustQty = new HotkeyButton("F4", "AdjustQty", Keys.F4);
-        private HotkeyButton hkSKUHistory = new HotkeyButton("F5", "SKU History", Keys.F5);
+        private HotkeyButton hkView = new HotkeyButton("F3", "View Allocations", Keys.F3);
+        private HotkeyButton hkAdjustQty = new HotkeyButton("F4", "Adjust Qty", Keys.F4);
+        private HotkeyButton hkSKUHistory = new HotkeyButton("F5", "Profile History", Keys.F5);
         private HotkeyButton hkProfileHistory = new HotkeyButton("F6", "SKU History", Keys.F6);
         private HotkeyButton hkArchivedSKUs = new HotkeyButton("F8", "Archived SKUs", Keys.F8);
 
@@ -30,7 +30,7 @@ namespace mjc_dev.forms
         private DataGridView SKUGridRefer;
         private DashboardModel model = new DashboardModel();
 
-        public SKUList() : base("SKU List", "Select a held order to open")
+        public SKUList() : base("SKU List", "List of SKUs")
         {
             InitializeComponent();
             _initBasicSize();

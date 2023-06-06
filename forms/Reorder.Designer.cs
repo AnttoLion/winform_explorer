@@ -1,6 +1,6 @@
 ﻿namespace mjc_dev.forms
 {
-    partial class Recorder
+    partial class Reorder
     {
         /// <summary>
         /// Required designer variable.

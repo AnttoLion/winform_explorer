@@ -18,7 +18,7 @@ namespace mjc_dev.forms
         private HotkeyButton hkReceiveInv = new HotkeyButton("F8", "Receive Inv", Keys.F8);
         private HotkeyButton hkCancel = new HotkeyButton("Esc", "Cancel", Keys.Escape);
 
-        public ReceiveInventory() : base("Recieve Inventory", "Full out to receive inventory")
+        public ReceiveInventory() : base("Recieve Inventory", "Fill out to receive inventory")
         {
             InitializeComponent();
             _initBasicSize();

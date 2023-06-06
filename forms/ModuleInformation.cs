@@ -17,7 +17,7 @@ namespace mjc_dev.forms
 
         private HotkeyButton hkPreviousScreen = new HotkeyButton("Esc", "Previous Screen", Keys.Escape);
 
-        public ModuleInformation() : base("Vendor List", "List of vendors")
+        public ModuleInformation() : base("Inventory Settings", "Manage inventory settings")
         {
             InitializeComponent();
             _initBasicSize();

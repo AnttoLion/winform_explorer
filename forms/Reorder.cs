@@ -12,13 +12,13 @@ using System.Windows.Forms;
 
 namespace mjc_dev.forms
 {
-    public partial class Recorder : GlobalLayout
+    public partial class Reorder : GlobalLayout
     {
 
-        private HotkeyButton hkClosesReport = new HotkeyButton("Esc", "ClosesReport", Keys.Escape);
+        private HotkeyButton hkClosesReport = new HotkeyButton("Esc", "Closes Report", Keys.Escape);
         private HotkeyButton hkPrint = new HotkeyButton("F9", "Print", Keys.F9);
 
-        public Recorder() : base("SKU List", "SKU that are below critical quantity and need replenished")
+        public Reorder() : base("Reorder - SKU List", "SKU that are below critical quantity and need replenished")
         {
             InitializeComponent();
             _initBasicSize();

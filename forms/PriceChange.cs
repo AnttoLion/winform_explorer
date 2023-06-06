@@ -15,7 +15,7 @@ namespace mjc_dev.forms
     public partial class PriceChange : GlobalLayout
     {
 
-        private HotkeyButton hkReceiveInv = new HotkeyButton("F8", "Receive Inv", Keys.F8);
+        private HotkeyButton hkReceiveInv = new HotkeyButton("F8", "Change Price", Keys.F8);
         private HotkeyButton hkCancel = new HotkeyButton("Esc", "Cancel", Keys.Escape);
 
         public PriceChange() : base("Price Change", "Change prices")

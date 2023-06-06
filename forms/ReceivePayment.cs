@@ -19,7 +19,7 @@ namespace mjc_dev.forms
         private HotkeyButton hkCancel = new HotkeyButton("Esc", "Cancel", Keys.Escape);
         private HotkeyButton hkSearchCustomers = new HotkeyButton("F2", "Search Customers", Keys.F2);
 
-        public ReceivePayment() : base("Recieve Payment", "Fill out to receive payment")
+        public ReceivePayment() : base("Receive Payment", "Fill out to receive payment")
         {
             InitializeComponent();
             _initBasicSize();

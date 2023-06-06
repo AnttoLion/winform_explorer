@@ -23,7 +23,7 @@ namespace mjc_dev.forms
         private NavigationButton PriceChange = new NavigationButton("Price Change", new PriceChange());
         private NavigationButton CategoryMargins = new NavigationButton("Category Margins", new CategoryMargin());
         private NavigationButton Vendors = new NavigationButton("Vendors", new VendorList());
-        private NavigationButton RecorderReport = new NavigationButton("Recorder Report", new Recorder());
+        private NavigationButton RecorderReport = new NavigationButton("Reorder Report", new Reorder());
         private NavigationButton ModuleInformation = new NavigationButton("Module Information", new ModuleInformation());
 
         public InventoryDashboard() : base("Inventory Dashboard", "Manage inventory")
