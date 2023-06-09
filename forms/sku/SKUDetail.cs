@@ -154,7 +154,7 @@ namespace mjc_dev.forms.sku
             this.maintainQtys.GetCheckBox().Checked = (bool)data[0].manageStock;
             this.allowDiscount.GetCheckBox().Checked = (bool)data[0].allowDiscounts;
             this.orderForm.GetTextBox().Text = data[0].orderFrom.ToString();
-            this.lastSold.GetDateTimePicker().Value = data[0].lastSold.ToLocalTime();
+            if(data[0].lastSold != DBNull.Value) this.lastSold.GetDateTimePicker().Value = data[0].lastSold.ToLocalTime();
             this.manufacturer.GetTextBox().Text = data[0].manufacturer.ToString();
             this.location.GetTextBox().Text = data[0].location.ToString();
 
