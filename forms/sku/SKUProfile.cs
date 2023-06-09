@@ -1,5 +1,7 @@
 ﻿using mjc_dev.common.components;
 using mjc_dev.common;
+using mjc_dev.forms.category;
+using mjc_dev.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,29 +11,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using mjc_dev.model;
-using mjc_dev.forms.modals;
 
-namespace mjc_dev.forms
+namespace mjc_dev.forms.sku
 {
-    public partial class CategoryMargin : GlobalLayout
+    public partial class SKUProfile : GlobalLayout
     {
 
-        private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
-        private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
-        private HotkeyButton hkSelects = new HotkeyButton("Enter", "Selects", Keys.Enter);
-        private HotkeyButton hkSetsPrices = new HotkeyButton("F4", "Sets Prices", Keys.F4);
+        private HotkeyButton hkPrevScreen = new HotkeyButton("Esc", "Previous screen", Keys.Escape);
+        //private HotkeyButton OpenOrder = new HotkeyButton("Enter", "Open order", Keys.Enter);
 
         private GridViewOrigin categoryListGrid = new GridViewOrigin();
         private DataGridView CLGridRefer;
         private DashboardModel model = new DashboardModel();
 
-        public CategoryMargin() : base("Category Margins", "Manage category margins used to calcuate prices")
+        public SKUProfile() : base("Profile Info", "Review SKU history of invoices")
         {
             InitializeComponent();
             _initBasicSize();
 
-            HotkeyButton[] hkButtons = new HotkeyButton[4] { hkAdds, hkDeletes, hkSelects, hkSetsPrices };
+            HotkeyButton[] hkButtons = new HotkeyButton[1] { hkPrevScreen };
             _initializeHKButtons(hkButtons);
             AddHotKeyEvents();
 
@@ -40,34 +38,6 @@ namespace mjc_dev.forms
 
         private void AddHotKeyEvents()
         {
-            hkAdds.GetButton().Click += (sender, e) =>
-            {
-                CategoryDetail detailModal = new CategoryDetail();
-                if (detailModal.ShowDialog() == DialogResult.OK)
-                {
-                    LoadCategoryList();
-                }
-            };
-            hkDeletes.GetButton().Click += (sender, e) =>
-            {
-                int selectedCategoryId = 0;
-                if (CLGridRefer.SelectedRows.Count > 0)
-                {
-                    foreach (DataGridViewRow row in CLGridRefer.SelectedRows)
-                    {
-                        selectedCategoryId = (int)row.Cells[0].Value;
-                    }
-                }
-                bool refreshData = model.DeleteCategory(selectedCategoryId);
-                if (refreshData)
-                {
-                    LoadCategoryList();
-                }
-            };
-            hkSelects.GetButton().Click += (sender, e) =>
-            {
-                updateCategory();
-            };
         }
 
         private void InitCategoryListGrid()
@@ -79,11 +49,25 @@ namespace mjc_dev.forms
             this.Controls.Add(CLGridRefer);
             this.CLGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.addcategory_btn_Click);
 
+            CLGridRefer.Columns.Add("Name", "Date");
+            CLGridRefer.Columns.Add("Age", "Cust#");
+            CLGridRefer.Columns.Add("Country", "Inv#");
+            CLGridRefer.Columns.Add("Country", "Qty");
+            CLGridRefer.Columns.Add("Country", "Price");
+
+            CLGridRefer.Columns[0].Width = 300;
+            CLGridRefer.Columns[1].Width = 300;
+            CLGridRefer.Columns[2].Width = 300;
+            CLGridRefer.Columns[3].Width = 300;
+            CLGridRefer.Columns[4].Width = 300;
+
+
             LoadCategoryList();
         }
 
         private void LoadCategoryList()
         {
+            return;
             string filter = "";
             var refreshData = model.LoadCategoryData(filter);
             if (refreshData)

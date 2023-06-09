@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mjc_dev.forms.modals
+namespace mjc_dev.forms.customer
 {
     public partial class CustomerDetail : BasicModal
     {

@@ -1,6 +1,4 @@
-﻿using mjc_dev.common.components;
-using mjc_dev.common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using mjc_dev.common.components;
+using mjc_dev.common;
+
+using mjc_dev.forms.category;
+using mjc_dev.forms.price;
+using mjc_dev.forms.sku;
+using mjc_dev.forms.vendor;
 
 namespace mjc_dev.forms
 {

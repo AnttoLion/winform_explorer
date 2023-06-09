@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mjc_dev.forms.modals
+namespace mjc_dev.forms.category
 {
     public partial class CategoryDetail : BasicModal
     {
@@ -77,6 +77,7 @@ namespace mjc_dev.forms.modals
             this.categoryName.GetTextBox().Text = categoryName;
             this.calculateAs.GetTextBox().Text = calculateAs.ToString();
             this.categoryId = category_id;
+
         }
     }
 }

@@ -70,23 +70,35 @@
       <DependentUpon>GlobalLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="config\DbConnection.cs" />
+    <Compile Include="forms\category\CategoryDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\category\CategoryDetail.Designer.cs">
+      <DependentUpon>CategoryDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\category\CategoryMargin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\category\CategoryMargin.Designer.cs">
+      <DependentUpon>CategoryMargin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\customer\CustomerDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\customer\CustomerDetail.Designer.cs">
+      <DependentUpon>CustomerDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\customer\CustomerList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\customer\CustomerList.Designer.cs">
+      <DependentUpon>CustomerList.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\DepleteInventory.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\DepleteInventory.Designer.cs">
       <DependentUpon>DepleteInventory.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\CategoryMargin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\CategoryMargin.Designer.cs">
-      <DependentUpon>CategoryMargin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\CustomerList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\CustomerList.Designer.cs">
-      <DependentUpon>CustomerList.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\CreditCodes.cs">
       <SubType>Form</SubType>
@@ -100,41 +112,77 @@
     <Compile Include="forms\CustomerProfile.Designer.cs">
       <DependentUpon>CustomerProfile.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\modals\CategoryDetail.cs">
+    <Compile Include="forms\invoice\LookupInvocie.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\modals\CategoryDetail.Designer.cs">
-      <DependentUpon>CategoryDetail.cs</DependentUpon>
+    <Compile Include="forms\invoice\LookupInvocie.Designer.cs">
+      <DependentUpon>LookupInvocie.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\modals\CustomerDetail.cs">
+    <Compile Include="forms\price\PriceChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\modals\CustomerDetail.Designer.cs">
-      <DependentUpon>CustomerDetail.cs</DependentUpon>
+    <Compile Include="forms\price\PriceChange.Designer.cs">
+      <DependentUpon>PriceChange.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\modals\VendorDetail.cs">
+    <Compile Include="forms\price\PriceTierDetail.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\modals\VendorDetail.Designer.cs">
-      <DependentUpon>VendorDetail.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\modals\SkuDetail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\modals\SkuDetail.Designer.cs">
-      <DependentUpon>SkuDetail.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\modals\PriceTierDetail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\modals\PriceTierDetail.Designer.cs">
+    <Compile Include="forms\price\PriceTierDetail.Designer.cs">
       <DependentUpon>PriceTierDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\price\PriceTiers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\price\PriceTiers.Designer.cs">
+      <DependentUpon>PriceTiers.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\Reconcilliation.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\Reconcilliation.Designer.cs">
       <DependentUpon>Reconcilliation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\Allocations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\Allocations.Designer.cs">
+      <DependentUpon>Allocations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\SKUDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUDetail.Designer.cs">
+      <DependentUpon>SKUDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\SKUList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUList.Designer.cs">
+      <DependentUpon>SKUList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\CrossReference.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\CrossReference.Designer.cs">
+      <DependentUpon>CrossReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\SKUProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUProfile.Designer.cs">
+      <DependentUpon>SKUProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\vendor\VendorDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\vendor\VendorDetail.Designer.cs">
+      <DependentUpon>VendorDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\vendor\VendorList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\vendor\VendorList.Designer.cs">
+      <DependentUpon>VendorList.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\ZoneChart.cs">
       <SubType>Form</SubType>
@@ -154,18 +202,6 @@
     <Compile Include="forms\SalesCostCodes.Designer.cs">
       <DependentUpon>SalesCostCodes.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\PriceTiers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\PriceTiers.Designer.cs">
-      <DependentUpon>PriceTiers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\Invocies.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\Invocies.Designer.cs">
-      <DependentUpon>Invocies.cs</DependentUpon>
-    </Compile>
     <Compile Include="forms\ReceivePayment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,29 +220,11 @@
     <Compile Include="forms\Reorder.Designer.cs">
       <DependentUpon>Reorder.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\VendorList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\VendorList.Designer.cs">
-      <DependentUpon>VendorList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\PriceChange.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\PriceChange.Designer.cs">
-      <DependentUpon>PriceChange.cs</DependentUpon>
-    </Compile>
     <Compile Include="forms\ReceiveInventory.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\ReceiveInventory.Designer.cs">
       <DependentUpon>ReceiveInventory.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\SKUList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\SKUList.Designer.cs">
-      <DependentUpon>SKUList.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\SystemSettings.cs">
       <SubType>Form</SubType>
@@ -249,9 +267,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="common\BasicLayout.resx">
       <DependentUpon>BasicLayout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="forms\Invocies.resx">
-      <DependentUpon>Invocies.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\ReceivableDashboard.resx">
       <DependentUpon>ReceivableDashboard.cs</DependentUpon>

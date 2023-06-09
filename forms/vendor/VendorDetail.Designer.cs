@@ -1,6 +1,6 @@
-﻿namespace mjc_dev.forms
+﻿namespace mjc_dev.forms.vendor
 {
-    partial class SKUList
+    partial class VendorDetail
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Text = "VendorDetail";
         }
 
         #endregion

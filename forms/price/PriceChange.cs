@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mjc_dev.forms
+namespace mjc_dev.forms.price
 {
     public partial class PriceChange : GlobalLayout
     {

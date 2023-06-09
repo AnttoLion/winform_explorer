@@ -11,7 +11,7 @@ using mjc_dev.common;
 using mjc_dev.common.components;
 using mjc_dev.model;
 
-namespace mjc_dev.forms.modals
+namespace mjc_dev.forms.price
 {
     public partial class PriceTierDetail : BasicModal
     {

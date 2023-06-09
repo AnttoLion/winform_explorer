@@ -10,13 +10,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.AxHost;
+using System.Net;
+using System.Reflection.Emit;
 
-namespace mjc_dev.forms.modals
+namespace mjc_dev.forms.sku
 {
-    public partial class SkuDetail : BasicModal
+    public partial class SKUDetail : GlobalLayout
     {
-        private ModalButton MBOk = new ModalButton("(Enter) OK", Keys.Enter);
-        private Button MBOk_button;
+        private HotkeyButton SKUMemo = new HotkeyButton("F2", "SKU Memo", Keys.F2);
+        private HotkeyButton QuickCalcPrice = new HotkeyButton("F3", "Quick Calc Price", Keys.F3);
+        private HotkeyButton MiscManagement = new HotkeyButton("F4", "Misc Management", Keys.F4);
+        private HotkeyButton ResetPrices = new HotkeyButton("F5", "Reset Prices", Keys.F5);
+        private HotkeyButton SetArchived = new HotkeyButton("F9", "Set Archived", Keys.F9);
 
         private FGroupLabel SKUInfo = new FGroupLabel("SKU Info");
         private FInputBox SKUName = new FInputBox("SKU#");
@@ -55,155 +61,82 @@ namespace mjc_dev.forms.modals
         private FInputBox priceTier1 = new FInputBox("Price Tier 1");
         private FInputBox priceTier2 = new FInputBox("Price Tier 2");
 
-
-
-
         private DashboardModel model = new DashboardModel();
         private int selectId = 0;
         private int skuId = 0;
         private int categoryId = 0;
 
-        public SkuDetail() : base("Sku detail")
+        public SKUDetail() : base("SKU Information", "Manage details of SKU")
         {
             this.Text = "Sku detail";
             InitializeComponent();
-            this.Size = new Size(1200, 930);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            InitForm();
-            InitMBOKButton();
+            _initBasicSize();
+            this.KeyDown += (s, e) => Form_KeyDown(s, e);
 
+            HotkeyButton[] hkButtons = new HotkeyButton[5] { SKUMemo, QuickCalcPrice, MiscManagement, ResetPrices, SetArchived};
+            _initializeHKButtons(hkButtons, false);
+            AddHotKeyEvents();
+
+            InitForm();
             this.Load += new System.EventHandler(this.Add_Load);
+        }
+
+        private void AddHotKeyEvents()
+        {
+            SetArchived.GetButton().Click += (sender, e) =>
+            {
+                setArchived(sender, e);
+            };
         }
 
         private void InitForm()
         {
-            {
-                SKUInfo.SetPosition(new Point(30, 30));
-                this.Controls.Add(SKUInfo.GetLabel());
 
-                SKUName.SetPosition(new Point(30, 80));
-                this.Controls.Add(SKUName.GetLabel());
-                this.Controls.Add(SKUName.GetTextBox());
+            List<dynamic> FormComponents = new List<dynamic>();
 
-                categoryCombo.SetPosition(new Point(30, 130));
-                this.Controls.Add(categoryCombo.GetLabel());
-                this.Controls.Add(categoryCombo.GetComboBox());
+            FormComponents.Add(SKUInfo);
+            FormComponents.Add(SKUName);
+            FormComponents.Add(categoryCombo);
+            FormComponents.Add(description);
+            FormComponents.Add(measurementUnit);
+            FormComponents.Add(weight);
+            FormComponents.Add(costCode);
+            FormComponents.Add(assetAcct);
 
-                description.SetPosition(new Point(30, 180));
-                this.Controls.Add(description.GetLabel());
-                this.Controls.Add(description.GetTextBox());
+            List<dynamic> LineComponents = new List<dynamic>();
 
-                measurementUnit.SetPosition(new Point(30, 230));
-                this.Controls.Add(measurementUnit.GetLabel());
-                this.Controls.Add(measurementUnit.GetTextBox());
+            LineComponents.Add(taxable);
+            LineComponents.Add(maintainQtys);
+            FormComponents.Add(LineComponents);
 
-                weight.SetPosition(new Point(30, 280));
-                this.Controls.Add(weight.GetLabel());
-                this.Controls.Add(weight.GetTextBox());
+            List<dynamic> LineComponents2 = new List<dynamic>();
 
-                costCode.SetPosition(new Point(30, 330));
-                this.Controls.Add(costCode.GetLabel());
-                this.Controls.Add(costCode.GetTextBox());
+            LineComponents2.Add(allowDiscount);
+            LineComponents2.Add(commissionable);
+            FormComponents.Add(LineComponents2);
 
-                assetAcct.SetPosition(new Point(30, 380));
-                this.Controls.Add(assetAcct.GetLabel());
-                this.Controls.Add(assetAcct.GetTextBox());
+            FormComponents.Add(orderForm);
+            FormComponents.Add(lastSold);
+            FormComponents.Add(manufacturer);
+            FormComponents.Add(location);
 
-                //checkbox
-                taxable.SetPosition(new Point(30, 430));
-                this.Controls.Add(taxable.GetCheckBox());
-                //checkbox
-                maintainQtys.SetPosition(new Point(220, 430));
-                this.Controls.Add(maintainQtys.GetCheckBox());
-                //checkbox
-                allowDiscount.SetPosition(new Point(30, 480));
-                this.Controls.Add(allowDiscount.GetCheckBox());
-                //checkbox
-                commissionable.SetPosition(new Point(220, 480));
-                this.Controls.Add(commissionable.GetCheckBox());
+            FormComponents.Add(quantityTracking);
+            FormComponents.Add(quantity);
+            FormComponents.Add(qtyAllocated);
+            FormComponents.Add(qtyAvaiable);
+            FormComponents.Add(criticalQty);
+            FormComponents.Add(recorderQty);
 
-                orderForm.SetPosition(new Point(30, 530));
-                this.Controls.Add(orderForm.GetLabel());
-                this.Controls.Add(orderForm.GetTextBox());
+            FormComponents.Add(sales);
+            FormComponents.Add(soldThisMonth);
+            FormComponents.Add(soldYTD);
+            FormComponents.Add(prices);
+            FormComponents.Add(coreCost);
+            FormComponents.Add(invValue);
+            FormComponents.Add(priceTier1);
+            FormComponents.Add(priceTier2);
 
-                lastSold.SetPosition(new Point(30, 580));
-                this.Controls.Add(lastSold.GetLabel());
-                this.Controls.Add(lastSold.GetDateTimePicker());
-
-                manufacturer.SetPosition(new Point(30, 630));
-                this.Controls.Add(manufacturer.GetLabel());
-                this.Controls.Add(manufacturer.GetTextBox());
-
-                location.SetPosition(new Point(30, 680));
-                this.Controls.Add(location.GetLabel());
-                this.Controls.Add(location.GetTextBox());
-            }
-            {
-                quantityTracking.SetPosition(new Point(630, 30));
-                this.Controls.Add(quantityTracking.GetLabel());
-
-                quantity.SetPosition(new Point(630, 80));
-                this.Controls.Add(quantity.GetLabel());
-                this.Controls.Add(quantity.GetTextBox());
-
-                qtyAllocated.SetPosition(new Point(630, 130));
-                this.Controls.Add(qtyAllocated.GetLabel());
-                this.Controls.Add(qtyAllocated.GetTextBox());
-
-                qtyAvaiable.SetPosition(new Point(630, 180));
-                this.Controls.Add(qtyAvaiable.GetLabel());
-                this.Controls.Add(qtyAvaiable.GetTextBox());
-
-                criticalQty.SetPosition(new Point(630, 230));
-                this.Controls.Add(criticalQty.GetLabel());
-                this.Controls.Add(criticalQty.GetTextBox());
-
-                recorderQty.SetPosition(new Point(630, 280));
-                this.Controls.Add(recorderQty.GetLabel());
-                this.Controls.Add(recorderQty.GetTextBox());
-
-                sales.SetPosition(new Point(630, 330));
-                this.Controls.Add(sales.GetLabel());
-
-                soldThisMonth.SetPosition(new Point(630, 380));
-                this.Controls.Add(soldThisMonth.GetLabel());
-                this.Controls.Add(soldThisMonth.GetTextBox());
-
-                soldYTD.SetPosition(new Point(630, 430));
-                this.Controls.Add(soldYTD.GetTextBox());
-                this.Controls.Add(soldYTD.GetLabel());
-
-                prices.SetPosition(new Point(630, 480));
-                this.Controls.Add(prices.GetLabel());
-
-                freezePrices.SetPosition(new Point(630, 530));
-                this.Controls.Add(freezePrices.GetCheckBox());
-
-                coreCost.SetPosition(new Point(630, 580));
-                this.Controls.Add(coreCost.GetLabel());
-                this.Controls.Add(coreCost.GetTextBox());
-
-                invValue.SetPosition(new Point(630, 630));
-                this.Controls.Add(invValue.GetLabel());
-                this.Controls.Add(invValue.GetTextBox());
-
-                priceTier1.SetPosition(new Point(630, 680));
-                this.Controls.Add(priceTier1.GetLabel());
-                this.Controls.Add(priceTier1.GetTextBox());
-
-                priceTier2.SetPosition(new Point(630, 730));
-                this.Controls.Add(priceTier2.GetLabel());
-                this.Controls.Add(priceTier2.GetTextBox());
-            }
-        }
-
-        private void InitMBOKButton()
-        {
-            ModalButton_HotKeyDown(MBOk);
-            MBOk_button = MBOk.GetButton();
-            MBOk_button.Location = new Point(1025, this.Height - 120);
-            MBOk_button.Click += (sender, e) => this.Add_SKUBUTTON(sender, e);
-            this.Controls.Add(MBOk_button);
+            _addFormInputs(FormComponents, 30, 110, 800, 50, 800);
         }
 
         public void setDetails(List<dynamic> data, int id)
@@ -270,11 +203,16 @@ namespace mjc_dev.forms.modals
             }
         }
 
-        private void Add_SKUBUTTON(object sender, EventArgs e)
+        private void setArchived(object sender, EventArgs e)
         {
             string s_sku_name = SKUName.GetTextBox().Text;
 
             CategoryComboBoxItem seletedItem = (CategoryComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
+            if (seletedItem == null)
+            {
+                MessageBox.Show("Please select a correct category.");
+                return;
+            }
             int i_category = seletedItem.Id;
 
             string s_description = description.GetTextBox().Text;
@@ -338,7 +276,7 @@ namespace mjc_dev.forms.modals
             if (refreshData)
             {
                 this.DialogResult = DialogResult.OK;
-                this.Close();
+                this._navigateToPrev(sender, e);
             }
             else MessageBox.Show("An Error occured while " + modeText + " the vendor.");
         }
@@ -357,6 +295,23 @@ namespace mjc_dev.forms.modals
             public override string ToString()
             {
                 return Text;
+            }
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    setArchived(sender, e);
+                }
+                else if (result == DialogResult.No)
+                {
+                    _navigateToPrev(sender, e);
+                }
             }
         }
     }

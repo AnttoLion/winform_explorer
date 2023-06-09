@@ -10,6 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using mjc_dev.forms.customer;
+using mjc_dev.forms.price;
+using mjc_dev.forms.invoice;
+
+
 namespace mjc_dev.forms
 {
     public partial class ReceivableDashboard : GlobalLayout
@@ -19,7 +24,7 @@ namespace mjc_dev.forms
 
         private NavigationButton CustomerList = new NavigationButton("Customer List", new CustomerList());
         private NavigationButton ReceivePayment = new NavigationButton("Receive Payment", new ReceivePayment());
-        private NavigationButton Invoices = new NavigationButton("Invoices", new Invocies());
+        private NavigationButton Invoices = new NavigationButton("Invoices", new LookupInvocie());
         private NavigationButton PricerTiers = new NavigationButton("Price Tiers", new PriceTiers());
         private NavigationButton SalesCostCodes = new NavigationButton("Sales/Cost Codes", new SalesCostCodes());
         private NavigationButton SalesTaxCode = new NavigationButton("Sales Tax Code", new SalesTaxCodes());

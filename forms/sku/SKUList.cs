@@ -10,9 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using mjc_dev.model;
-using mjc_dev.forms.modals;
+using System.Runtime.Remoting.Channels;
 
-namespace mjc_dev.forms
+namespace mjc_dev.forms.sku
 {
     public partial class SKUList : GlobalLayout
     {
@@ -40,37 +40,57 @@ namespace mjc_dev.forms
             AddHotKeyEvents();
 
             InitPriceTierGrid();
+
+
+            this.VisibleChanged += (ss, sargs) => {
+                this.LoadSKUList();
+            };
         }
 
         private void AddHotKeyEvents()
         {
             hkAdds.GetButton().Click += (sender, e) =>
             {
-                SkuDetail detailModal = new SkuDetail();
-                if (detailModal.ShowDialog() == DialogResult.OK)
-                {
-                    LoadSKUList();
-                }
+                this.Hide();
+                SKUDetail detailModal = new SKUDetail();
+                _navigateToForm(sender,e, detailModal);
             };
             hkDeletes.GetButton().Click += (sender, e) =>
             {
-                int selectedSKUId = 0;
-                if (SKUGridRefer.SelectedRows.Count > 0)
+                DialogResult result = MessageBox.Show("Do you want to delete?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    foreach (DataGridViewRow row in SKUGridRefer.SelectedRows)
+                    int selectedSKUId = 0;
+                    if (SKUGridRefer.SelectedRows.Count > 0)
                     {
-                        selectedSKUId = (int)row.Cells[0].Value;
+                        foreach (DataGridViewRow row in SKUGridRefer.SelectedRows)
+                        {
+                            selectedSKUId = (int)row.Cells[0].Value;
+                        }
                     }
-                }
-                bool refreshData = model.DeleteSKU(selectedSKUId);
-                if (refreshData)
-                {
-                    LoadSKUList();
+                    bool refreshData = model.DeleteSKU(selectedSKUId);
+                    if (refreshData)
+                    {
+                        LoadSKUList();
+                    }
                 }
             };
             hkSelects.GetButton().Click += (sender, e) =>
             {
-                updateSKU();
+                updateSKU(sender, e);
+            };
+            hkCrossRefLookup.GetButton().Click += (sender, e) =>
+            {
+                this.Hide();
+                CrossReference CrossRefModal = new CrossReference();
+                _navigateToForm(sender, e, CrossRefModal);
+            };
+            hkView.GetButton().Click += (sender, e) =>
+            {
+                this.Hide();
+                SKUProfile CrossRefModal = new SKUProfile();
+                _navigateToForm(sender, e, CrossRefModal);
             };
         }
 
@@ -87,7 +107,7 @@ namespace mjc_dev.forms
         }
 
 
-        private void LoadSKUList()
+        public void LoadSKUList()
         {
             string filter = "";
             var refreshData = model.LoadSKUData(filter);
@@ -108,9 +128,9 @@ namespace mjc_dev.forms
             }
         }
 
-        private void updateSKU()
+        private void updateSKU(object sender, EventArgs e)
         {
-            SkuDetail detailModal = new SkuDetail(); ;
+            SKUDetail detailModal = new SKUDetail();
 
             int rowIndex = SKUGridRefer.CurrentCell.RowIndex;
 
@@ -121,15 +141,13 @@ namespace mjc_dev.forms
             skuData = model.GetSKUData(skuId);
             detailModal.setDetails(skuData, skuData[0].id);
 
-            if (detailModal.ShowDialog() == DialogResult.OK)
-            {
-                LoadSKUList();
-            }
+            this.Hide();
+            _navigateToForm(sender, e, detailModal);
         }
 
         private void SKUGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            updateSKU();
+            updateSKU(sender, e);
         }
     }
 }

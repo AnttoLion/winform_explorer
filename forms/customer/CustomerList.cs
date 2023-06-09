@@ -1,5 +1,6 @@
-﻿using mjc_dev.common.components;
-using mjc_dev.common;
+﻿using mjc_dev.common;
+using mjc_dev.common.components;
+using mjc_dev.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,14 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using mjc_dev.forms.modals;
-using mjc_dev.model;
 
-namespace mjc_dev.forms
+namespace mjc_dev.forms.customer
 {
     public partial class CustomerList : GlobalLayout
     {
-
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
         private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
         private HotkeyButton hkSelects = new HotkeyButton("Enter", "Selects", Keys.Enter);
@@ -44,7 +42,6 @@ namespace mjc_dev.forms
 
             InitCustomerList();
         }
-
         private void AddHotKeyEvents()
         {
             hkAdds.GetButton().Click += (sender, e) =>

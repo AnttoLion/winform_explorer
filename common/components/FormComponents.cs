@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,10 @@ using System.Windows.Forms;
 
 namespace mjc_dev.common.components
 {
+    internal static class ComponentsGlobals
+    {
+        public static Color FocusedColor = Color.FromArgb(255, 255, 204);
+    }
     public class ModalButton
     {
         private Button button;
@@ -63,15 +68,26 @@ namespace mjc_dev.common.components
             label.Text = labeltext;
 
             label.AutoSize = true;
-            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.Size = new System.Drawing.Size(150, 31);
+            label.Size = new System.Drawing.Size(200, 31);
 
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             textBox = new TextBox();
             textBox.Size = new Size(300, 20);
             textBox.Font = new Font("Segoe UI Semibold", 15.75F);
+            textBox.BackColor = Color.FromArgb(236, 242, 249);
+
+            textBox.Enter += (s, e) =>
+            {
+                label.ForeColor = ComponentsGlobals.FocusedColor;
+            };
+            textBox.LostFocus += (s, e) =>
+            {
+                label.ForeColor = System.Drawing.Color.WhiteSmoke;
+            };
         }
 
         public TextBox GetTextBox()
@@ -87,7 +103,7 @@ namespace mjc_dev.common.components
         public void SetPosition(Point location)
         {
             label.Location = location;
-            textBox.Location = new Point(location.X + 200, location.Y);
+            textBox.Location = new Point(location.X + label.Width, location.Y);
         }
     }
 
@@ -102,17 +118,28 @@ namespace mjc_dev.common.components
             label.Text = labeltext;
 
             label.AutoSize = true;
-            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.Size = new System.Drawing.Size(150, 31);
+            label.Size = new System.Drawing.Size(200, 31);
 
             calendar = new DateTimePicker();
             calendar.Size = new Size(300, 20);
             calendar.Font = new Font("Arial", 15.75F);
             calendar.Format = DateTimePickerFormat.Custom;
             calendar.CustomFormat = "MMMd, yyyy";
+            calendar.BackColor = Color.Red;
+
+            calendar.Enter += (s, e) =>
+            {
+                label.ForeColor = ComponentsGlobals.FocusedColor;
+            };
+            calendar.LostFocus += (s, e) =>
+            {
+                label.ForeColor = System.Drawing.Color.WhiteSmoke;
+            };
         }
 
         public DateTimePicker GetDateTimePicker()
@@ -128,7 +155,7 @@ namespace mjc_dev.common.components
         public void SetPosition(Point location)
         {
             label.Location = location;
-            calendar.Location = new Point(location.X + 200, location.Y);
+            calendar.Location = new Point(location.X + label.Width, location.Y);
         }
     }
 
@@ -143,7 +170,7 @@ namespace mjc_dev.common.components
             label.Text = labeltext;
 
             label.AutoSize = true;
-            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -152,6 +179,25 @@ namespace mjc_dev.common.components
             comboBox = new ComboBox();
             comboBox.Size = new Size(300, 20);
             comboBox.Font = new Font("Segoe UI Semibold", 15.75F);
+            comboBox.BackColor = Color.FromArgb(236, 242, 249);
+
+            comboBox.Enter += (s, e) =>
+            {
+                label.ForeColor = ComponentsGlobals.FocusedColor;
+            };
+            comboBox.LostFocus += (s, e) =>
+            {
+                label.ForeColor = System.Drawing.Color.WhiteSmoke;
+            };
+            comboBox.KeyDown += ComboBox_KeyDown;
+        }
+
+        private void ComboBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Down)
+            {
+                comboBox.DroppedDown = true;
+            }
         }
 
         public ComboBox GetComboBox()
@@ -181,6 +227,15 @@ namespace mjc_dev.common.components
             checkBox.Text = labeltext;
             checkBox.Font = new Font("Segoe UI Semibold", 15.75F);
             checkBox.ForeColor = System.Drawing.Color.WhiteSmoke;
+
+            checkBox.Enter += (s, e) =>
+            {
+                checkBox.ForeColor = ComponentsGlobals.FocusedColor;
+            };
+            checkBox.LostFocus += (s, e) =>
+            {
+                checkBox.ForeColor = System.Drawing.Color.WhiteSmoke;
+            };
         }
 
         public CheckBox GetCheckBox()
@@ -204,10 +259,10 @@ namespace mjc_dev.common.components
             label.Text = labeltext;
 
             label.AutoSize = true;
-            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 16.75F);
-            label.ForeColor = System.Drawing.Color.FromArgb(255, 255, 179);
+            label.ForeColor = System.Drawing.Color.FromArgb(128, 255, 255);
             label.AutoSize = true;
             label.AutoSize = true;
         }

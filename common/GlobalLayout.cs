@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace mjc_dev.common
 {
@@ -32,7 +33,7 @@ namespace mjc_dev.common
             _initBasicSize();
         }
 
-        protected void _initializeHKButtons(HotkeyButton[] hkButtons)
+        protected void _initializeHKButtons(HotkeyButton[] hkButtons, bool DefaultEscEvent = true, HotkeyButton[] onEventhkButtons = null)
         {
             int startX = 20;
             int startY = 65;
@@ -66,7 +67,8 @@ namespace mjc_dev.common
                 }
             }
 
-            this.KeyDown += (s, e) => GlobalLayout_KeyDown(s, e, hkButtons);
+            if (onEventhkButtons == null) onEventhkButtons = hkButtons;
+            this.KeyDown += (s, e) => GlobalLayout_KeyDown(s, e, onEventhkButtons, DefaultEscEvent);
         }
 
         protected void _addComingSoon()
@@ -147,9 +149,156 @@ namespace mjc_dev.common
             this.Hide();
         }
 
-        private void GlobalLayout_KeyDown(object sender, KeyEventArgs e, HotkeyButton[] hkButtons)
+        protected void _addFormInputs(List<dynamic> Inputs, int startX, int startY, int distanceX, int distanceY, int limitY = int.MaxValue)
         {
-            if (e.KeyCode == Keys.Escape)
+            int posX = startX;
+            int posY = startY;
+            for (int i = 0; i < Inputs.Count; i++)
+            {
+                if (Inputs[i] is FInputBox) {
+                    FInputBox inputBox = (FInputBox)Inputs[i];
+                    inputBox.SetPosition(new Point(posX, posY));
+                    this.Controls.Add(inputBox.GetLabel());
+                    this.Controls.Add(inputBox.GetTextBox());
+                    inputBox.GetTextBox().KeyDown += (s, e) => {
+                        if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                        {
+                            SelectNextControl((Control)s, true, true, true, true);
+                            e.Handled = true;
+                        }
+                        if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                        {
+                            SelectNextControl((Control)s, false, true, true, true);
+                            e.Handled = true;
+                        }
+                    };
+                }else if (Inputs[i] is FCheckBox)
+                {
+                    FCheckBox checkBox = (FCheckBox)Inputs[i];
+                    checkBox.SetPosition(new Point(posX + 5, posY));
+                    this.Controls.Add(checkBox.GetCheckBox());
+                    checkBox.GetCheckBox().KeyDown += (s, e) => {
+                        if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                        {
+                            SelectNextControl((Control)s, true, true, true, true);
+                            e.Handled = true;
+                        }
+                        if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                        {
+                            SelectNextControl((Control)s, false, true, true, true);
+                            e.Handled = true;
+                        }
+                    };
+                }
+                else if (Inputs[i] is FComboBox)
+                {
+                    FComboBox comboBox = (FComboBox)Inputs[i];
+                    comboBox.SetPosition(new Point(posX, posY));
+                    this.Controls.Add(comboBox.GetLabel());
+                    this.Controls.Add(comboBox.GetComboBox());
+                    comboBox.GetComboBox().KeyDown += (s, e) => {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            SelectNextControl((Control)s, true, true, true, true);
+                            e.Handled = true;
+                        }
+                        if (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift)
+                        {
+                            SelectNextControl((Control)s, false, true, true, true);
+                            e.Handled = true;
+                        }
+                    };
+                }
+                else if (Inputs[i] is FGroupLabel)
+                {
+                    //Console.WriteLine(posY.ToString());
+                    FGroupLabel groupLabel = (FGroupLabel)Inputs[i];
+                    groupLabel.SetPosition(new Point(posX, posY));
+                    this.Controls.Add(groupLabel.GetLabel());
+                    
+                }
+                else if (Inputs[i] is FDateTime)
+                {
+                    //Console.WriteLine(posY.ToString());
+                    FDateTime dateTime = (FDateTime)Inputs[i];
+                    dateTime.SetPosition(new Point(posX, posY));
+                    this.Controls.Add(dateTime.GetLabel());
+                    this.Controls.Add(dateTime.GetDateTimePicker());
+                    dateTime.GetDateTimePicker().KeyDown += (s, e) => {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            SelectNextControl((Control)s, true, true, true, true);
+                            e.Handled = true;
+                        }
+                        if (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift)
+                        {
+                            SelectNextControl((Control)s, false, true, true, true);
+                            e.Handled = true;
+                        }
+                    };
+                }
+                else
+                {
+                    List<dynamic> LineComponents = Inputs[i];
+                    int prevWidth = 0;
+                    for (int j = 0; j < LineComponents.Count; j++)
+                    {
+                        if (LineComponents[j] is FInputBox)
+                        {
+                            FInputBox inputBox = (FInputBox)LineComponents[j];
+                            inputBox.SetPosition(new Point(posX + prevWidth, posY));
+                            this.Controls.Add(inputBox.GetLabel());
+                            this.Controls.Add(inputBox.GetTextBox());
+                            inputBox.GetTextBox().KeyDown += (s, e) => {
+                                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                                {
+                                    SelectNextControl((Control)s, true, true, true, true);
+                                    e.Handled = true;
+                                }
+                                if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                                {
+                                    SelectNextControl((Control)s, false, true, true, true);
+                                    e.Handled = true;
+                                }
+                            };
+
+                            prevWidth += inputBox.GetLabel().Width + inputBox.GetTextBox().Width + 50;
+                        }
+                        else if (LineComponents[j] is FCheckBox)
+                        {
+                            FCheckBox checkBox = (FCheckBox)LineComponents[j];
+                            checkBox.SetPosition(new Point(posX + 5 + prevWidth, posY));
+                            this.Controls.Add(checkBox.GetCheckBox());
+                            checkBox.GetCheckBox().KeyDown += (s, e) => {
+                                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                                {
+                                    SelectNextControl((Control)s, true, true, true, true);
+                                    e.Handled = true;
+                                }
+                                if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                                {
+                                    SelectNextControl((Control)s, false, true, true, true);
+                                    e.Handled = true;
+                                }
+                            };
+
+                            prevWidth += checkBox.GetCheckBox().Width + 50;
+                        }
+                    }
+                }
+
+                posY = posY + distanceY;
+                if(posY > limitY)
+                {
+                    posY = startY;
+                    posX = startX + distanceX;
+                }
+            }
+        }
+
+        protected void GlobalLayout_KeyDown(object sender, KeyEventArgs e, HotkeyButton[] hkButtons, bool DefaultEscEvent)
+        {
+            if (e.KeyCode == Keys.Escape && DefaultEscEvent)
             {
                 if(this._prevForm != null)
                 {
@@ -169,7 +318,5 @@ namespace mjc_dev.common
                 }
             }
         }
-
-        
     }
 }

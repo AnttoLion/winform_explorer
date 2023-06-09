@@ -10,9 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using mjc_dev.model;
-using mjc_dev.forms.modals;
 
-namespace mjc_dev.forms
+namespace mjc_dev.forms.vendor
 {
     public partial class VendorList : GlobalLayout
     {
