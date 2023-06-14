@@ -13,12 +13,13 @@ using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
 using System.Net;
 using System.Reflection.Emit;
+using mjc_dev.forms.price;
 
 namespace mjc_dev.forms.sku
 {
     public partial class SKUDetail : GlobalLayout
     {
-        private HotkeyButton SKUMemo = new HotkeyButton("F2", "SKU Memo", Keys.F2);
+        private HotkeyButton hkSKUMemo = new HotkeyButton("F2", "SKU Memo", Keys.F2);
         private HotkeyButton QuickCalcPrice = new HotkeyButton("F3", "Quick Calc Price", Keys.F3);
         private HotkeyButton MiscManagement = new HotkeyButton("F4", "Misc Management", Keys.F4);
         private HotkeyButton ResetPrices = new HotkeyButton("F5", "Reset Prices", Keys.F5);
@@ -58,13 +59,14 @@ namespace mjc_dev.forms.sku
         private FCheckBox freezePrices = new FCheckBox("Freeze prices");
         private FInputBox coreCost = new FInputBox("Core Cost");
         private FInputBox invValue = new FInputBox("Inv Value");
-        private FInputBox priceTier1 = new FInputBox("Price Tier 1");
-        private FInputBox priceTier2 = new FInputBox("Price Tier 2");
+
+        private FInputBox[] priceTiers;
 
         private DashboardModel model = new DashboardModel();
         private int selectId = 0;
         private int skuId = 0;
         private int categoryId = 0;
+        private string memo;
 
         public SKUDetail() : base("SKU Information", "Manage details of SKU")
         {
@@ -73,7 +75,7 @@ namespace mjc_dev.forms.sku
             _initBasicSize();
             this.KeyDown += (s, e) => Form_KeyDown(s, e);
 
-            HotkeyButton[] hkButtons = new HotkeyButton[5] { SKUMemo, QuickCalcPrice, MiscManagement, ResetPrices, SetArchived};
+            HotkeyButton[] hkButtons = new HotkeyButton[5] { hkSKUMemo, QuickCalcPrice, MiscManagement, ResetPrices, SetArchived};
             _initializeHKButtons(hkButtons, false);
             AddHotKeyEvents();
 
@@ -85,12 +87,40 @@ namespace mjc_dev.forms.sku
         {
             SetArchived.GetButton().Click += (sender, e) =>
             {
-                setArchived(sender, e);
+                DialogResult result = MessageBox.Show("Do you want to set archived?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if(result == DialogResult.Yes)
+                {
+                    model.UpdateSKUArchieved(true, this.skuId);
+                }
+                else if (result == DialogResult.No)
+                {
+                    model.UpdateSKUArchieved(false, this.skuId);
+                }
+            };
+            hkSKUMemo.GetButton().Click += (sender, e) =>
+            {
+                SKUMemo MemoModal = new SKUMemo(skuId, memo);
+                this.Enabled = false;
+                MemoModal.Show();
+                MemoModal.FormClosed += (ss, sargs) =>
+                {
+                    this.memo = MemoModal.getMemo();
+                    this.Enabled = true;
+                };
+
             };
         }
 
         private void InitForm()
         {
+
+            Panel _panel = new System.Windows.Forms.Panel();
+            _panel.BackColor = System.Drawing.Color.Transparent;
+            _panel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            _panel.Location = new System.Drawing.Point(0, 95);
+            _panel.Size = new Size(this.Width-15, this.Height - 340);
+            _panel.AutoScroll = true;
+            this.Controls.Add(_panel);
 
             List<dynamic> FormComponents = new List<dynamic>();
 
@@ -119,30 +149,47 @@ namespace mjc_dev.forms.sku
             FormComponents.Add(lastSold);
             FormComponents.Add(manufacturer);
             FormComponents.Add(location);
+            _addFormInputs(FormComponents, 30, 20, 800, 50, 700, _panel.Controls);
 
-            FormComponents.Add(quantityTracking);
-            FormComponents.Add(quantity);
-            FormComponents.Add(qtyAllocated);
-            FormComponents.Add(qtyAvaiable);
-            FormComponents.Add(criticalQty);
-            FormComponents.Add(recorderQty);
+            List<dynamic> FormComponents2 = new List<dynamic>();
+            FormComponents2.Add(quantityTracking);
+            FormComponents2.Add(quantity);
+            FormComponents2.Add(qtyAllocated);
+            FormComponents2.Add(qtyAvaiable);
+            FormComponents2.Add(criticalQty);
+            FormComponents2.Add(recorderQty);
 
-            FormComponents.Add(sales);
-            FormComponents.Add(soldThisMonth);
-            FormComponents.Add(soldYTD);
-            FormComponents.Add(prices);
-            FormComponents.Add(coreCost);
-            FormComponents.Add(invValue);
-            FormComponents.Add(priceTier1);
-            FormComponents.Add(priceTier2);
+            FormComponents2.Add(sales);
+            FormComponents2.Add(soldThisMonth);
+            FormComponents2.Add(soldYTD);
 
-            _addFormInputs(FormComponents, 30, 110, 800, 50, 800);
+            FormComponents2.Add(prices);
+            FormComponents2.Add(freezePrices);
+            FormComponents2.Add(coreCost);
+            FormComponents2.Add(invValue);
+
+            string filter = "";
+            var refreshData = model.LoadPriceTierData(filter);
+            if (refreshData)
+            {
+                List<PriceTierData> pDatas = model.PriceTierDataList;
+
+                priceTiers = new FInputBox[pDatas.Count];
+                for (int i = 0; i< pDatas.Count; i++)
+                {
+                    priceTiers[i] = new FInputBox(pDatas[i].name.ToString());
+                    FormComponents2.Add(priceTiers[i]);
+                }
+            }
+
+            _addFormInputs(FormComponents2, 700, 20, 800, 50, int.MaxValue, _panel.Controls);
         }
 
         public void setDetails(List<dynamic> data, int id)
         {
             this.skuId = id;
             this.selectId = (int)data[0].category;
+            if(data[0].memo != null) this.memo = data[0].memo;
 
             this.SKUName.GetTextBox().Text = data[0].sku.ToString();
             this.description.GetTextBox().Text = data[0].description.ToString();
@@ -154,7 +201,10 @@ namespace mjc_dev.forms.sku
             this.maintainQtys.GetCheckBox().Checked = (bool)data[0].manageStock;
             this.allowDiscount.GetCheckBox().Checked = (bool)data[0].allowDiscounts;
             this.orderForm.GetTextBox().Text = data[0].orderFrom.ToString();
-            if(data[0].lastSold != DBNull.Value) this.lastSold.GetDateTimePicker().Value = data[0].lastSold.ToLocalTime();
+
+            this.lastSold.GetDateTimePicker().Value = data[0].lastSold.ToLocalTime();
+            if(data[0].lastSold != null) this.lastSold.GetDateTimePicker().Value = data[0].lastSold.ToLocalTime();
+
             this.manufacturer.GetTextBox().Text = data[0].manufacturer.ToString();
             this.location.GetTextBox().Text = data[0].location.ToString();
 
@@ -171,8 +221,6 @@ namespace mjc_dev.forms.sku
 
             this.coreCost.GetTextBox().Text = data[0].coreCost.ToString();
             this.invValue.GetTextBox().Text = data[0].inventoryValue.ToString();
-            this.priceTier1.GetTextBox().Text = "";
-            this.priceTier2.GetTextBox().Text = "";
         }
 
         private void Add_Load(object sender, EventArgs e)
@@ -203,7 +251,7 @@ namespace mjc_dev.forms.sku
             }
         }
 
-        private void setArchived(object sender, EventArgs e)
+        private void saveSKU(object sender, EventArgs e)
         {
             string s_sku_name = SKUName.GetTextBox().Text;
 
@@ -236,6 +284,7 @@ namespace mjc_dev.forms.sku
 
             string s_manufacturer = manufacturer.GetTextBox().Text;
             string s_location = location.GetTextBox().Text;
+            string memo = this.memo;
 
             int i_quantity; bool is_i_quantity = int.TryParse(quantity.GetTextBox().Text, out i_quantity);
             if (!is_i_quantity) i_quantity = 0;
@@ -259,10 +308,6 @@ namespace mjc_dev.forms.sku
             if (!is_i_core_cost) i_core_cost = 0;
             int i_inv_value; bool is_i_inv_value = int.TryParse(invValue.GetTextBox().Text, out i_inv_value);
             if (!is_i_inv_value) i_inv_value = 0;
-            int i_price_tier1; bool is_i_price_tier1 = int.TryParse(priceTier1.GetTextBox().Text, out i_price_tier1);
-            if (!is_i_price_tier1) i_price_tier1 = 0;
-            int i_price_tier2; bool is_i_price_tier2 = int.TryParse(priceTier2.GetTextBox().Text, out i_price_tier2);
-            if (!is_i_price_tier2) i_price_tier2 = 0;
 
             if (s_sku_name == "")
             {
@@ -270,8 +315,8 @@ namespace mjc_dev.forms.sku
                 return;
             }
             bool refreshData = false;
-            if (skuId == 0) refreshData = model.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, i_price_tier1, i_price_tier2);
-            else refreshData = model.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, i_price_tier1, i_price_tier2, skuId);
+            if (skuId == 0) refreshData = model.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo);
+            else refreshData = model.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, skuId);
             string modeText = skuId == 0 ? "creating" : "updating";
             if (refreshData)
             {
@@ -306,7 +351,7 @@ namespace mjc_dev.forms.sku
 
                 if (result == DialogResult.Yes)
                 {
-                    setArchived(sender, e);
+                    saveSKU(sender, e);
                 }
                 else if (result == DialogResult.No)
                 {

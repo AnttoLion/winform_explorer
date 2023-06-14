@@ -142,6 +142,12 @@
     <Compile Include="forms\Reconcilliation.Designer.cs">
       <DependentUpon>Reconcilliation.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\sales\SalesHisotry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sales\SalesHisotry.Designer.cs">
+      <DependentUpon>SalesHisotry.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\sku\Allocations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,12 @@
     </Compile>
     <Compile Include="forms\sku\CrossReference.Designer.cs">
       <DependentUpon>CrossReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\SKUMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUMemo.Designer.cs">
+      <DependentUpon>SKUMemo.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\sku\SKUProfile.cs">
       <SubType>Form</SubType>
@@ -273,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="forms\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\sku\SKUMemo.resx">
+      <DependentUpon>SKUMemo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -106,6 +106,19 @@ namespace mjc_dev.model
             phone = _phone;
         }
     }
+
+    public struct SKUMemoData
+    {
+        public int id { get; set; }
+        public string memo { get; set; }
+
+        public SKUMemoData(int _id, string _memo)
+        {
+            id = _id;
+            memo = _memo;
+        }
+    }
+
     public class DashboardModel : DbConnection
     {
         #region Fields & Properties
@@ -124,6 +137,8 @@ namespace mjc_dev.model
         public decimal TotalProfit { get; set; }
 
         public List<SKUDetail> SKUDataList { get; private set; }
+
+        //public List<SKUMemoData> SKUMemoList { get; private set; }
         public List<CategoryData> CategoryDataList { get; private set; }
         public List<VendorData> VendorDataList { get; private set; }
         public List<PriceTierData> PriceTierDataList { get; private set; }
@@ -369,7 +384,32 @@ namespace mjc_dev.model
             return true;
         }
 
-        public bool AddSKU(string sku__name, int category, string description, string measurement_unit, int weight, int cost_code, int asset_acct, bool taxable, bool maintain_qty, bool allow_discount, bool commissionable, int order_from, DateTime last_sold, string manufacturer, string location, int quantity, int qty_allocated, int qty_available, int critical_qty, int reorder_qty, int sold_this_month, int sold_ytd, bool freeze_prices, int core_cost, int inv_value, int price_tier1, int price_tier2)
+        public bool AddSKU(string sku__name, 
+            int category, 
+            string description, 
+            string measurement_unit, 
+            int weight, 
+            int cost_code, 
+            int asset_acct, 
+            bool taxable, 
+            bool maintain_qty, 
+            bool allow_discount, 
+            bool commissionable, 
+            int order_from, 
+            DateTime last_sold, 
+            string manufacturer, 
+            string location, 
+            int quantity, 
+            int qty_allocated, 
+            int qty_available, 
+            int critical_qty, 
+            int reorder_qty, 
+            int sold_this_month, 
+            int sold_ytd, 
+            bool freeze_prices, 
+            int core_cost, 
+            int inv_value, 
+            string memo)
         {
 
             using (var connection = GetConnection())
@@ -380,7 +420,7 @@ namespace mjc_dev.model
                 {
                     command.Connection = connection;
                     //Get Total Number of Customers
-                    command.CommandText = "INSERT INTO dbo.SKU (sku, category, description, measurementUnit, weight, costCode, assetAccount, taxable, manageStock, allowDiscounts, commissionable, orderFrom, lastSold, manufacturer, location, quantity, qtyAllocated, qtyAvailable, qtyCritical, qtyReorder, soldMonthToDate, soldYearToDate, freezePrices, coreCost, inventoryValue, createdAt, createdBy, updatedAt, updatedBy, subassemblyStatus, subassemblyPrint) VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31)";
+                    command.CommandText = "INSERT INTO dbo.SKU (sku, category, description, measurementUnit, weight, costCode, assetAccount, taxable, manageStock, allowDiscounts, commissionable, orderFrom, lastSold, manufacturer, location, quantity, qtyAllocated, qtyAvailable, qtyCritical, qtyReorder, soldMonthToDate, soldYearToDate, freezePrices, coreCost, inventoryValue, createdAt, createdBy, updatedAt, updatedBy, subassemblyStatus, subassemblyPrint, memo) VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31, @memo)";
                     command.Parameters.AddWithValue("@Value1", sku__name);
                     command.Parameters.AddWithValue("@Value2", category);
                     command.Parameters.AddWithValue("@Value3", description);
@@ -412,6 +452,7 @@ namespace mjc_dev.model
                     command.Parameters.AddWithValue("@Value29", 1);
                     command.Parameters.AddWithValue("@Value30", false);
                     command.Parameters.AddWithValue("@Value31", false);
+                    command.Parameters.AddWithValue("@memo", memo);
 
                     command.ExecuteNonQuery();
 
@@ -422,7 +463,33 @@ namespace mjc_dev.model
             }
         }
 
-        public bool UpdateSKU(string sku__name, int category, string description, string measurement_unit, int weight, int cost_code, int asset_acct, bool taxable, bool maintain_qty, bool allow_discount, bool commissionable, int order_from, DateTime last_sold, string manufacturer, string location, int quantity, int qty_allocated, int qty_available, int critical_qty, int reorder_qty, int sold_this_month, int sold_ytd, bool freeze_prices, int core_cost, int inv_value, int price_tier1, int price_tier2, int id)
+        public bool UpdateSKU(string sku__name, 
+            int category, 
+            string description, 
+            string measurement_unit, 
+            int weight, 
+            int cost_code, 
+            int asset_acct, 
+            bool taxable, 
+            bool maintain_qty, 
+            bool allow_discount, 
+            bool commissionable, 
+            int order_from, 
+            DateTime last_sold, 
+            string manufacturer, 
+            string location, 
+            int quantity, 
+            int qty_allocated, 
+            int qty_available, 
+            int critical_qty, 
+            int reorder_qty, 
+            int sold_this_month, 
+            int sold_ytd, 
+            bool freeze_prices, 
+            int core_cost, 
+            int inv_value, 
+            string memo,
+            int id)
         {
             using (var connection = GetConnection())
             {
@@ -431,7 +498,7 @@ namespace mjc_dev.model
                 using (var command = new SqlCommand())
                 {
                     command.Connection = connection;
-                    command.CommandText = @"UPDATE dbo.SKU SET sku = @Value1, category = @Value2, description = @Value3, measurementUnit = @Value4, weight = @Value5, costCode = @Value6, assetAccount = @Value7, taxable = @Value8, manageStock = @Value9, allowDiscounts = @Value10, commissionable = @Value11, orderFrom = @Value12, lastSold = @Value13, manufacturer = @Value14, location = @Value15, quantity = @Value16, qtyAllocated = @Value17, qtyAvailable = @Value18, qtyCritical = @Value19, qtyReorder = @Value20, soldMonthToDate = @Value21, soldYearToDate = @Value22, freezePrices = @Value23, coreCost = @Value24,inventoryValue = @Value25 WHERE id = @Value26";
+                    command.CommandText = @"UPDATE dbo.SKU SET sku = @Value1, category = @Value2, description = @Value3, measurementUnit = @Value4, weight = @Value5, costCode = @Value6, assetAccount = @Value7, taxable = @Value8, manageStock = @Value9, allowDiscounts = @Value10, commissionable = @Value11, orderFrom = @Value12, lastSold = @Value13, manufacturer = @Value14, location = @Value15, quantity = @Value16, qtyAllocated = @Value17, qtyAvailable = @Value18, qtyCritical = @Value19, qtyReorder = @Value20, soldMonthToDate = @Value21, soldYearToDate = @Value22, freezePrices = @Value23, coreCost = @Value24, inventoryValue = @Value25, memo = @memo WHERE id = @Value26";
                     command.Parameters.AddWithValue("@Value1", sku__name);
                     command.Parameters.AddWithValue("@Value2", category);
                     command.Parameters.AddWithValue("@Value3", description);
@@ -457,11 +524,52 @@ namespace mjc_dev.model
                     command.Parameters.AddWithValue("@Value23", freeze_prices);
                     command.Parameters.AddWithValue("@Value24", core_cost);
                     command.Parameters.AddWithValue("@Value25", inv_value);
+                    command.Parameters.AddWithValue("@memo", memo);
                     command.Parameters.AddWithValue("@Value26", id);
 
                     command.ExecuteNonQuery();
 
                     MessageBox.Show("The Vendor updated successfully.");
+                }
+
+                return true;
+            }
+        }
+
+        public bool UpdateSKUMemo(string sku__memo, int id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"UPDATE dbo.SKU SET memo = @Value1 WHERE id = @Value2";
+                    command.Parameters.AddWithValue("@Value1", sku__memo);
+                    command.Parameters.AddWithValue("@Value2", id);
+
+                    command.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+        }
+
+        public bool UpdateSKUArchieved(bool archived, int id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"UPDATE dbo.SKU SET archieved = @Value1 WHERE id = @Value2";
+                    command.Parameters.AddWithValue("@Value1", archived);
+                    command.Parameters.AddWithValue("@Value2", id);
+
+                    command.ExecuteNonQuery();
                 }
 
                 return true;

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using mjc_dev.model;
 using System.Runtime.Remoting.Channels;
+using mjc_dev.forms.sales;
 
 namespace mjc_dev.forms.sku
 {
@@ -89,7 +90,13 @@ namespace mjc_dev.forms.sku
             hkView.GetButton().Click += (sender, e) =>
             {
                 this.Hide();
-                SKUProfile CrossRefModal = new SKUProfile();
+                Allocations CrossRefModal = new Allocations();
+                _navigateToForm(sender, e, CrossRefModal);
+            };
+            hkSKUHistory.GetButton().Click += (sender, e) =>
+            {
+                this.Hide();
+                SalesHisotry CrossRefModal = new SalesHisotry();
                 _navigateToForm(sender, e, CrossRefModal);
             };
         }

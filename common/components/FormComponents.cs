@@ -228,6 +228,7 @@ namespace mjc_dev.common.components
             checkBox.Font = new Font("Segoe UI Semibold", 15.75F);
             checkBox.ForeColor = System.Drawing.Color.WhiteSmoke;
 
+
             checkBox.Enter += (s, e) =>
             {
                 checkBox.ForeColor = ComponentsGlobals.FocusedColor;
@@ -247,6 +248,29 @@ namespace mjc_dev.common.components
         public void SetPosition(Point location)
         {
             checkBox.Location = new Point(location.X, location.Y);
+        }
+    }
+
+    public class FRichTextBox
+    {
+        private RichTextBox richText;
+        public FRichTextBox()
+        {
+            richText = new RichTextBox();
+            richText.AutoSize = true;
+            richText.Font = new Font("Segoe UI Semibold", 15.75F);
+            //richText.ForeColor = System.Drawing.Color.WhiteSmoke;
+        }
+
+        public RichTextBox GetTextBox()
+        {
+            return richText;
+        }
+
+
+        public void SetPosition(Point location)
+        {
+            richText.Location = new Point(location.X, location.Y);
         }
     }
 

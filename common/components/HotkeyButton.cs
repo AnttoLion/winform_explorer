@@ -36,7 +36,8 @@ namespace mjc_dev.common.components
 
             label.AutoSize = true;
             label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            label.BackColor = System.Drawing.Color.FromArgb(11, 46, 78);
+            //label.BackColor = System.Drawing.Color.FromArgb(11, 46, 78);
+            label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
             label.Size = new System.Drawing.Size(146, 31);

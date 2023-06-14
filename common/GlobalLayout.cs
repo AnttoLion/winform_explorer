@@ -149,17 +149,21 @@ namespace mjc_dev.common
             this.Hide();
         }
 
-        protected void _addFormInputs(List<dynamic> Inputs, int startX, int startY, int distanceX, int distanceY, int limitY = int.MaxValue)
+        protected void _addFormInputs(List<dynamic> Inputs, int startX, int startY, int distanceX, int distanceY, int limitY = int.MaxValue, Control.ControlCollection _controls = null)
         {
+            if(_controls == null){
+                _controls = this.Controls;
+            }
             int posX = startX;
             int posY = startY;
             for (int i = 0; i < Inputs.Count; i++)
             {
-                if (Inputs[i] is FInputBox) {
+                if (Inputs[i] is FInputBox)
+                {
                     FInputBox inputBox = (FInputBox)Inputs[i];
                     inputBox.SetPosition(new Point(posX, posY));
-                    this.Controls.Add(inputBox.GetLabel());
-                    this.Controls.Add(inputBox.GetTextBox());
+                    _controls.Add(inputBox.GetLabel());
+                    _controls.Add(inputBox.GetTextBox());
                     inputBox.GetTextBox().KeyDown += (s, e) => {
                         if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
                         {
@@ -172,11 +176,12 @@ namespace mjc_dev.common
                             e.Handled = true;
                         }
                     };
-                }else if (Inputs[i] is FCheckBox)
+                }
+                else if (Inputs[i] is FCheckBox)
                 {
                     FCheckBox checkBox = (FCheckBox)Inputs[i];
                     checkBox.SetPosition(new Point(posX + 5, posY));
-                    this.Controls.Add(checkBox.GetCheckBox());
+                    _controls.Add(checkBox.GetCheckBox());
                     checkBox.GetCheckBox().KeyDown += (s, e) => {
                         if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
                         {
@@ -194,8 +199,8 @@ namespace mjc_dev.common
                 {
                     FComboBox comboBox = (FComboBox)Inputs[i];
                     comboBox.SetPosition(new Point(posX, posY));
-                    this.Controls.Add(comboBox.GetLabel());
-                    this.Controls.Add(comboBox.GetComboBox());
+                    _controls.Add(comboBox.GetLabel());
+                    _controls.Add(comboBox.GetComboBox());
                     comboBox.GetComboBox().KeyDown += (s, e) => {
                         if (e.KeyCode == Keys.Enter)
                         {
@@ -214,16 +219,16 @@ namespace mjc_dev.common
                     //Console.WriteLine(posY.ToString());
                     FGroupLabel groupLabel = (FGroupLabel)Inputs[i];
                     groupLabel.SetPosition(new Point(posX, posY));
-                    this.Controls.Add(groupLabel.GetLabel());
-                    
+                    _controls.Add(groupLabel.GetLabel());
+
                 }
                 else if (Inputs[i] is FDateTime)
                 {
                     //Console.WriteLine(posY.ToString());
                     FDateTime dateTime = (FDateTime)Inputs[i];
                     dateTime.SetPosition(new Point(posX, posY));
-                    this.Controls.Add(dateTime.GetLabel());
-                    this.Controls.Add(dateTime.GetDateTimePicker());
+                    _controls.Add(dateTime.GetLabel());
+                    _controls.Add(dateTime.GetDateTimePicker());
                     dateTime.GetDateTimePicker().KeyDown += (s, e) => {
                         if (e.KeyCode == Keys.Enter)
                         {
@@ -247,8 +252,8 @@ namespace mjc_dev.common
                         {
                             FInputBox inputBox = (FInputBox)LineComponents[j];
                             inputBox.SetPosition(new Point(posX + prevWidth, posY));
-                            this.Controls.Add(inputBox.GetLabel());
-                            this.Controls.Add(inputBox.GetTextBox());
+                            _controls.Add(inputBox.GetLabel());
+                            _controls.Add(inputBox.GetTextBox());
                             inputBox.GetTextBox().KeyDown += (s, e) => {
                                 if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
                                 {
@@ -268,7 +273,7 @@ namespace mjc_dev.common
                         {
                             FCheckBox checkBox = (FCheckBox)LineComponents[j];
                             checkBox.SetPosition(new Point(posX + 5 + prevWidth, posY));
-                            this.Controls.Add(checkBox.GetCheckBox());
+                            _controls.Add(checkBox.GetCheckBox());
                             checkBox.GetCheckBox().KeyDown += (s, e) => {
                                 if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
                                 {
@@ -288,13 +293,14 @@ namespace mjc_dev.common
                 }
 
                 posY = posY + distanceY;
-                if(posY > limitY)
+                if (posY > limitY)
                 {
                     posY = startY;
                     posX = startX + distanceX;
                 }
             }
         }
+
 
         protected void GlobalLayout_KeyDown(object sender, KeyEventArgs e, HotkeyButton[] hkButtons, bool DefaultEscEvent)
         {
