@@ -39,6 +39,8 @@ namespace mjc_dev.common.components
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 227, 130);
             dataGridView.DefaultCellStyle.SelectionForeColor = Color.FromArgb(58, 65, 73);
+            dataGridView.ScrollBars = ScrollBars.Both;
+
 
             dataGridView.Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
         }

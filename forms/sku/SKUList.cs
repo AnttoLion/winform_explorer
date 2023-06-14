@@ -105,7 +105,7 @@ namespace mjc_dev.forms.sku
         {
             SKUGridRefer = SKUListGrid.GetGrid();
             SKUGridRefer.Location = new Point(0, 95);
-            SKUGridRefer.Width = this.Width;
+            SKUGridRefer.Width = this.Width - 20;
             SKUGridRefer.Height = this.Height - 295;
             this.Controls.Add(SKUGridRefer);
             this.SKUGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SKUGridView_CellDoubleClick);
