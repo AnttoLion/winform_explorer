@@ -46,10 +46,11 @@ namespace mjc_dev.common
                 if (e.KeyCode == modalButton.GetKeys())
                 {
                     modalButton.GetButton().PerformClick();
-                    this.Close();
                     return;
                 }
             };
         }
+
+       
     }
 }

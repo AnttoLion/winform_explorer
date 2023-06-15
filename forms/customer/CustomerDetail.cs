@@ -348,8 +348,14 @@ namespace mjc_dev.forms.customer
             string stmt_num = StmtCust.GetTextBox().Text;
             string stmt_name = StmtName.GetTextBox().Text;
 
-            PriceTierComboBoxItem seletedItem = (PriceTierComboBoxItem)PriceTier.GetComboBox().SelectedItem;
-            int pricetier = seletedItem.Id;
+            if (PriceTier.GetComboBox().SelectedItem == null)
+            {
+                MessageBox.Show("please select PriceTier");
+                //PriceTier.GetComboBox().Select();
+                return;
+            }
+            PriceTierComboBoxItem selectedItem = (PriceTierComboBoxItem)PriceTier.GetComboBox().SelectedItem;
+            int pricetier = selectedItem.Id;
 
             string terms = Terms.GetTextBox().Text;
             string limit = Limit.GetTextBox().Text;

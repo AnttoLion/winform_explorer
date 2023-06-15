@@ -411,7 +411,6 @@ namespace mjc_dev.model
             int inv_value, 
             string memo)
         {
-
             using (var connection = GetConnection())
             {
                 connection.Open();

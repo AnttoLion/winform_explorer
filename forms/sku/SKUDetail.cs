@@ -14,6 +14,7 @@ using static System.Windows.Forms.AxHost;
 using System.Net;
 using System.Reflection.Emit;
 using mjc_dev.forms.price;
+using System.Xml.Linq;
 
 namespace mjc_dev.forms.sku
 {
@@ -66,7 +67,7 @@ namespace mjc_dev.forms.sku
         private int selectId = 0;
         private int skuId = 0;
         private int categoryId = 0;
-        private string memo;
+        private string memo = "";
 
         public SKUDetail() : base("SKU Information", "Manage details of SKU")
         {
@@ -253,13 +254,19 @@ namespace mjc_dev.forms.sku
         private void saveSKU(object sender, EventArgs e)
         {
             string s_sku_name = SKUName.GetTextBox().Text;
-
-            CategoryComboBoxItem seletedItem = (CategoryComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
-            if (seletedItem == null)
+            if (string.IsNullOrWhiteSpace(s_sku_name))
             {
-                MessageBox.Show("Please select a correct category.");
+                MessageBox.Show("please enter SKU Name");
+                this.SKUName.GetTextBox().Select();
                 return;
             }
+            if (categoryCombo.GetComboBox().SelectedItem == null)
+            {
+                MessageBox.Show("please select a category");
+                return;
+            }
+            CategoryComboBoxItem seletedItem = (CategoryComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
+
             int i_category = seletedItem.Id;
 
             string s_description = description.GetTextBox().Text;

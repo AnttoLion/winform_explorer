@@ -32,6 +32,13 @@ namespace mjc_dev.forms.price
             this.StartPosition = FormStartPosition.CenterScreen;
             InitMBOKButton();
             InitInputBox();
+
+            this.Load += (s, e) => PriceTierDetail_Load(s, e);
+        }
+
+        private void PriceTierDetail_Load(object sender, EventArgs e)
+        {
+            priceTierName.GetTextBox().Select();
         }
 
         private void InitMBOKButton()
@@ -48,10 +55,34 @@ namespace mjc_dev.forms.price
             priceTierName.SetPosition(new Point(30, 30));
             this.Controls.Add(priceTierName.GetLabel());
             this.Controls.Add(priceTierName.GetTextBox());
+            priceTierName.GetTextBox().KeyDown += (s, e) => {
+                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                {
+                    SelectNextControl((Control)s, true, true, true, true);
+                    e.Handled = true;
+                }
+                if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                {
+                    SelectNextControl((Control)s, false, true, true, true);
+                    e.Handled = true;
+                }
+            };
 
             profitMargin.SetPosition(new Point(30, 80));
             this.Controls.Add(profitMargin.GetLabel());
             this.Controls.Add(profitMargin.GetTextBox());
+            profitMargin.GetTextBox().KeyDown += (s, e) => {
+                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+                {
+                    SelectNextControl((Control)s, true, true, true, true);
+                    e.Handled = true;
+                }
+                if (e.KeyCode == Keys.Up || (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift))
+                {
+                    SelectNextControl((Control)s, false, true, true, true);
+                    e.Handled = true;
+                }
+            };
 
             priceTierCode.SetPosition(new Point(30, 130));
             this.Controls.Add(priceTierCode.GetLabel());
@@ -61,7 +92,19 @@ namespace mjc_dev.forms.price
         private void ok_button_Click(object sender, EventArgs e)
         {
             string name = this.priceTierName.GetTextBox().Text;
-            double profitMargin = double.Parse(this.profitMargin.GetTextBox().Text);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("please enter Price Tier Name");
+                this.priceTierName.GetTextBox().Select();
+                return;
+            }
+            if (!double.TryParse(this.profitMargin.GetTextBox().Text, out double profitMargin))
+            {
+                MessageBox.Show("please enter a number");
+                this.profitMargin.GetTextBox().Text = "";
+                this.profitMargin.GetTextBox().Focus();
+                return;
+            }
             string pricetiercode = this.priceTierCode.GetTextBox().Text;
 
             bool refreshData = false;

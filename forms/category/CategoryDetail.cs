@@ -29,8 +29,16 @@ namespace mjc_dev.forms.category
             InitializeComponent();
             this.Size = new Size(600, 260);
             this.StartPosition = FormStartPosition.CenterScreen;
+
             InitMBOKButton();
             InitInputBox();
+
+            this.Load += (s, e) => CategoryDetail_Load(s, e);
+        }
+
+        private void CategoryDetail_Load(object sender, EventArgs e)
+        {
+            categoryName.GetTextBox().Select();
         }
 
         private void InitMBOKButton()
@@ -56,7 +64,19 @@ namespace mjc_dev.forms.category
         private void ok_button_Click(object sender, EventArgs e)
         {
             string name = this.categoryName.GetTextBox().Text;
-            int calculateAs = int.Parse(this.calculateAs.GetTextBox().Text);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("please enter Category Name");
+                this.categoryName.GetTextBox().Select();
+                return;
+            }
+            if (!int.TryParse(this.calculateAs.GetTextBox().Text, out int calculateAs))
+            {
+                MessageBox.Show("please enter a number");
+                this.calculateAs.GetTextBox().Text = "";
+                this.calculateAs.GetTextBox().Select();
+                return;
+            }
 
             bool refreshData = false;
             if (categoryId == 0)
