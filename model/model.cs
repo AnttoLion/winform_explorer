@@ -373,9 +373,16 @@ namespace mjc_dev.model
                     reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        SKUDataList.Add(
-                            new SKUDetail((int)reader[0], reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), (int)reader[4], (int)reader[5])
-                        );
+                        //MessageBox.Show(reader[0].ToString());
+                        int.TryParse(reader[0].ToString(), out int id);
+                        string name = reader[1].ToString();
+                        string desc = reader[2].ToString();
+                        string category = reader[3].ToString();
+                        int price = (int)reader[4];
+                        int stock = (int)reader[5];
+
+                        SKUDetail skuItem = new SKUDetail(id, name, desc, category, price, stock);
+                        SKUDataList.Add(skuItem);
                     }
                     reader.Close();
                 }
