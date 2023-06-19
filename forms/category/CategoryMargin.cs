@@ -35,6 +35,11 @@ namespace mjc_dev.forms.category
             AddHotKeyEvents();
 
             InitCategoryListGrid();
+
+            this.VisibleChanged += (s, e) => 
+            {
+                this.LoadCategoryList();
+            };
         }
 
         private void AddHotKeyEvents()
@@ -77,8 +82,6 @@ namespace mjc_dev.forms.category
             CLGridRefer.Height = this.Height - 295;
             this.Controls.Add(CLGridRefer);
             this.CLGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.addcategory_btn_Click);
-
-            LoadCategoryList();
         }
 
         private void LoadCategoryList()

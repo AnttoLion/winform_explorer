@@ -35,6 +35,11 @@ namespace mjc_dev.forms.price
             AddHotKeyEvents();
 
             InitPriceTierGrid();
+
+            this.VisibleChanged += (s, e) =>
+            {
+                this.LoadPriceTierList();
+            };
         }
 
         private void AddHotKeyEvents()
@@ -77,8 +82,6 @@ namespace mjc_dev.forms.price
             PTGridRefer.Height = this.Height - 295;
             this.Controls.Add(PTGridRefer);
             this.PTGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.pricetierGridView_CellDoubleClick);
-
-            LoadPriceTierList();
         }
 
         private void LoadPriceTierList()

@@ -36,6 +36,11 @@ namespace mjc_dev.forms.vendor
             AddHotKeyEvents();
 
             InitVendorList();
+
+            this.VisibleChanged += (s, e) =>
+            {
+                this.LoadVendorList();
+            };
         }
         private void AddHotKeyEvents()
         {
@@ -80,8 +85,6 @@ namespace mjc_dev.forms.vendor
             {
                 updateVendor();
             };
-
-            LoadVendorList();
         }
 
         private void LoadVendorList()

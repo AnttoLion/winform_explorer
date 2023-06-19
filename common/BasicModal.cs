@@ -20,14 +20,14 @@ namespace mjc_dev.common
         public BasicModal()
         {
             InitializeComponent();
-            this._initLayout();
+            this._initLayout(true);
         }
-        public BasicModal(string title) : base()
+        public BasicModal(string title, bool defaultEsc = true) : base()
         {
-            this._initLayout();
+            this._initLayout(defaultEsc);
             this.Text = title;
         }
-        private void _initLayout()
+        private void _initLayout(bool defaultEsc)
         {
             this.BackColor = System.Drawing.Color.FromArgb(38, 77, 118);
             this.KeyPreview = true;
@@ -37,7 +37,7 @@ namespace mjc_dev.common
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.KeyDown += (s, e) => {
-                if (e.KeyCode == Keys.Escape)
+                if (defaultEsc && e.KeyCode == Keys.Escape)
                 {
                     this.Close();
                     return;

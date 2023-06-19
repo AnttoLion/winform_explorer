@@ -60,9 +60,12 @@ namespace mjc_dev.model
 
                     if (filter != "")
                     {
-                        command.CommandText = @"select id, sku, category, description, qtyAvailable, qtyReorder
-                                                from dbo.SKU
-                                                where description like @filter or sku like @filter";
+                        command.CommandText = @"select S_Table.id, sku, C_Table.categoryName, description, qtyAvailable, qtyReorder
+                                                from dbo.SKU as S_Table
+                                                inner join dbo.Categories C_Table on category = C_Table.id 
+                                                where S_Table.description like @filter 
+                                                or S_Table.sku like @filter
+                                                or C_Table.categoryName like @filter";
                         command.Parameters.Add("@filter", System.Data.SqlDbType.VarChar).Value = "%" + filter + "%";
                     }
 

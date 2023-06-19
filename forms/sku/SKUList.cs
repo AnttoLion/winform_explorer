@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using mjc_dev.model;
 using System.Runtime.Remoting.Channels;
 using mjc_dev.forms.sales;
+using Microsoft.VisualBasic;
 
 namespace mjc_dev.forms.sku
 {
@@ -32,6 +33,8 @@ namespace mjc_dev.forms.sku
         private DataGridView SKUGridRefer;
         private int SKUGridSelectedIndex = 0;
 
+        private string searchKey = "";
+
         private SKUModel SKUModelObj = new SKUModel();
 
         public SKUList(bool ArchivedView = false) : base("SKU List", "List of SKUs")
@@ -48,10 +51,32 @@ namespace mjc_dev.forms.sku
 
             AddHotKeyEvents();
 
-            InitPriceTierGrid();
+            InitSKUGrid();
 
             this.VisibleChanged += (ss, sargs) => {
+                Console.WriteLine(ss);
                 this.LoadSKUList();
+            };
+
+            this.KeyDown += (s, e) => 
+            { 
+                if(e.KeyCode == Keys.F && e.Control)
+                {
+                    this.Enabled = false;
+                    SearchInput searchInputModal = new SearchInput();
+                    searchInputModal.SetSearchKey(this.searchKey);
+                    searchInputModal.Show();
+
+                    searchInputModal.FormClosed += (ss, ee) =>
+                    {
+                        if(this.searchKey != searchInputModal.GetSearchKey())
+                        {
+                            this.searchKey = searchInputModal.GetSearchKey();
+                            this.LoadSKUList(false, false);
+                        }
+                        this.Enabled = true;
+                    };
+                }
             };
         }
 
@@ -189,24 +214,29 @@ namespace mjc_dev.forms.sku
             };
         }
 
-        private void InitPriceTierGrid()
+        private void InitSKUGrid()
         {
             SKUGridRefer = SKUListGrid.GetGrid();
             SKUGridRefer.Location = new Point(0, 95);
             SKUGridRefer.Width = this.Width - 20;
-            SKUGridRefer.Height = this.Height - 295;
+            SKUGridRefer.Height = this.Height - 330;
             this.Controls.Add(SKUGridRefer);
             this.SKUGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SKUGridView_CellDoubleClick);
             this.SKUGridRefer.SelectionChanged += (s, e) => SKUGridRefer_SelectionChanged(s, e);
-
-            LoadSKUList();
         }
 
 
         public void LoadSKUList(bool archivedView = false, bool keepSelection = true)
         {
-            string filter = "";
-            var refreshData = SKUModelObj.LoadSKUData(filter, archivedView);
+            if(this.searchKey == "")
+            {
+                this._changeFormText("SKU List");
+            }
+            else
+            {
+                this._changeFormText("SKU List searched by " + this.searchKey);
+            }
+            var refreshData = SKUModelObj.LoadSKUData(this.searchKey, archivedView);
             if (refreshData)
             {
                 SKUGridRefer.DataSource = SKUModelObj.SKUDataList;
@@ -226,8 +256,11 @@ namespace mjc_dev.forms.sku
             if(keepSelection)
             {
                 SKUGridRefer.ClearSelection();
-                SKUGridRefer.Rows[SKUGridSelectedIndex].Selected = true;
-                SKUGridRefer.CurrentCell = SKUGridRefer[1, SKUGridSelectedIndex];
+                if (SKUGridSelectedIndex >= 0 && SKUGridSelectedIndex < SKUGridRefer.Rows.Count)
+                {
+                    SKUGridRefer.Rows[SKUGridSelectedIndex].Selected = true;
+                    SKUGridRefer.CurrentCell = SKUGridRefer[1, SKUGridSelectedIndex];
+                }
             }
         }
 

@@ -42,6 +42,11 @@ namespace mjc_dev.forms.customer
             AddHotKeyEvents();
 
             InitCustomerList();
+
+            this.VisibleChanged += (s, e) =>
+            {
+                this.LoadCustomerList();
+            };
         }
         private void AddHotKeyEvents()
         {
