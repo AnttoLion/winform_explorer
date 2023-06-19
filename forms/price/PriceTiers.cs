@@ -23,7 +23,7 @@ namespace mjc_dev.forms.price
 
         private GridViewOrigin priceTireGrid = new GridViewOrigin();
         private DataGridView PTGridRefer;
-        private DashboardModel model = new DashboardModel();
+        private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
 
         public PriceTiers() : base("Price Tiers", "Tiers of pricing to be assigned to a customer to calculate what prices they're charged")
         {
@@ -57,7 +57,7 @@ namespace mjc_dev.forms.price
                         selectedPriceTierId = (int)row.Cells[0].Value;
                     }
                 }
-                bool refreshData = model.DeletePriceTier(selectedPriceTierId);
+                bool refreshData = PriceTiersModelObj.DeletePriceTier(selectedPriceTierId);
                 if (refreshData)
                 {
                     LoadPriceTierList();
@@ -84,10 +84,10 @@ namespace mjc_dev.forms.price
         private void LoadPriceTierList()
         {
             string filter = "";
-            var refreshData = model.LoadPriceTierData(filter);
+            var refreshData = PriceTiersModelObj.LoadPriceTierData(filter);
             if (refreshData)
             {
-                PTGridRefer.DataSource = model.PriceTierDataList;
+                PTGridRefer.DataSource = PriceTiersModelObj.PriceTierDataList;
                 PTGridRefer.Columns[0].HeaderText = "Price Tier #";
                 PTGridRefer.Columns[0].Width = 300;
                 PTGridRefer.Columns[1].HeaderText = "Price Tier";

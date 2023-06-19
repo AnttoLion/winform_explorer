@@ -18,13 +18,13 @@ using System.Xml.Linq;
 
 namespace mjc_dev.forms.sku
 {
-    public partial class SKUDetail : GlobalLayout
+    public partial class SKUInformation : GlobalLayout
     {
         private HotkeyButton hkSKUMemo = new HotkeyButton("F2", "SKU Memo", Keys.F2);
-        private HotkeyButton QuickCalcPrice = new HotkeyButton("F3", "Quick Calc Price", Keys.F3);
-        private HotkeyButton MiscManagement = new HotkeyButton("F4", "Misc Management", Keys.F4);
-        private HotkeyButton ResetPrices = new HotkeyButton("F5", "Reset Prices", Keys.F5);
-        private HotkeyButton SetArchived = new HotkeyButton("F9", "Set Archived", Keys.F9);
+        private HotkeyButton hkQuickCalcPrice = new HotkeyButton("F3", "Quick Calc Price", Keys.F3);
+        private HotkeyButton hkMiscManagement = new HotkeyButton("F4", "Misc Management", Keys.F4);
+        private HotkeyButton hkResetPrices = new HotkeyButton("F5", "Reset Prices", Keys.F5);
+        private HotkeyButton hkSetArchived = new HotkeyButton("F9", "Set Archived", Keys.F9);
 
         private FGroupLabel SKUInfo = new FGroupLabel("SKU Info");
         private FInputBox SKUName = new FInputBox("SKU#");
@@ -63,20 +63,23 @@ namespace mjc_dev.forms.sku
 
         private FInputBox[] priceTiers;
 
-        private DashboardModel model = new DashboardModel();
+        private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
+        private CategoriesModel CategoriesModelObj = new CategoriesModel();
+        private SKUModel SKUModelObj = new SKUModel();
+
         private int selectId = 0;
         private int skuId = 0;
         private int categoryId = 0;
         private string memo = "";
 
-        public SKUDetail() : base("SKU Information", "Manage details of SKU")
+        public SKUInformation() : base("SKU Information", "Manage details of SKU")
         {
             this.Text = "Sku detail";
             InitializeComponent();
             _initBasicSize();
             this.KeyDown += (s, e) => Form_KeyDown(s, e);
 
-            HotkeyButton[] hkButtons = new HotkeyButton[5] { hkSKUMemo, QuickCalcPrice, MiscManagement, ResetPrices, SetArchived};
+            HotkeyButton[] hkButtons = new HotkeyButton[5] { hkSKUMemo, hkQuickCalcPrice, hkMiscManagement, hkResetPrices, hkSetArchived };
             _initializeHKButtons(hkButtons, false);
             AddHotKeyEvents();
 
@@ -86,16 +89,16 @@ namespace mjc_dev.forms.sku
 
         private void AddHotKeyEvents()
         {
-            SetArchived.GetButton().Click += (sender, e) =>
+            hkSetArchived.GetButton().Click += (sender, e) =>
             {
                 DialogResult result = MessageBox.Show("Do you want to set archived?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if(result == DialogResult.Yes)
                 {
-                    model.UpdateSKUArchieved(true, this.skuId);
+                    SKUModelObj.UpdateSKUArchived(true, this.skuId);
                 }
                 else if (result == DialogResult.No)
                 {
-                    model.UpdateSKUArchieved(false, this.skuId);
+                    SKUModelObj.UpdateSKUArchived(false, this.skuId);
                 }
             };
             hkSKUMemo.GetButton().Click += (sender, e) =>
@@ -109,6 +112,16 @@ namespace mjc_dev.forms.sku
                     this.Enabled = true;
                 };
 
+            };
+            hkMiscManagement.GetButton().Click += (sender, e) => 
+            {
+                MiscManagement MiscManagementModal = new MiscManagement();
+                this.Enabled = false;
+                MiscManagementModal.Show();
+                MiscManagementModal.FormClosed += (ss, sargs) =>
+                {
+                    this.Enabled = true;
+                };
             };
         }
 
@@ -170,10 +183,10 @@ namespace mjc_dev.forms.sku
             FormComponents2.Add(invValue);
 
             string filter = "";
-            var refreshData = model.LoadPriceTierData(filter);
+            var refreshData = PriceTiersModelObj.LoadPriceTierData(filter);
             if (refreshData)
             {
-                List<PriceTierData> pDatas = model.PriceTierDataList;
+                List<PriceTierData> pDatas = PriceTiersModelObj.PriceTierDataList;
 
                 priceTiers = new FInputBox[pDatas.Count];
                 for (int i = 0; i< pDatas.Count; i++)
@@ -228,7 +241,7 @@ namespace mjc_dev.forms.sku
             bool initFlag = true;
             categoryCombo.GetComboBox().Items.Clear();
             List<KeyValuePair<int, string>> CategoryList = new List<KeyValuePair<int, string>>();
-            CategoryList = model.GetCategoryItems();
+            CategoryList = CategoriesModelObj.GetCategoryItems();
             foreach (KeyValuePair<int, string> item in CategoryList)
             {
                 int id = item.Key;
@@ -321,8 +334,8 @@ namespace mjc_dev.forms.sku
                 return;
             }
             bool refreshData = false;
-            if (skuId == 0) refreshData = model.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo);
-            else refreshData = model.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, skuId);
+            if (skuId == 0) refreshData = SKUModelObj.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo);
+            else refreshData = SKUModelObj.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, skuId);
             string modeText = skuId == 0 ? "creating" : "updating";
             if (refreshData)
             {

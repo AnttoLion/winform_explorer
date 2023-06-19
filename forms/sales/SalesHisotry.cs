@@ -21,7 +21,6 @@ namespace mjc_dev.forms.sales
 
         private GridViewOrigin slaesHistoryGrid = new GridViewOrigin();
         private DataGridView SHGridRefer;
-        private DashboardModel model = new DashboardModel();
 
         public SalesHisotry() : base("History for SKU", "Sales history for the selected SKU#")
         {
@@ -68,17 +67,7 @@ namespace mjc_dev.forms.sales
         private void LoadCategoryList()
         {
             return;
-            string filter = "";
-            var refreshData = model.LoadCategoryData(filter);
-            if (refreshData)
-            {
-                SHGridRefer.DataSource = model.CategoryDataList;
-                SHGridRefer.Columns[0].Visible = false;
-                SHGridRefer.Columns[1].HeaderText = "Category";
-                SHGridRefer.Columns[1].Width = 300;
-                SHGridRefer.Columns[2].HeaderText = "Cal As";
-                SHGridRefer.Columns[2].Width = 300;
-            }
+            
         }
 
         private void updateCategory()

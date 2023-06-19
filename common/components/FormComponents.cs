@@ -217,6 +217,23 @@ namespace mjc_dev.common.components
         }
     }
 
+    public class FComboBoxItem
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+
+        public FComboBoxItem(int id, string text)
+        {
+            Id = id;
+            Text = text;
+        }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+    }
+
     public class FCheckBox
     {
         private CheckBox checkBox;

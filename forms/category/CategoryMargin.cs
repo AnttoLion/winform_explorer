@@ -23,7 +23,7 @@ namespace mjc_dev.forms.category
 
         private GridViewOrigin categoryListGrid = new GridViewOrigin();
         private DataGridView CLGridRefer;
-        private DashboardModel model = new DashboardModel();
+        private CategoriesModel CategoriesModelObj = new CategoriesModel();
 
         public CategoryMargin() : base("Category Margins", "Manage category margins used to calcuate prices")
         {
@@ -57,7 +57,7 @@ namespace mjc_dev.forms.category
                         selectedCategoryId = (int)row.Cells[0].Value;
                     }
                 }
-                bool refreshData = model.DeleteCategory(selectedCategoryId);
+                bool refreshData = CategoriesModelObj.DeleteCategory(selectedCategoryId);
                 if (refreshData)
                 {
                     LoadCategoryList();
@@ -84,10 +84,10 @@ namespace mjc_dev.forms.category
         private void LoadCategoryList()
         {
             string filter = "";
-            var refreshData = model.LoadCategoryData(filter);
+            var refreshData = CategoriesModelObj.LoadCategoryData(filter);
             if (refreshData)
             {
-                CLGridRefer.DataSource = model.CategoryDataList;
+                CLGridRefer.DataSource = CategoriesModelObj.CategoryDataList;
                 CLGridRefer.Columns[0].Visible = false;
                 CLGridRefer.Columns[1].HeaderText = "Category";
                 CLGridRefer.Columns[1].Width = 300;

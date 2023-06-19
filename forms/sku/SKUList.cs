@@ -20,28 +20,35 @@ namespace mjc_dev.forms.sku
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
         private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
         private HotkeyButton hkSelects = new HotkeyButton("Enter", "Selects", Keys.Enter);
-        private HotkeyButton hkCrossRefLookup = new HotkeyButton("F2", "Cross Ref Lookup", Keys.F2);
-        private HotkeyButton hkView = new HotkeyButton("F3", "View Allocations", Keys.F3);
+        private HotkeyButton hkCrossRefLookup = new HotkeyButton("F1", "Cross Ref Lookup", Keys.F1);
+        private HotkeyButton hkViewAllocations = new HotkeyButton("F2", "View Allocations", Keys.F2);
         private HotkeyButton hkAdjustQty = new HotkeyButton("F4", "Adjust Qty", Keys.F4);
         private HotkeyButton hkSKUHistory = new HotkeyButton("F5", "Profile History", Keys.F5);
         private HotkeyButton hkProfileHistory = new HotkeyButton("F6", "SKU History", Keys.F6);
         private HotkeyButton hkArchivedSKUs = new HotkeyButton("F8", "Archived SKUs", Keys.F8);
+        private HotkeyButton hkActiveSKUs = new HotkeyButton("F9", "Active SKUs", Keys.F9);
 
         private GridViewOrigin SKUListGrid = new GridViewOrigin();
         private DataGridView SKUGridRefer;
-        private DashboardModel model = new DashboardModel();
+        private int SKUGridSelectedIndex = 0;
 
-        public SKUList() : base("SKU List", "List of SKUs")
+        private SKUModel SKUModelObj = new SKUModel();
+
+        public SKUList(bool ArchivedView = false) : base("SKU List", "List of SKUs")
         {
             InitializeComponent();
             _initBasicSize();
 
-            HotkeyButton[] hkButtons = new HotkeyButton[9] { hkAdds, hkDeletes, hkSelects, hkCrossRefLookup, hkView, hkAdjustQty, hkSKUHistory, hkProfileHistory, hkArchivedSKUs };
+            HotkeyButton[] hkButtons = new HotkeyButton[10] { hkAdds, hkDeletes, hkSelects, hkCrossRefLookup, hkViewAllocations, hkAdjustQty, hkSKUHistory, hkProfileHistory, hkArchivedSKUs, hkActiveSKUs };
             _initializeHKButtons(hkButtons);
+
+            hkActiveSKUs.SetPosition(hkArchivedSKUs.GetButton().Location);
+            hkActiveSKUs.GetButton().Hide();
+            hkActiveSKUs.GetLabel().Hide();
+
             AddHotKeyEvents();
 
             InitPriceTierGrid();
-
 
             this.VisibleChanged += (ss, sargs) => {
                 this.LoadSKUList();
@@ -53,7 +60,7 @@ namespace mjc_dev.forms.sku
             hkAdds.GetButton().Click += (sender, e) =>
             {
                 this.Hide();
-                SKUDetail detailModal = new SKUDetail();
+                SKUInformation detailModal = new SKUInformation();
                 _navigateToForm(sender,e, detailModal);
             };
             hkDeletes.GetButton().Click += (sender, e) =>
@@ -70,7 +77,7 @@ namespace mjc_dev.forms.sku
                             selectedSKUId = (int)row.Cells[0].Value;
                         }
                     }
-                    bool refreshData = model.DeleteSKU(selectedSKUId);
+                    bool refreshData = SKUModelObj.DeleteSKU(selectedSKUId);
                     if (refreshData)
                     {
                         LoadSKUList();
@@ -83,21 +90,102 @@ namespace mjc_dev.forms.sku
             };
             hkCrossRefLookup.GetButton().Click += (sender, e) =>
             {
-                this.Hide();
-                CrossReference CrossRefModal = new CrossReference();
+
+                int rowIndex = SKUGridRefer.SelectedRows[0].Index;
+                this.SKUGridSelectedIndex = SKUGridRefer.SelectedRows[0].Index;
+
+                DataGridViewRow row = SKUGridRefer.Rows[rowIndex];
+                int skuId = (int)row.Cells[0].Value;
+
+                CrossReference CrossRefModal = new CrossReference(skuId, row.Cells[1].Value.ToString());
                 _navigateToForm(sender, e, CrossRefModal);
+                this.Hide();
             };
-            hkView.GetButton().Click += (sender, e) =>
+            hkViewAllocations.GetButton().Click += (sender, e) =>
             {
+                this.SKUGridSelectedIndex = SKUGridRefer.SelectedRows[0].Index;
+
+                Allocations AllocationsModal = new Allocations();
+                _navigateToForm(sender, e, AllocationsModal);
                 this.Hide();
-                Allocations CrossRefModal = new Allocations();
-                _navigateToForm(sender, e, CrossRefModal);
+            };
+            hkAdjustQty.GetButton().Click += (sender, e) =>
+            {
+                int rowIndex = SKUGridRefer.SelectedRows[0].Index;
+
+                this.SKUGridSelectedIndex = rowIndex;
+
+                DataGridViewRow row = SKUGridRefer.Rows[rowIndex];
+                int skuId = (int)row.Cells[0].Value;
+                string skuName = row.Cells[1].Value.ToString();
+
+                this.Enabled = false;
+                AdjustQty AdjustQtyModal = new AdjustQty(skuId, skuName);
+                AdjustQtyModal.Show();
+                AdjustQtyModal.FormClosed += (ss, sargs) =>
+                {
+                    this.Enabled = true;
+                    this.LoadSKUList();
+                };
             };
             hkSKUHistory.GetButton().Click += (sender, e) =>
             {
+                this.SKUGridSelectedIndex = SKUGridRefer.SelectedRows[0].Index;
+
+                SalesHisotry SalesHistoryModal = new SalesHisotry();
+                _navigateToForm(sender, e, SalesHistoryModal);
                 this.Hide();
-                SalesHisotry CrossRefModal = new SalesHisotry();
-                _navigateToForm(sender, e, CrossRefModal);
+            };
+            hkProfileHistory.GetButton().Click += (sender, e) =>
+            {
+                this.SKUGridSelectedIndex = SKUGridRefer.SelectedRows[0].Index;
+
+                SKUProfile SKUProfileModal = new SKUProfile();
+                _navigateToForm(sender, e, SKUProfileModal);
+                this.Hide();
+            };
+            hkArchivedSKUs.GetButton().Click += (sender, e) => {
+
+                hkCrossRefLookup.GetButton().Hide();
+                hkCrossRefLookup.GetLabel().Hide();
+
+                hkViewAllocations.GetButton().Hide();
+                hkViewAllocations.GetLabel().Hide();
+
+                hkAdjustQty.GetButton().Hide();
+                hkAdjustQty.GetLabel().Hide();
+
+                hkArchivedSKUs.GetButton().Hide();
+                hkArchivedSKUs.GetLabel().Hide();
+
+                hkActiveSKUs.GetButton().Show();
+                hkActiveSKUs.GetLabel().Show();
+
+                this._changeFormText("ARCHIVED - SKU List");
+
+                LoadSKUList(true, false);
+            };
+
+            hkActiveSKUs.GetButton().Click += (sender, e) => {
+
+                hkCrossRefLookup.GetButton().Show();
+                hkCrossRefLookup.GetLabel().Show();
+
+                hkViewAllocations.GetButton().Show();
+                hkViewAllocations.GetLabel().Show();
+
+                hkAdjustQty.GetButton().Show();
+                hkAdjustQty.GetLabel().Show();
+
+                hkArchivedSKUs.GetButton().Show();
+                hkArchivedSKUs.GetLabel().Show();
+
+                hkActiveSKUs.GetButton().Hide();
+                hkActiveSKUs.GetLabel().Hide();
+
+                this._changeFormText("SKU List");
+
+                LoadSKUList(false, false);
             };
         }
 
@@ -109,18 +197,19 @@ namespace mjc_dev.forms.sku
             SKUGridRefer.Height = this.Height - 295;
             this.Controls.Add(SKUGridRefer);
             this.SKUGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SKUGridView_CellDoubleClick);
+            this.SKUGridRefer.SelectionChanged += (s, e) => SKUGridRefer_SelectionChanged(s, e);
 
             LoadSKUList();
         }
 
 
-        public void LoadSKUList()
+        public void LoadSKUList(bool archivedView = false, bool keepSelection = true)
         {
             string filter = "";
-            var refreshData = model.LoadSKUData(filter);
+            var refreshData = SKUModelObj.LoadSKUData(filter, archivedView);
             if (refreshData)
             {
-                SKUGridRefer.DataSource = model.SKUDataList;
+                SKUGridRefer.DataSource = SKUModelObj.SKUDataList;
                 SKUGridRefer.Columns[0].Visible = false;
                 SKUGridRefer.Columns[1].HeaderText = "SKU#";
                 SKUGridRefer.Columns[1].Width = 300;
@@ -133,19 +222,28 @@ namespace mjc_dev.forms.sku
                 SKUGridRefer.Columns[5].HeaderText = "Qty Tracking";
                 SKUGridRefer.Columns[5].Width = 300;
             }
+
+            if(keepSelection)
+            {
+                SKUGridRefer.ClearSelection();
+                SKUGridRefer.Rows[SKUGridSelectedIndex].Selected = true;
+                SKUGridRefer.CurrentCell = SKUGridRefer[1, SKUGridSelectedIndex];
+            }
         }
 
         private void updateSKU(object sender, EventArgs e)
         {
-            SKUDetail detailModal = new SKUDetail();
+            SKUInformation detailModal = new SKUInformation();
 
-            int rowIndex = SKUGridRefer.CurrentCell.RowIndex;
+            int rowIndex = SKUGridRefer.SelectedRows[0].Index;
+
+            this.SKUGridSelectedIndex = rowIndex;
 
             DataGridViewRow row = SKUGridRefer.Rows[rowIndex];
             int skuId = (int)row.Cells[0].Value;
 
             List<dynamic> skuData = new List<dynamic>();
-            skuData = model.GetSKUData(skuId);
+            skuData = SKUModelObj.GetSKUData(skuId);
             detailModal.setDetails(skuData, skuData[0].id);
 
             this.Hide();
@@ -155,6 +253,15 @@ namespace mjc_dev.forms.sku
         private void SKUGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             updateSKU(sender, e);
+        }
+
+        private void SKUGridRefer_SelectionChanged(object sender, EventArgs e)
+        {
+
+            if (SKUGridRefer.SelectedRows.Count > 0)
+            {
+                
+            }
         }
     }
 }

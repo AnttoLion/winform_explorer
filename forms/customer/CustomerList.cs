@@ -29,7 +29,8 @@ namespace mjc_dev.forms.customer
 
         private GridViewOrigin customerListGrid = new GridViewOrigin();
         private DataGridView CLGridRefer;
-        private DashboardModel model = new DashboardModel();
+
+        private CustomersModel CustomersModelObj = new CustomersModel();
 
         public CustomerList() : base("Customer List", "Manage customers in the system")
         {
@@ -62,7 +63,7 @@ namespace mjc_dev.forms.customer
                         selectedCustomerId = (int)row.Cells[0].Value;
                     }
                 }
-                bool refreshData = model.DeleteCustomer(selectedCustomerId);
+                bool refreshData = CustomersModelObj.DeleteCustomer(selectedCustomerId);
                 if (refreshData)
                 {
                     LoadCustomerList();
@@ -92,11 +93,11 @@ namespace mjc_dev.forms.customer
         private void LoadCustomerList()
         {
             string filter = "";
-            var refreshData = model.LoadCustomerData(filter);
+            var refreshData = CustomersModelObj.LoadCustomerData(filter);
             Console.WriteLine(refreshData);
             if (refreshData)
             {
-                CLGridRefer.DataSource = model.CustomerDataList;
+                CLGridRefer.DataSource = CustomersModelObj.CustomerDataList;
                 CLGridRefer.Columns[0].Visible = false;
                 CLGridRefer.Columns[1].HeaderText = "Customer #";
                 CLGridRefer.Columns[1].Width = 300;
@@ -123,7 +124,7 @@ namespace mjc_dev.forms.customer
 
             int vendorId = (int)row.Cells[0].Value;
             List<dynamic> customerData = new List<dynamic>();
-            customerData = model.GetCustomerData(vendorId);
+            customerData = CustomersModelObj.GetCustomerData(vendorId);
             detailModal.setDetails(customerData, customerData[0].id);
 
             if (detailModal.ShowDialog() == DialogResult.OK)

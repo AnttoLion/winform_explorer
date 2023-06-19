@@ -40,7 +40,7 @@ namespace mjc_dev.forms.invoice
 
         private GridViewOrigin InvoiceLookupGrid = new GridViewOrigin();
         private DataGridView ILGridRefer;
-        private DashboardModel model = new DashboardModel();
+        //private DashboardModel model = new DashboardModel();
 
 
         public LookupInvocie() : base("Invoice Lookup", "Displays invoices of a customer")
@@ -100,32 +100,7 @@ namespace mjc_dev.forms.invoice
                 //updateCustomer();
             };
 
-            LoadCustomerList();
-        }
-
-        private void LoadCustomerList()
-        {
-            string filter = "";
-            var refreshData = model.LoadCustomerData(filter);
-            //Console.WriteLine(refreshData);
-            //Console.WriteLine(refreshData);
-            if (refreshData)
-            {
-                ILGridRefer.DataSource = model.CustomerDataList;
-                ILGridRefer.Columns[0].Visible = false;
-                ILGridRefer.Columns[1].HeaderText = "Customer #";
-                ILGridRefer.Columns[1].Width = 300;
-                ILGridRefer.Columns[2].HeaderText = "Name";
-                ILGridRefer.Columns[2].Width = 300;
-                ILGridRefer.Columns[3].HeaderText = "Address";
-                ILGridRefer.Columns[3].Width = 500;
-                ILGridRefer.Columns[4].HeaderText = "City";
-                ILGridRefer.Columns[4].Width = 200;
-                ILGridRefer.Columns[5].HeaderText = "State";
-                ILGridRefer.Columns[5].Width = 200;
-                ILGridRefer.Columns[6].HeaderText = "Zipcode";
-                ILGridRefer.Columns[6].Width = 200;
-            }
+            //LoadCustomerList();
         }
     }
 }

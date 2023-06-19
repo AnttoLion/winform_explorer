@@ -28,7 +28,7 @@ namespace mjc_dev.forms.vendor
         private FInputBox BusPhone = new FInputBox("Bus.Phone");
         private FInputBox Fax = new FInputBox("Fax");
 
-        private DashboardModel model = new DashboardModel();
+        private VendorsModel VendorsModelObj = new VendorsModel();
         private int vendorId = 0;
 
         public VendorDetail() : base("Add Vendor")
@@ -101,8 +101,8 @@ namespace mjc_dev.forms.vendor
 
             bool refreshData = false;
 
-            if (vendorId == 0) refreshData = model.AddVendor(vendorName, address1, address2, city, state, zipcode, busphone, fax);
-            else refreshData = model.UpdateVendor(vendorName, address1, address2, city, state, zipcode, busphone, fax, vendorId);
+            if (vendorId == 0) refreshData = VendorsModelObj.AddVendor(vendorName, address1, address2, city, state, zipcode, busphone, fax);
+            else refreshData = VendorsModelObj.UpdateVendor(vendorName, address1, address2, city, state, zipcode, busphone, fax, vendorId);
 
             string modeText = vendorId == 0 ? "creating" : "updating";
 

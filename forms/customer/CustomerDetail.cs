@@ -53,8 +53,10 @@ namespace mjc_dev.forms.customer
         private FInputBox YTDInterest = new FInputBox("YTDInterest");
         private FDateTime DateLastPurch = new FDateTime("DateLastPurch");
 
+        private CustomersModel CustomersModelObj = new CustomersModel();
+        private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
+
         private int customerId;
-        private DashboardModel model = new DashboardModel();
         private int selectId = 0;
 
         public CustomerDetail()
@@ -399,8 +401,8 @@ namespace mjc_dev.forms.customer
             //            if (!is_pricetier || !is_corebalance || !is_credit_card || is_acct_balance || is_ytd_purch || is_ytd_purch || is_interest_rate || is_ytd_interest)
             bool refreshData = false;
 
-            if (customerId == 0) refreshData = model.AddCustomer(customer_num, customer_name, address1, address2, city, state, zipcode, business_phone, fax, email, date_opened, salesman, resale, stmt_num, stmt_name, pricetier, terms, limit, memo, taxable, send_stm, core_tracking, core_balance, print_core_tot, acct_type, porequired, credit_card, interest_rate, acct_balance, ytd_purch, ytd_interest, last_date_purch);
-            else refreshData = model.UpdateCustomer(customer_num, customer_name, address1, address2, city, state, zipcode, business_phone, fax, email, date_opened, salesman, resale, stmt_num, stmt_name, pricetier, terms, limit, memo, taxable, send_stm, core_tracking, core_balance, print_core_tot, acct_type, porequired, credit_card, interest_rate, acct_balance, ytd_purch, ytd_interest, last_date_purch, customerId);
+            if (customerId == 0) refreshData = CustomersModelObj.AddCustomer(customer_num, customer_name, address1, address2, city, state, zipcode, business_phone, fax, email, date_opened, salesman, resale, stmt_num, stmt_name, pricetier, terms, limit, memo, taxable, send_stm, core_tracking, core_balance, print_core_tot, acct_type, porequired, credit_card, interest_rate, acct_balance, ytd_purch, ytd_interest, last_date_purch);
+            else refreshData = CustomersModelObj.UpdateCustomer(customer_num, customer_name, address1, address2, city, state, zipcode, business_phone, fax, email, date_opened, salesman, resale, stmt_num, stmt_name, pricetier, terms, limit, memo, taxable, send_stm, core_tracking, core_balance, print_core_tot, acct_type, porequired, credit_card, interest_rate, acct_balance, ytd_purch, ytd_interest, last_date_purch, customerId);
 
             string modeText = customerId == 0 ? "creating" : "updating";
 
@@ -417,7 +419,7 @@ namespace mjc_dev.forms.customer
             bool initFlag = true;
             PriceTier.GetComboBox().Items.Clear();
             List<KeyValuePair<int, string>> PriceTierList = new List<KeyValuePair<int, string>>();
-            PriceTierList = model.GetPriceTierItems();
+            PriceTierList = PriceTiersModelObj.GetPriceTierItems();
             foreach (KeyValuePair<int, string> item in PriceTierList)
             {
                 int id = item.Key;

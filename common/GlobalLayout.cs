@@ -18,6 +18,8 @@ namespace mjc_dev.common
     {
         public Form _prevForm { get; set; }
 
+        protected int _accountId = 1;
+
         private Label _comingSoonTxt;
         private NavigationHistory navigationHistory = new NavigationHistory();
 

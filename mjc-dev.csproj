@@ -148,17 +148,41 @@
     <Compile Include="forms\sales\SalesHisotry.Designer.cs">
       <DependentUpon>SalesHisotry.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\sku\AdjustQty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\AdjustQty.Designer.cs">
+      <DependentUpon>AdjustQty.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\sku\Allocations.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\sku\Allocations.Designer.cs">
       <DependentUpon>Allocations.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\sku\SKUDetail.cs">
+    <Compile Include="forms\sku\AllocationsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\sku\SKUDetail.Designer.cs">
-      <DependentUpon>SKUDetail.cs</DependentUpon>
+    <Compile Include="forms\sku\AllocationsForm.Designer.cs">
+      <DependentUpon>AllocationsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\CrossRefDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\CrossRefDetail.Designer.cs">
+      <DependentUpon>CrossRefDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\MiscManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\MiscManagement.Designer.cs">
+      <DependentUpon>MiscManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="forms\sku\SKUInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUInformation.Designer.cs">
+      <DependentUpon>SKUInformation.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\sku\SKUList.cs">
       <SubType>Form</SubType>
@@ -274,7 +298,12 @@
     <Compile Include="forms\OrderEntry.Designer.cs">
       <DependentUpon>OrderEntry.cs</DependentUpon>
     </Compile>
-    <Compile Include="model\model.cs" />
+    <Compile Include="model\CategoriesModel.cs" />
+    <Compile Include="model\CustomersModel.cs" />
+    <Compile Include="model\PriceTiersModel.cs" />
+    <Compile Include="model\SKUCrossRefModal.cs" />
+    <Compile Include="model\SKUModel.cs" />
+    <Compile Include="model\VendorsModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="common\BasicLayout.resx">
@@ -315,6 +344,5 @@
   <ItemGroup>
     <None Include="imgs\hotkeyview.png" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

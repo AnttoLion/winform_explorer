@@ -22,7 +22,6 @@ namespace mjc_dev.forms.sku
 
         private GridViewOrigin categoryListGrid = new GridViewOrigin();
         private DataGridView CLGridRefer;
-        private DashboardModel model = new DashboardModel();
 
         public SKUProfile() : base("Profile Info", "Review SKU history of invoices")
         {
@@ -68,17 +67,6 @@ namespace mjc_dev.forms.sku
         private void LoadCategoryList()
         {
             return;
-            string filter = "";
-            var refreshData = model.LoadCategoryData(filter);
-            if (refreshData)
-            {
-                CLGridRefer.DataSource = model.CategoryDataList;
-                CLGridRefer.Columns[0].Visible = false;
-                CLGridRefer.Columns[1].HeaderText = "Category";
-                CLGridRefer.Columns[1].Width = 300;
-                CLGridRefer.Columns[2].HeaderText = "Cal As";
-                CLGridRefer.Columns[2].Width = 300;
-            }
         }
 
         private void updateCategory()

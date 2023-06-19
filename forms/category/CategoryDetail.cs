@@ -22,7 +22,7 @@ namespace mjc_dev.forms.category
         private FInputBox calculateAs = new FInputBox("calculateAs");
 
         private int categoryId;
-        private DashboardModel model = new DashboardModel();
+        private CategoriesModel CategoriesModelObj = new CategoriesModel();
 
         public CategoryDetail() : base("Add Category")
         {
@@ -80,8 +80,8 @@ namespace mjc_dev.forms.category
 
             bool refreshData = false;
             if (categoryId == 0)
-                refreshData = model.AddCategory(name, calculateAs);
-            else refreshData = model.UpdateCategory(name, calculateAs, categoryId);
+                refreshData = CategoriesModelObj.AddCategory(name, calculateAs);
+            else refreshData = CategoriesModelObj.UpdateCategory(name, calculateAs, categoryId);
 
             string modeText = categoryId == 0 ? "creating" : "updating";
 

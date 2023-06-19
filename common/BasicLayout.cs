@@ -143,5 +143,9 @@ namespace mjc_dev.common
             this._footer.Controls.Add(this._formDescription);
         }
 
+        protected void _changeFormText(string formTitle)
+        {
+            this._formTitle.Text = formTitle;
+        }
     }
 }

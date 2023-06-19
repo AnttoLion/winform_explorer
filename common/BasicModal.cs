@@ -11,8 +11,12 @@ using System.Windows.Forms;
 
 namespace mjc_dev.common
 {
+
     public partial class BasicModal : Form
     {
+
+        protected int _accountId = 1;
+
         public BasicModal()
         {
             InitializeComponent();
@@ -31,13 +35,25 @@ namespace mjc_dev.common
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.KeyDown += (s, e) => { 
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.KeyDown += (s, e) => {
                 if (e.KeyCode == Keys.Escape)
                 {
                     this.Close();
                     return;
                 }
             };
+        }
+
+        protected void _setModalStyle2()
+        {
+            this.BackColor = System.Drawing.Color.FromArgb(35, 102, 169);
+            this.KeyPreview = true;
+            this.ShowIcon = false;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         protected void ModalButton_HotKeyDown(ModalButton modalButton)

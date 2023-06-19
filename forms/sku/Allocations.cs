@@ -1,7 +1,5 @@
 ﻿using mjc_dev.common.components;
 using mjc_dev.common;
-using mjc_dev.forms.category;
-using mjc_dev.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using mjc_dev.model;
+using System.Runtime.Remoting.Channels;
+using mjc_dev.forms.sales;
 
 namespace mjc_dev.forms.sku
 {
@@ -22,7 +23,6 @@ namespace mjc_dev.forms.sku
 
         private GridViewOrigin allocationsGrid = new GridViewOrigin();
         private DataGridView ALGridRefer;
-        private DashboardModel model = new DashboardModel();
 
         public Allocations() : base("Allocations for SKU#", "Review held orders with sku quantity allocated")
         {
@@ -72,41 +72,10 @@ namespace mjc_dev.forms.sku
         private void LoadCategoryList()
         {
             return;
-            string filter = "";
-            var refreshData = model.LoadCategoryData(filter);
-            if (refreshData)
-            {
-                ALGridRefer.DataSource = model.CategoryDataList;
-                ALGridRefer.Columns[0].Visible = false;
-                ALGridRefer.Columns[1].HeaderText = "Category";
-                ALGridRefer.Columns[1].Width = 300;
-                ALGridRefer.Columns[2].HeaderText = "Cal As";
-                ALGridRefer.Columns[2].Width = 300;
-            }
         }
 
         private void updateCategory()
         {
-            CategoryDetail detailModal = new CategoryDetail();
-
-            int rowIndex = ALGridRefer.CurrentCell.RowIndex;
-
-            if (ALGridRefer.SelectedRows.Count > 0)
-            {
-                foreach (DataGridViewRow row in ALGridRefer.SelectedRows)
-                {
-                    int categoryId = (int)row.Cells[0].Value;
-                    string categoryName = row.Cells[1].Value.ToString();
-                    string calculateAs = row.Cells[2].Value.ToString();
-
-                    detailModal.setDetails(categoryName, calculateAs, categoryId);
-                }
-            }
-
-            if (detailModal.ShowDialog() == DialogResult.OK)
-            {
-                LoadCategoryList();
-            }
         }
 
         private void addcategory_btn_Click(object sender, DataGridViewCellEventArgs e)

@@ -24,7 +24,7 @@ namespace mjc_dev.forms.vendor
 
         private GridViewOrigin VendorListGrid = new GridViewOrigin();
         private DataGridView VGridRefer;
-        private DashboardModel model = new DashboardModel();
+        private VendorsModel VendorsModelObj = new VendorsModel();
 
         public VendorList() : base("Vendor List", "List of vendors")
         {
@@ -57,7 +57,7 @@ namespace mjc_dev.forms.vendor
                         selectedVendorId = (int)row.Cells[0].Value;
                     }
                 }
-                bool refreshData = model.DeleteVendor(selectedVendorId);
+                bool refreshData = VendorsModelObj.DeleteVendor(selectedVendorId);
                 if (refreshData)
                 {
                     LoadVendorList();
@@ -87,11 +87,11 @@ namespace mjc_dev.forms.vendor
         private void LoadVendorList()
         {
             string filter = "";
-            var refreshData = model.LoadVendorData(filter);
+            var refreshData = VendorsModelObj.LoadVendorData(filter);
             Console.WriteLine(refreshData);
             if (refreshData)
             {
-                VGridRefer.DataSource = model.VendorDataList;
+                VGridRefer.DataSource = VendorsModelObj.VendorDataList;
                 VGridRefer.Columns[0].HeaderText = "Vendor #";
                 VGridRefer.Columns[0].Width = 300;
                 VGridRefer.Columns[1].HeaderText = "Name";
@@ -115,7 +115,7 @@ namespace mjc_dev.forms.vendor
 
             int vendorId = (int)row.Cells[0].Value;
             List<dynamic> vendorData = new List<dynamic>();
-            vendorData = model.GetVendorData(vendorId);
+            vendorData = VendorsModelObj.GetVendorData(vendorId);
             detailModal.setDetails(vendorData, vendorData[0].id);
 
             if (detailModal.ShowDialog() == DialogResult.OK)
