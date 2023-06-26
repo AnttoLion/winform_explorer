@@ -37,9 +37,12 @@ namespace mjc_dev.forms.orders
 
         private GridViewOrigin OrderEntryLookupGrid = new GridViewOrigin();
         private DataGridView OEGridRefer = new DataGridView();
+        private int OEGridSelectedIndex = 0;
+
         private string searchKey;
 
         private CustomersModel CustomersModelObj = new CustomersModel();
+        private OrderItemsModel OrderModelObj = new OrderItemsModel();
 
         public OrderEntry() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
         {
@@ -125,7 +128,40 @@ namespace mjc_dev.forms.orders
 
         public void LoadSKUList(bool archivedView = false, bool keepSelection = true)
         {
+            if (this.searchKey == "")
+            {
+                this._changeFormText("SKU List");
+            }
+            else
+            {
+                this._changeFormText("SKU List searched by " + this.searchKey);
+            }
+            var refreshData = OrderModelObj.LoadOrderData(this.searchKey, archivedView);
+            if (refreshData)
+            {
+                OEGridRefer.DataSource = OrderModelObj.SKUDataList;
+                OEGridRefer.Columns[0].Visible = false;
+                OEGridRefer.Columns[1].HeaderText = "SKU#";
+                OEGridRefer.Columns[1].Width = 300;
+                OEGridRefer.Columns[2].HeaderText = "Category";
+                OEGridRefer.Columns[2].Width = 300;
+                OEGridRefer.Columns[3].HeaderText = "Description";
+                OEGridRefer.Columns[3].Width = 500;
+                OEGridRefer.Columns[4].HeaderText = "Qty Avail";
+                OEGridRefer.Columns[4].Width = 300;
+                OEGridRefer.Columns[5].HeaderText = "Qty Tracking";
+                OEGridRefer.Columns[5].Width = 300;
+            }
 
+            if (keepSelection)
+            {
+                OEGridRefer.ClearSelection();
+                if (OEGridSelectedIndex >= 0 && OEGridSelectedIndex < OEGridRefer.Rows.Count)
+                {
+                    OEGridRefer.Rows[OEGridSelectedIndex].Selected = true;
+                    OEGridRefer.CurrentCell =   [1, OEGridSelectedIndex];
+                }
+            }
         }
     }
 }
