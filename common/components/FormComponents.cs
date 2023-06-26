@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace mjc_dev.common.components
 {
-    internal static class ComponentsGlobals
+    internal static class ComponentsConstants
     {
         public static Color FocusedColor = Color.FromArgb(255, 255, 204);
     }
@@ -62,7 +62,7 @@ namespace mjc_dev.common.components
         private TextBox textBox;
         private Label label;
 
-        public FInputBox(string labeltext)
+        public FInputBox(string labeltext, int labelWidth = 200)
         {
             label = new Label();
             label.Text = labeltext;
@@ -72,7 +72,7 @@ namespace mjc_dev.common.components
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.Size = new System.Drawing.Size(200, 31);
+            label.Size = new System.Drawing.Size(labelWidth, 31);
 
             label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             textBox = new TextBox();
@@ -82,7 +82,7 @@ namespace mjc_dev.common.components
 
             textBox.Enter += (s, e) =>
             {
-                label.ForeColor = ComponentsGlobals.FocusedColor;
+                label.ForeColor = ComponentsConstants.FocusedColor;
             };
             textBox.LostFocus += (s, e) =>
             {
@@ -112,7 +112,7 @@ namespace mjc_dev.common.components
         private DateTimePicker calendar;
         private Label label;
 
-        public FDateTime(string labeltext)
+        public FDateTime(string labeltext, int labelWidth = 200)
         {
             label = new Label();
             label.Text = labeltext;
@@ -123,7 +123,7 @@ namespace mjc_dev.common.components
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.Size = new System.Drawing.Size(200, 31);
+            label.Size = new System.Drawing.Size(labelWidth, 31);
 
             calendar = new DateTimePicker();
             calendar.Size = new Size(300, 20);
@@ -134,7 +134,7 @@ namespace mjc_dev.common.components
 
             calendar.Enter += (s, e) =>
             {
-                label.ForeColor = ComponentsGlobals.FocusedColor;
+                label.ForeColor = ComponentsConstants.FocusedColor;
             };
             calendar.LostFocus += (s, e) =>
             {
@@ -164,7 +164,7 @@ namespace mjc_dev.common.components
         private ComboBox comboBox;
         private Label label;
 
-        public FComboBox(string labeltext)
+        public FComboBox(string labeltext, int labelWidth = 200)
         {
             label = new Label();
             label.Text = labeltext;
@@ -174,16 +174,18 @@ namespace mjc_dev.common.components
             label.BackColor = System.Drawing.Color.Transparent;
             label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
             label.ForeColor = System.Drawing.Color.WhiteSmoke;
-            label.Size = new System.Drawing.Size(150, 31);
+            label.Size = new System.Drawing.Size(labelWidth, 31);
 
             comboBox = new ComboBox();
             comboBox.Size = new Size(300, 20);
             comboBox.Font = new Font("Segoe UI Semibold", 15.75F);
             comboBox.BackColor = Color.FromArgb(236, 242, 249);
+            comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
 
             comboBox.Enter += (s, e) =>
             {
-                label.ForeColor = ComponentsGlobals.FocusedColor;
+                label.ForeColor = ComponentsConstants.FocusedColor;
             };
             comboBox.LostFocus += (s, e) =>
             {
@@ -213,7 +215,7 @@ namespace mjc_dev.common.components
         public void SetPosition(Point location)
         {
             label.Location = location;
-            comboBox.Location = new Point(location.X + 200, location.Y);
+            comboBox.Location = new Point(location.X + label.Width, location.Y);
         }
     }
 
@@ -243,12 +245,12 @@ namespace mjc_dev.common.components
             checkBox.AutoSize = true;
             checkBox.Text = labeltext;
             checkBox.Font = new Font("Segoe UI Semibold", 15.75F);
-            checkBox.ForeColor = System.Drawing.Color.WhiteSmoke;
+            checkBox.ForeColor = System.Drawing.Color.WhiteSmoke; 
 
 
             checkBox.Enter += (s, e) =>
             {
-                checkBox.ForeColor = ComponentsGlobals.FocusedColor;
+                checkBox.ForeColor = ComponentsConstants.FocusedColor;
             };
             checkBox.LostFocus += (s, e) =>
             {
@@ -316,6 +318,56 @@ namespace mjc_dev.common.components
         public void SetPosition(Point location)
         {
             label.Location = location;
+        }
+    }
+
+    public class FlabelConstant
+    {
+        private Label contant;
+        private Label label;
+
+        public FlabelConstant(string labeltext, int labelWidth = 200)
+        {
+            label = new Label();
+            label.Text = labeltext;
+
+            label.AutoSize = true;
+            label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            label.BackColor = System.Drawing.Color.Transparent;
+            label.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
+            label.ForeColor = System.Drawing.Color.WhiteSmoke;
+            label.Size = new System.Drawing.Size(labelWidth, 31);
+
+            contant = new Label();
+            contant.Text = "N/A";
+
+            contant.AutoSize = true;
+            contant.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            contant.BackColor = System.Drawing.Color.Transparent;
+            contant.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F);
+            contant.ForeColor = System.Drawing.Color.WhiteSmoke;
+            contant.Size = new System.Drawing.Size(200, 31);
+        }
+
+        public Label GetConstant()
+        {
+            return contant;
+        }
+
+        public Label GetLabel()
+        {
+            return label;
+        }
+
+        public void SetContext(string constText)
+        {
+            this.contant.Text = constText;
+        }
+
+        public void SetPosition(Point location)
+        {
+            label.Location = location;
+            contant.Location = new Point(location.X + label.Width, location.Y);
         }
     }
 }

@@ -128,9 +128,8 @@ namespace mjc_dev.forms.customer
             DataGridViewRow row = CLGridRefer.Rows[rowIndex];
 
             int vendorId = (int)row.Cells[0].Value;
-            List<dynamic> customerData = new List<dynamic>();
-            customerData = CustomersModelObj.GetCustomerData(vendorId);
-            detailModal.setDetails(customerData, customerData[0].id);
+            
+            detailModal.setDetails(vendorId);
 
             if (detailModal.ShowDialog() == DialogResult.OK)
             {

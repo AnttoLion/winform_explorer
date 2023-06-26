@@ -218,11 +218,16 @@ namespace mjc_dev.common
                 }
                 else if (Inputs[i] is FGroupLabel)
                 {
-                    //Console.WriteLine(posY.ToString());
                     FGroupLabel groupLabel = (FGroupLabel)Inputs[i];
                     groupLabel.SetPosition(new Point(posX, posY));
                     _controls.Add(groupLabel.GetLabel());
-
+                }
+                else if (Inputs[i] is FlabelConstant)
+                {
+                    FlabelConstant labelConstant = (FlabelConstant)Inputs[i];
+                    labelConstant.SetPosition(new Point(posX, posY));
+                    _controls.Add(labelConstant.GetLabel());
+                    _controls.Add(labelConstant.GetConstant());
                 }
                 else if (Inputs[i] is FDateTime)
                 {
@@ -298,7 +303,7 @@ namespace mjc_dev.common
                 if (posY > limitY)
                 {
                     posY = startY;
-                    posX = startX + distanceX;
+                    posX += distanceX;
                 }
             }
         }

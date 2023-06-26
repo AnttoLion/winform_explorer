@@ -124,6 +124,12 @@
     <Compile Include="forms\invoice\LookupInvocie.Designer.cs">
       <DependentUpon>LookupInvocie.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\orders\OrderEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\orders\OrderEntry.Designer.cs">
+      <DependentUpon>OrderEntry.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\price\PriceChange.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,14 +304,9 @@
     <Compile Include="forms\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\OrderEntry.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="forms\OrderEntry.Designer.cs">
-      <DependentUpon>OrderEntry.cs</DependentUpon>
-    </Compile>
     <Compile Include="model\CategoriesModel.cs" />
     <Compile Include="model\CustomersModel.cs" />
+    <Compile Include="model\OrderModel.cs" />
     <Compile Include="model\PriceTiersModel.cs" />
     <Compile Include="model\SKUCrossRefModal.cs" />
     <Compile Include="model\SKUModel.cs" />
@@ -350,5 +351,6 @@
   <ItemGroup>
     <None Include="imgs\hotkeyview.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

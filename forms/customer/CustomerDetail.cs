@@ -283,45 +283,47 @@ namespace mjc_dev.forms.customer
             }
         }
 
-        public void setDetails(List<dynamic> data, int id)
+        public void setDetails(int vendorId)
         {
-            this.customerId = id;
+            var customerData = CustomersModelObj.GetCustomerData(vendorId);
 
-            this.CustomerNum.GetTextBox().Text = data[0].customerNumber.ToString();
-            this.CustomerNum.GetTextBox().Text = data[0].customerName.ToString();
-            this.AddressLine1.GetTextBox().Text = data[0].address1.ToString();
-            this.AddressLine2.GetTextBox().Text = data[0].address2.ToString();
-            this.City.GetTextBox().Text = data[0].city.ToString();
-            this.State.GetTextBox().Text = data[0].state.ToString();
-            this.Zip.GetTextBox().Text = data[0].zipcode.ToString();
-            this.BusPhone.GetTextBox().Text = data[0].businessPhone.ToString();
-            this.Fax.GetTextBox().Text = data[0].fax.ToString();
-            this.EMail.GetTextBox().Text = data[0].email.ToString();
-            this.DateOpened.GetDateTimePicker().Value = data[0].dateOpened.ToLocalTime();
-            this.Salesman.GetTextBox().Text = data[0].salesman.ToString();
-            this.Resale.GetTextBox().Text = data[0].resale.ToString();
-            this.StmtCust.GetTextBox().Text = data[0].statementCustomerNumber.ToString();
-            this.StmtName.GetTextBox().Text = data[0].statementName.ToString();
+            this.customerId = customerData.id;
+
+            this.CustomerNum.GetTextBox().Text = customerData.customerNumber.ToString();
+            this.CustomerNum.GetTextBox().Text = customerData.customerName.ToString();
+            this.AddressLine1.GetTextBox().Text = customerData.address1.ToString();
+            this.AddressLine2.GetTextBox().Text = customerData.address2.ToString();
+            this.City.GetTextBox().Text = customerData.city.ToString();
+            this.State.GetTextBox().Text = customerData.state.ToString();
+            this.Zip.GetTextBox().Text = customerData.zipcode.ToString();
+            this.BusPhone.GetTextBox().Text = customerData.businessPhone.ToString();
+            this.Fax.GetTextBox().Text = customerData.fax.ToString();
+            this.EMail.GetTextBox().Text = customerData.email.ToString();
+            this.DateOpened.GetDateTimePicker().Value = customerData.dateOpened.ToLocalTime();
+            this.Salesman.GetTextBox().Text = customerData.salesman.ToString();
+            this.Resale.GetTextBox().Text = customerData.resale.ToString();
+            this.StmtCust.GetTextBox().Text = customerData.statementCustomerNumber.ToString();
+            this.StmtName.GetTextBox().Text = customerData.statementName.ToString();
             //            this.pricetimer_textbox.Text = data[0].priceTierId.ToString();
-            selectId = (int)data[0].priceTierId;
+            selectId = (int)customerData.priceTierId;
 
-            this.Terms.GetTextBox().Text = data[0].terms.ToString();
-            this.Limit.GetTextBox().Text = data[0].limit.ToString();
-            this.Memo.GetTextBox().Text = data[0].memo.ToString();
-            this.Taxable.GetCheckBox().Checked = data[0].taxable.ToString() == "True" ? true : false;
-            this.SendStatements.GetCheckBox().Checked = data[0].sendStatements.ToString() == "True" ? true : false;
+            this.Terms.GetTextBox().Text = customerData.terms.ToString();
+            this.Limit.GetTextBox().Text = customerData.limit.ToString();
+            this.Memo.GetTextBox().Text = customerData.memo.ToString();
+            this.Taxable.GetCheckBox().Checked = customerData.taxable.ToString() == "True" ? true : false;
+            this.SendStatements.GetCheckBox().Checked = customerData.sendStatements.ToString() == "True" ? true : false;
 
-            this.CoreTracking.GetTextBox().Text = data[0].coreTracking.ToString();
-            this.CoreBalance.GetTextBox().Text = data[0].coreBalance.ToString();
-            this.PrintCoreTot.GetTextBox().Text = data[0].priceCoreTotal.ToString();
-            this.AccountType.GetTextBox().Text = data[0].accountType.ToString();
-            this.PORequired.GetTextBox().Text = data[0].poRequired.ToString();
-            this.CreditCode.GetTextBox().Text = data[0].creditCodeId.ToString();
-            this.InterestRate.GetTextBox().Text = data[0].interestRate.ToString();
-            this.AcctBalance.GetTextBox().Text = data[0].accountBalance.ToString();
-            this.YTDPurchases.GetTextBox().Text = data[0].yearToDatePurchases.ToString();
-            this.YTDInterest.GetTextBox().Text = data[0].yearToDateInterest.ToString();
-            this.DateLastPurch.GetDateTimePicker().Value = data[0].dateLastPurchased.ToLocalTime();
+            this.CoreTracking.GetTextBox().Text = customerData.coreTracking.ToString();
+            this.CoreBalance.GetTextBox().Text = customerData.coreBalance.ToString();
+            this.PrintCoreTot.GetTextBox().Text = customerData.priceCoreTotal.ToString();
+            this.AccountType.GetTextBox().Text = customerData.accountType.ToString();
+            this.PORequired.GetTextBox().Text = customerData.poRequired.ToString();
+            this.CreditCode.GetTextBox().Text = customerData.creditCodeId.ToString();
+            this.InterestRate.GetTextBox().Text = customerData.interestRate.ToString();
+            this.AcctBalance.GetTextBox().Text = customerData.accountBalance.ToString();
+            this.YTDPurchases.GetTextBox().Text = customerData.yearToDatePurchases.ToString();
+            this.YTDInterest.GetTextBox().Text = customerData.yearToDateInterest.ToString();
+            this.DateLastPurch.GetDateTimePicker().Value = customerData.dateLastPurchased.ToLocalTime();
 
         }
 

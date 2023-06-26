@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using mjc_dev.config;
+using static mjc_dev.forms.sku.SKUInformation;
 
 namespace mjc_dev.model
 {
@@ -37,7 +39,6 @@ namespace mjc_dev.model
     {
         public int NumCustomers { get; private set; }
         public List<CustomerData> CustomerDataList { get; private set; }
-
 
         public bool LoadCustomerData(string filter)
         {
@@ -78,6 +79,7 @@ namespace mjc_dev.model
 
         public bool AddCustomer(string customer_num, string customer_name, string address1, string address2, string city, string state, string zipcode, string business_phone, string fax, string email, DateTime date_opened, string salesman, bool resale, string stmt_num, string stmt_name, int pricetier, string terms, string limit, string memo, bool taxable, bool send_stm, string core_tracking, double core_balance, bool print_core_tot, string acct_type, bool porequired, int credit_card, double interest_rate, double acct_balance, int ytd_purch, double ytd_interest, DateTime last_date_purch)
         {
+            //MessageBox.Show(price)
             using (var connection = GetConnection())
             {
                 connection.Open();
@@ -147,7 +149,7 @@ namespace mjc_dev.model
                 using (var command = new SqlCommand())
                 {
                     command.Connection = connection;
-                    command.CommandText = @"UPDATE dbo.Customers SET customerNumber = @Value1, customerName = @Value2, address1 = @Value3, address2 = @Value4, city = @Value5, state = @Value6, zipcode = @Value7, businessPhone = @Value8, fax = @Value9, email = @Value10, dateOpened = @Value11, salesman = @Value12, resale = @Value13, statementCustomerNumber = @Value14, statementName = @Value15, priceTierId = @Value16, terms = @Value17, limit = @Value18, memo = @Value19, taxable = @Value20, sendStatements = @Value21, coreTracking = @Value22, coreBalance = @Value23,priceCoreTotal = @Value24, accountType = @Value25,poRequired = @Value26, creditCodeId = @Value27, interestRate = @Value28, accountBalance = @Value29, yearToDatePurchases = @Value30, yearToDateInterest = @Value31, dateLastPurchased = @Value32 WHERE id = @Value33";
+                    command.CommandText = @"UPDATE dbo.Customers SET customerNumber = @Value1, customerName = @Value2, address1 = @Value3, address2 = @Value4, city = @Value5, state = @Value6, zipcode = @Value7, businessPhone = @Value8, fax = @Value9, email = @Value10, dateOpened = @Value11, salesman = @Value12, resale = @Value13, statementCustomerNumber = @Value14, statementName = @Value15, priceTierId = @Value16, terms = @Value17, limit = @Value18, memo = @Value19, taxable = @Value20, sendStatements = @Value21, coreTracking = @Value22, coreBalance = @Value23, priceCoreTotal = @Value24, accountType = @Value25,poRequired = @Value26, creditCodeId = @Value27, interestRate = @Value28, accountBalance = @Value29, yearToDatePurchases = @Value30, yearToDateInterest = @Value31, dateLastPurchased = @Value32 WHERE id = @Value33";
                     command.Parameters.AddWithValue("@Value1", customer_num);
                     command.Parameters.AddWithValue("@Value2", customer_name);
                     command.Parameters.AddWithValue("@Value3", address1);
@@ -213,40 +215,74 @@ namespace mjc_dev.model
             }
         }
 
-        public List<dynamic> GetCustomerData(int id)
+        public List<KeyValuePair<int, string>> GetCustomerList()
         {
+            List<KeyValuePair<int, string>> PriceTierList = new List<KeyValuePair<int, string>>();
+
             using (var connection = GetConnection())
             {
                 connection.Open();
 
                 using (var command = new SqlCommand())
                 {
-                    SqlDataReader reader;
-                    List<dynamic> returnList = new List<dynamic>();
-
                     command.Connection = connection;
+                    SqlDataReader reader;
 
-                    command.CommandText = @"select * from dbo.Customers where id = @id";
-                    command.Parameters.AddWithValue("@id", id);
-
+                    command.CommandText = @"select id, customerNumber
+                                            from dbo.Customers";
                     reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        var row = new ExpandoObject() as IDictionary<string, object>;
-
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            row.Add(reader.GetName(i), reader[i]);
-                        }
-
-                        returnList.Add(row);
+                        PriceTierList.Add(
+                            new KeyValuePair<int, string>((int)reader[0], reader[1].ToString())
+                        );
                     }
                     reader.Close();
+                }
+            }
+            return PriceTierList;
+        }
 
-                    return returnList;
+        public dynamic GetCustomerData(int id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"select id, customerNumber, customerName, terms, zipcode, poRequired from dbo.Customers where id = @id";
+                    command.Parameters.AddWithValue("@id", id);
+
+                    var reader = command.ExecuteReader();
+                    if (reader.Read()) // check if there are any rows returned
+                    {
+                        // retrieve values from the reader
+                        int customerId = (int)reader.GetValue(0);
+                        string customerNumber = reader.IsDBNull(1) ? "" : reader.GetString(1);
+                        string customerName = reader.IsDBNull(2) ? "" : reader.GetString(2);
+                        string terms = reader.IsDBNull(3) ? "" : reader.GetString(3);
+                        string zipcode = reader.IsDBNull(4) ? "" : reader.GetString(4);
+                        string poRequired = reader.IsDBNull(5) ? "" : reader.GetString(5);
+
+                        // create an object to hold the customer data
+                        var customer = new
+                        {
+                            id = customerId,
+                            customerNumber = customerNumber,
+                            customerName = customerName,
+                            terms = terms,
+                            zipcode = zipcode,
+                            poRequired = poRequired
+                        };
+
+                        return customer;
+                    }
+
+                    // no rows returned
+                    return null;
                 }
             }
         }
-
     }
 }
