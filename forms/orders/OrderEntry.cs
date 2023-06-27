@@ -35,14 +35,22 @@ namespace mjc_dev.forms.orders
         private FlabelConstant Zone = new FlabelConstant("Zone", 150);
         private FlabelConstant Position = new FlabelConstant("PO#", 150);
 
-        private GridViewOrigin OrderEntryLookupGrid = new GridViewOrigin();
-        private DataGridView OEGridRefer = new DataGridView();
+        private FlabelConstant Requested = new FlabelConstant("Requested");
+        private FlabelConstant Filled = new FlabelConstant("Filled");
+        private FlabelConstant QtyOnHold = new FlabelConstant("Qty on Hand");
+        private FlabelConstant QtyAllocated = new FlabelConstant("Qty Allocated");
+        private FlabelConstant QtyAvailable = new FlabelConstant("Qty Available");
+        private FlabelConstant Subtotal = new FlabelConstant("Subtotal");
+        private FlabelConstant TaxPercent = new FlabelConstant("7.250% Tax");
+        private FlabelConstant TotalSale = new FlabelConstant("Total Sale");
+
+        private DataGridView OEGridRefer;
         private int OEGridSelectedIndex = 0;
 
         private string searchKey;
 
         private CustomersModel CustomersModelObj = new CustomersModel();
-        private OrderItemsModel OrderModelObj = new OrderItemsModel();
+        private OrderItemsModel OrderItemsModalObj = new OrderItemsModel();
 
         public OrderEntry() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
         {
@@ -53,10 +61,18 @@ namespace mjc_dev.forms.orders
             _initializeHKButtons(hkButtons);
             //_addComingSoon();
 
+            InitHKButtonEvents();
             InitCustomerInfo();
-            //InitCustomerList();
+            InitOrderItemsList();
+
+            InitGridFooter();
 
             //ComboBox_SelectedIndexChanged(Customer.GetComboBox(), EventArgs.Empty);
+        }
+
+        private void InitHKButtonEvents()
+        {
+            hkAdds.GetButton().Click += (s, e) => insertButton_Click(s, e);
         }
 
         private void InitCustomerInfo()
@@ -108,60 +124,118 @@ namespace mjc_dev.forms.orders
             }
         }
 
-        private void InitCustomerList()
+        private void InitOrderItemsList()
         {
+            GridViewOrigin OrderEntryLookupGrid = new GridViewOrigin();
             OEGridRefer = OrderEntryLookupGrid.GetGrid();
             OEGridRefer.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(157, 196, 235);
             OEGridRefer.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(31, 63, 96);
             OEGridRefer.ColumnHeadersDefaultCellStyle.Padding = new Padding(12);
-            OEGridRefer.Location = new Point(0, 300);
+            OEGridRefer.Location = new Point(0, 200);
             OEGridRefer.Width = this.Width;
-            OEGridRefer.Height = this.Height - 295;
-            this.Controls.Add(OEGridRefer);
-            this.OEGridRefer.CellDoubleClick += (sender, e) =>
-            {
-                //updateCustomer();
-            };
+            OEGridRefer.Height = 490;
+            OEGridRefer.ReadOnly = false;
 
-            //LoadCustomerList();
+            this.Controls.Add(OEGridRefer);
+
+            LoadSKUList();
         }
 
-        public void LoadSKUList(bool archivedView = false, bool keepSelection = true)
+        private void InitGridFooter()
         {
-            if (this.searchKey == "")
+            List<dynamic> GridFooterComponents = new List<dynamic>();
+
+            GridFooterComponents.Add(Requested);
+            GridFooterComponents.Add(Filled);
+
+            _addFormInputs(GridFooterComponents, 30, 720, 650, 42, 820);
+
+            List<dynamic> GridFooterComponents1 = new List<dynamic>();
+
+            GridFooterComponents1.Add(QtyOnHold);
+            GridFooterComponents1.Add(QtyAllocated);
+            GridFooterComponents1.Add(QtyAvailable);
+            GridFooterComponents1.Add(Subtotal);
+            GridFooterComponents1.Add(TaxPercent);
+            GridFooterComponents1.Add(TotalSale);
+
+            _addFormInputs(GridFooterComponents1, 680, 720, 650, 42, 820);
+        }
+
+        public void LoadSKUList(bool keepSelection = true)
+        {
+            var refreshData = OrderItemsModalObj.LoadOrderItemsList(this.searchKey);
+            if (refreshData)
             {
-                this._changeFormText("SKU List");
+                OEGridRefer.DataSource = OrderItemsModalObj.OIList;
+            }
+
+            OEGridRefer.Columns[0].Visible = false;
+            OEGridRefer.Columns[1].HeaderText = "orderId";
+            OEGridRefer.Columns[1].Visible = false;
+            OEGridRefer.Columns[2].HeaderText = "skuId";
+            OEGridRefer.Columns[2].Visible = false;
+            OEGridRefer.Columns[3].HeaderText = "SKU#";
+            OEGridRefer.Columns[3].Width = 300;
+            OEGridRefer.Columns[4].HeaderText = "Quantity";
+            OEGridRefer.Columns[4].Width = 200;
+            OEGridRefer.Columns[5].HeaderText = "Description";
+            OEGridRefer.Columns[5].Width = 400;
+            OEGridRefer.Columns[6].HeaderText = "Tax";
+            OEGridRefer.Columns[6].Width = 200;
+            OEGridRefer.Columns[7].HeaderText = "Disc%";
+            OEGridRefer.Columns[7].Width = 200;
+            OEGridRefer.Columns[8].HeaderText = "Unit Price";
+            OEGridRefer.Columns[8].Width = 200;
+            OEGridRefer.Columns[9].HeaderText = "Line Total";
+            OEGridRefer.Columns[9].Width = 200;
+            OEGridRefer.Columns[10].HeaderText = "SC";
+            OEGridRefer.Columns[10].Width = 200;
+
+
+        }
+
+
+        private void insertButton_Click(object sender, EventArgs e)
+        {
+            // Get current row index
+            int rowIndex = OEGridRefer.CurrentRow?.Index ?? -1;
+
+            // Check if a row is currently selected
+            if (rowIndex >= 0)
+            {
+                // Get the current list of OrderItemsList objects from the DataGridView's DataSource
+                List<OrderItemsList> oiList = (List<OrderItemsList>)OEGridRefer.DataSource;
+
+                // Create a new OrderItemsList object with default values
+                OrderItemsList newOI = new OrderItemsList(0, 0, 0, null, 0, null, false, null, 0, 0, null);
+
+                // Insert the new OrderItemsList object into the list at the selected row index
+                oiList.Insert(rowIndex, newOI);
+
+                // Set the DataGridView's DataSource property to the updated List<OrderItemsList>
+                OEGridRefer.DataSource = null;
+                OEGridRefer.DataSource = oiList;
+
+                // Set the focus to the first cell of the new row
+                OEGridRefer.CurrentCell = OEGridRefer[0, rowIndex];
             }
             else
             {
-                this._changeFormText("SKU List searched by " + this.searchKey);
-            }
-            var refreshData = OrderModelObj.LoadOrderData(this.searchKey, archivedView);
-            if (refreshData)
-            {
-                OEGridRefer.DataSource = OrderModelObj.SKUDataList;
-                OEGridRefer.Columns[0].Visible = false;
-                OEGridRefer.Columns[1].HeaderText = "SKU#";
-                OEGridRefer.Columns[1].Width = 300;
-                OEGridRefer.Columns[2].HeaderText = "Category";
-                OEGridRefer.Columns[2].Width = 300;
-                OEGridRefer.Columns[3].HeaderText = "Description";
-                OEGridRefer.Columns[3].Width = 500;
-                OEGridRefer.Columns[4].HeaderText = "Qty Avail";
-                OEGridRefer.Columns[4].Width = 300;
-                OEGridRefer.Columns[5].HeaderText = "Qty Tracking";
-                OEGridRefer.Columns[5].Width = 300;
-            }
+                // If no row is currently selected, just add the new row to the end of the DataGridView
+                List<OrderItemsList> oiList = (List<OrderItemsList>)OEGridRefer.DataSource;
+                oiList.Add(new OrderItemsList(0, 0, 0, null, 0, null, false, null, 0, 0, null));
+                OEGridRefer.DataSource = null;
+                OEGridRefer.DataSource = oiList;
 
-            if (keepSelection)
-            {
-                OEGridRefer.ClearSelection();
-                if (OEGridSelectedIndex >= 0 && OEGridSelectedIndex < OEGridRefer.Rows.Count)
+                // Set the focus to the last cell of the new row
+                int lastRowIndex = OEGridRefer.RowCount - 1;
+                if (lastRowIndex >= 0)
                 {
-                    OEGridRefer.Rows[OEGridSelectedIndex].Selected = true;
-                    OEGridRefer.CurrentCell =   [1, OEGridSelectedIndex];
+                    OEGridRefer.CurrentCell = OEGridRefer[OEGridRefer.ColumnCount - 1, lastRowIndex];
                 }
             }
         }
+
     }
 }

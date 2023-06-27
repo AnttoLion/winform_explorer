@@ -306,7 +306,7 @@
     </Compile>
     <Compile Include="model\CategoriesModel.cs" />
     <Compile Include="model\CustomersModel.cs" />
-    <Compile Include="model\OrderModel.cs" />
+    <Compile Include="model\OrderItemsModel.cs" />
     <Compile Include="model\PriceTiersModel.cs" />
     <Compile Include="model\SKUCrossRefModal.cs" />
     <Compile Include="model\SKUModel.cs" />
