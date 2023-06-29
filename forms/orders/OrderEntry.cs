@@ -138,7 +138,7 @@ namespace mjc_dev.forms.orders
 
             this.Controls.Add(OEGridRefer);
 
-            LoadSKUList();
+            //LoadSKUList();
         }
 
         private void InitGridFooter()
