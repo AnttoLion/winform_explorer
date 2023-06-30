@@ -91,6 +91,31 @@ namespace mjc_dev.model
             return true;
         }
 
+        public bool AddSKUPrice(int skuId, int priceTierId, double price)
+        {
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    //Get Total Number of Customers
+                    command.CommandText = "INSERT INTO dbo.SKUPrices (active, skuId, priceTierId, price, createdAt, createdBy, updatedAt, updatedBy) VALUES (@active, @Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7)";
+                    command.Parameters.AddWithValue("@active", true);
+                    command.Parameters.AddWithValue("@Value1", skuId);
+                    command.Parameters.AddWithValue("@Value2", priceTierId);
+                    command.Parameters.AddWithValue("@Value3", price);
+                    command.Parameters.AddWithValue("@Value4", DateTime.Now);
+                    command.Parameters.AddWithValue("@Value5", 1);
+                    command.Parameters.AddWithValue("@Value6", DateTime.Now);
+                    command.Parameters.AddWithValue("@Value7", 1);
+                    command.ExecuteNonQuery();
+                }
+                return true;
+            }
+        }
+
         public bool AddSKU(string sku__name,
             int category,
             string description,
@@ -116,8 +141,11 @@ namespace mjc_dev.model
             bool freeze_prices,
             int core_cost,
             int inv_value,
-            string memo)
+            string memo,
+            Dictionary<int, double> priceTierDict
+            )
         {
+
             using (var connection = GetConnection())
             {
                 connection.Open();
@@ -126,7 +154,7 @@ namespace mjc_dev.model
                 {
                     command.Connection = connection;
                     //Get Total Number of Customers
-                    command.CommandText = "INSERT INTO dbo.SKU (active, sku, category, description, measurementUnit, weight, costCode, assetAccount, taxable, manageStock, allowDiscounts, commissionable, orderFrom, lastSold, manufacturer, location, quantity, qtyAllocated, qtyAvailable, qtyCritical, qtyReorder, soldMonthToDate, soldYearToDate, freezePrices, coreCost, inventoryValue, createdAt, createdBy, updatedAt, updatedBy, subassemblyStatus, subassemblyPrint, memo) VALUES (@active, @Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31, @memo)";
+                    command.CommandText = "INSERT INTO dbo.SKU (active, sku, category, description, measurementUnit, weight, costCode, assetAccount, taxable, manageStock, allowDiscounts, commissionable, orderFrom, lastSold, manufacturer, location, quantity, qtyAllocated, qtyAvailable, qtyCritical, qtyReorder, soldMonthToDate, soldYearToDate, freezePrices, coreCost, inventoryValue, createdAt, createdBy, updatedAt, updatedBy, subassemblyStatus, subassemblyPrint, memo) OUTPUT INSERTED.ID VALUES (@active, @Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31, @memo)";
                     command.Parameters.AddWithValue("@active", true);
                     command.Parameters.AddWithValue("@Value1", sku__name);
                     command.Parameters.AddWithValue("@Value2", category);
@@ -161,7 +189,15 @@ namespace mjc_dev.model
                     command.Parameters.AddWithValue("@Value31", false);
                     command.Parameters.AddWithValue("@memo", memo);
 
-                    command.ExecuteNonQuery();
+                    int newId = (int)command.ExecuteScalar();
+
+                    foreach (KeyValuePair<int, double> pair in priceTierDict)
+                    {
+                        int key = pair.Key;
+                        double value = pair.Value;
+
+                        AddSKUPrice(newId, key, value);
+                    }
 
                     MessageBox.Show("New SKU inserted successfully.");
                 }
@@ -196,6 +232,7 @@ namespace mjc_dev.model
             int core_cost,
             int inv_value,
             string memo,
+            Dictionary<int, double> priceTierDict,
             int id)
         {
             using (var connection = GetConnection())

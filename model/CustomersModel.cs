@@ -263,7 +263,7 @@ namespace mjc_dev.model
                         string customerName = reader.IsDBNull(2) ? "" : reader.GetString(2);
                         string terms = reader.IsDBNull(3) ? "" : reader.GetString(3);
                         string zipcode = reader.IsDBNull(4) ? "" : reader.GetString(4);
-                        string poRequired = reader.IsDBNull(5) ? "" : reader.GetString(5);
+                        string poRequired = reader.IsDBNull(5) ? "" : "reader.GetString(5)";
 
                         // create an object to hold the customer data
                         var customer = new

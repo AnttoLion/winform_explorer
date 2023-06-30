@@ -191,7 +191,7 @@ namespace mjc_dev.forms.sku
                 priceTiers = new FInputBox[pDatas.Count];
                 for (int i = 0; i< pDatas.Count; i++)
                 {
-                    priceTiers[i] = new FInputBox(pDatas[i].name.ToString());
+                    priceTiers[i] = new FInputBox(pDatas[i].name.ToString(), 200, pDatas[i].id);
                     FormComponents2.Add(priceTiers[i]);
                 }
             }
@@ -333,9 +333,21 @@ namespace mjc_dev.forms.sku
                 MessageBox.Show("Please fill String field.");
                 return;
             }
+
+            Dictionary<int, double> priceTierDict = new Dictionary<int, double>();
+
+            for (int i = 0; i < priceTiers.Length; i++)
+            {
+                double priceData; bool parse_succeed = double.TryParse(priceTiers[i].GetTextBox().Text, out priceData);
+                if (parse_succeed) priceTierDict.Add(priceTiers[i].GetId(), priceData);
+            }
+
             bool refreshData = false;
-            if (skuId == 0) refreshData = SKUModelObj.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo);
-            else refreshData = SKUModelObj.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, skuId);
+            if (skuId == 0)
+            {
+                refreshData = SKUModelObj.AddSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, priceTierDict);
+            }
+            else refreshData = SKUModelObj.UpdateSKU(s_sku_name, i_category, s_description, s_measurement_unit, i_weight, i_cost_code, i_asset_acct, b_taxable, b_maintain_qty, b_allow_discount, b_commissionable, i_order_from, d_last_sold, s_manufacturer, s_location, i_quantity, i_qty_allocated, i_qty_available, i_qty_critical, i_qty_reorder, i_sold_this_month, i_sold_ytd, b_freeze_prices, i_core_cost, i_inv_value, memo, priceTierDict, skuId);
             string modeText = skuId == 0 ? "creating" : "updating";
             if (refreshData)
             {
