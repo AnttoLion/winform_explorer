@@ -61,9 +61,12 @@ namespace mjc_dev.common.components
     {
         private TextBox textBox;
         private Label label;
+        private int id { get; set; } = 0;
 
-        public FInputBox(string labeltext, int labelWidth = 200)
+        public FInputBox(string labeltext, int labelWidth = 200, int input_Id = 0)
         {
+            id = input_Id;
+
             label = new Label();
             label.Text = labeltext;
 
@@ -98,6 +101,11 @@ namespace mjc_dev.common.components
         public Label GetLabel()
         {
             return label;
+        }
+
+        public int GetId()
+        {
+            return id;
         }
 
         public void SetPosition(Point location)
