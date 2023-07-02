@@ -1,5 +1,6 @@
 ﻿using mjc_dev.common.components;
 using mjc_dev.common;
+using mjc_dev.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,16 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
-using System.Net;
-using System.Reflection.Emit;
-using mjc_dev.model;
-using static mjc_dev.forms.sku.SKUInformation;
-using System.Xml.Linq;
 
 namespace mjc_dev.forms.orders
 {
-    public partial class ProcessOrder : GlobalLayout
+    public partial class OrderEntry : GlobalLayout
     {
 
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
@@ -54,7 +49,7 @@ namespace mjc_dev.forms.orders
         private SKUModel SKUModelObj = new SKUModel();
         private OrderItemsModel OrderItemsModalObj = new OrderItemsModel();
 
-        public ProcessOrder() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
+        public OrderEntry() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
         {
             InitializeComponent();
             _initBasicSize();
@@ -112,16 +107,16 @@ namespace mjc_dev.forms.orders
             var customerData = CustomersModelObj.GetCustomerData(customerId);
             if (customerData != null)
             {
-                if(customerData.customerName != "") CustomerName.SetContext(customerData.customerName);
+                if (customerData.customerName != "") CustomerName.SetContext(customerData.customerName);
                 else CustomerName.SetContext("n/a");
 
                 if (customerData.terms != "") Terms.SetContext(customerData.terms);
                 else Terms.SetContext("n/a");
 
-                if(customerData.zipcode != "") Zone.SetContext(customerData.zipcode);
+                if (customerData.zipcode != "") Zone.SetContext(customerData.zipcode);
                 else Zone.SetContext("n/a");
 
-                if(customerData.poRequired != "") Position.SetContext(customerData.poRequired);
+                if (customerData.poRequired != "") Position.SetContext(customerData.poRequired);
                 else Position.SetContext("n/a");
             }
         }
