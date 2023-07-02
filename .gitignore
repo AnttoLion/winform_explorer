@@ -34,3 +34,6 @@ msbuild.err
 msbuild.wrn
 
 temp/
+
+# Db connection
+DbConnection.cs

@@ -251,10 +251,10 @@ namespace mjc_dev.forms.sku
                     selectId = id;
                     initFlag = false;
                 }
-                categoryCombo.GetComboBox().Items.Add(new CategoryComboBoxItem(id, name));
+                categoryCombo.GetComboBox().Items.Add(new FComboBoxItem(id, name));
             }
 
-            foreach (CategoryComboBoxItem item in categoryCombo.GetComboBox().Items)
+            foreach (FComboBoxItem item in categoryCombo.GetComboBox().Items)
             {
                 if (item.Id == selectId)
                 {
@@ -278,7 +278,7 @@ namespace mjc_dev.forms.sku
                 MessageBox.Show("please select a category");
                 return;
             }
-            CategoryComboBoxItem seletedItem = (CategoryComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
+            FComboBoxItem seletedItem = (FComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
 
             int i_category = seletedItem.Id;
 
@@ -355,23 +355,6 @@ namespace mjc_dev.forms.sku
                 this._navigateToPrev(sender, e);
             }
             else MessageBox.Show("An Error occured while " + modeText + " the vendor.");
-        }
-
-        public class CategoryComboBoxItem
-        {
-            public int Id { get; set; }
-            public string Text { get; set; }
-
-            public CategoryComboBoxItem(int id, string text)
-            {
-                Id = id;
-                Text = text;
-            }
-
-            public override string ToString()
-            {
-                return Text;
-            }
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

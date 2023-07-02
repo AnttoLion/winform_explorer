@@ -14,6 +14,7 @@ using System.Net;
 using System.Reflection.Emit;
 using mjc_dev.model;
 using static mjc_dev.forms.sku.SKUInformation;
+using System.Xml.Linq;
 
 namespace mjc_dev.forms.orders
 {
@@ -93,7 +94,7 @@ namespace mjc_dev.forms.orders
             {
                 int id = item.Key;
                 string name = item.Value;
-                Customer.GetComboBox().Items.Add(new CategoryComboBoxItem(id, name));
+                Customer.GetComboBox().Items.Add(new FComboBoxItem(id, name));
             }
 
             Customer.GetComboBox().SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);
@@ -104,7 +105,7 @@ namespace mjc_dev.forms.orders
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CategoryComboBoxItem selectedItem = (CategoryComboBoxItem)Customer.GetComboBox().SelectedItem;
+            FComboBoxItem selectedItem = (FComboBoxItem)Customer.GetComboBox().SelectedItem;
             int customerId = selectedItem.Id;
 
             var customerData = CustomersModelObj.GetCustomerData(customerId);
@@ -135,6 +136,53 @@ namespace mjc_dev.forms.orders
             OEGridRefer.Width = this.Width;
             OEGridRefer.Height = 490;
             OEGridRefer.ReadOnly = false;
+
+            OEGridRefer.ReadOnly = false;
+            OEGridRefer.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            OEGridRefer.Columns.Add("id", "id");
+            OEGridRefer.Columns["id"].Visible = false;
+
+            OEGridRefer.Columns.Add("orderId", "orderId");
+            OEGridRefer.Columns["orderId"].Visible = false;
+
+            OEGridRefer.Columns.Add("skuId", "skuId");
+            OEGridRefer.Columns["skuId"].Visible = false;
+
+            DataGridViewComboBoxColumn skuColumn = new DataGridViewComboBoxColumn();
+
+            skuColumn.Items.Add("fff");
+            skuColumn.Items.Add("ggg");
+
+            //DataGridViewCellStyle style = new DataGridViewCellStyle(); style.BackColor = Color.LightBlue; skuColumn.DefaultCellStyle = style;
+            skuColumn.Name = "sku"; 
+            skuColumn.HeaderText = "SK#"; 
+            skuColumn.Width = 300; 
+            OEGridRefer.Columns.Add(skuColumn);
+
+            OEGridRefer.Columns.Add("quantity", "Quantity");
+            OEGridRefer.Columns["quantity"].Width = 200;
+            OEGridRefer.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            OEGridRefer.Columns.Add("description", "Description");
+            OEGridRefer.Columns["description"].Width = 400;
+
+            OEGridRefer.Columns.Add("tax", "Tax");
+            OEGridRefer.Columns["tax"].Width = 200;
+
+            OEGridRefer.Columns.Add("disc", "Disc%");
+            OEGridRefer.Columns["disc"].Width = 200;
+
+            OEGridRefer.Columns.Add("unitPrice", "Unit Price");
+            OEGridRefer.Columns["unitPrice"].Width = 200;
+            OEGridRefer.Columns["unitPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            OEGridRefer.Columns.Add("lineTotal", "Line Total");
+            OEGridRefer.Columns["lineTotal"].Width = 200;
+            OEGridRefer.Columns["lineTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            OEGridRefer.Columns.Add("SC", "SC");
+            OEGridRefer.Columns["SC"].Width = 200;
 
             this.Controls.Add(OEGridRefer);
 
@@ -191,50 +239,21 @@ namespace mjc_dev.forms.orders
             OEGridRefer.Columns[9].Width = 200;
             OEGridRefer.Columns[10].HeaderText = "SC";
             OEGridRefer.Columns[10].Width = 200;
-
-
         }
-
 
         private void insertButton_Click(object sender, EventArgs e)
         {
-            // Get current row index
-            int rowIndex = OEGridRefer.CurrentRow?.Index ?? -1;
+            DataGridViewRow lastRow = OEGridRefer.Rows[OEGridRefer.Rows.Count - 1];
+            string lastRowValue = lastRow.Cells[OEGridRefer.Columns["sku"].Index].Value?.ToString(); // Assuming the first cell of each row should have a value
 
-            // Check if a row is currently selected
-            if (rowIndex >= 0)
+            if (string.IsNullOrEmpty(lastRowValue))
             {
-                // Get the current list of OrderItemsList objects from the DataGridView's DataSource
-                List<OrderItemsList> oiList = (List<OrderItemsList>)OEGridRefer.DataSource;
-
-                // Create a new OrderItemsList object with default values
-                OrderItemsList newOI = new OrderItemsList(0, 0, 0, null, 0, null, false, null, 0, 0, null);
-
-                // Insert the new OrderItemsList object into the list at the selected row index
-                oiList.Insert(rowIndex, newOI);
-
-                // Set the DataGridView's DataSource property to the updated List<OrderItemsList>
-                OEGridRefer.DataSource = null;
-                OEGridRefer.DataSource = oiList;
-
-                // Set the focus to the first cell of the new row
-                OEGridRefer.CurrentCell = OEGridRefer[0, rowIndex];
+                OEGridRefer.CurrentCell = OEGridRefer[OEGridRefer.Columns["sku"].Index, lastRow.Index];
+                // Last row is empty, do not add a new row
+                return;
             }
-            else
-            {
-                // If no row is currently selected, just add the new row to the end of the DataGridView
-                List<OrderItemsList> oiList = (List<OrderItemsList>)OEGridRefer.DataSource;
-                oiList.Add(new OrderItemsList(0, 0, 0, null, 0, null, false, null, 0, 0, null));
-                OEGridRefer.DataSource = null;
-                OEGridRefer.DataSource = oiList;
 
-                // Set the focus to the last cell of the new row
-                int lastRowIndex = OEGridRefer.RowCount - 1;
-                if (lastRowIndex >= 0)
-                {
-                    OEGridRefer.CurrentCell = OEGridRefer[OEGridRefer.ColumnCount - 1, lastRowIndex];
-                }
-            }
+            OEGridRefer.Rows.Add();
         }
 
     }
