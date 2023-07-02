@@ -124,6 +124,12 @@
     <Compile Include="forms\invoice\LookupInvocie.Designer.cs">
       <DependentUpon>LookupInvocie.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\orders\OrderEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\orders\OrderEntry.Designer.cs">
+      <DependentUpon>OrderEntry.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\orders\ProcessOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -308,7 +314,7 @@
     <Compile Include="model\CustomersModel.cs" />
     <Compile Include="model\OrderItemsModel.cs" />
     <Compile Include="model\PriceTiersModel.cs" />
-    <Compile Include="model\SKUCrossRefModal.cs" />
+    <Compile Include="model\SKUCrossRefModel.cs" />
     <Compile Include="model\SKUModel.cs" />
     <Compile Include="model\VendorsModel.cs" />
     <Compile Include="Program.cs" />

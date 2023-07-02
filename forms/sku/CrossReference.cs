@@ -25,7 +25,7 @@ namespace mjc_dev.forms.sku
 
         private GridViewOrigin crossRefGrid = new GridViewOrigin();
         private DataGridView CRGridRefer;
-        private SKUCrossRefModal SUKCrossRefMModalObj = new SKUCrossRefModal();
+        private SKUCrossRefModel SUKCrossRefMModalObj = new SKUCrossRefModel();
         private int SKUId;
 
         public CrossReference(int _skuId, string _skuLabel) : base("Cross References for " + _skuLabel, "List all serials that SKUs may also be searched by based on listings by other vendors")

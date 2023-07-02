@@ -29,7 +29,7 @@ namespace mjc_dev.model
         }
     }
 
-    public class SKUCrossRefModal : DbConnection
+    public class SKUCrossRefModel : DbConnection
     {
 
         public List<SKUCrossRefData> SKUCrossRefList { get; private set; }

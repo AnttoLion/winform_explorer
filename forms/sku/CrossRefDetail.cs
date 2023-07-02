@@ -25,7 +25,7 @@ namespace mjc_dev.forms.sku
 
         private int priceTierId;
 
-        private SKUCrossRefModal SKUCrossRefModalObj = new SKUCrossRefModal();
+        private SKUCrossRefModel SKUCrossRefModalObj = new SKUCrossRefModel();
         private SKUModel SKUModelObj = new SKUModel();
         private VendorsModel VendorsModelObj = new VendorsModel();
 
