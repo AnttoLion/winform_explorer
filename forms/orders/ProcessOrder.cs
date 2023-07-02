@@ -15,11 +15,10 @@ using System.Reflection.Emit;
 using mjc_dev.model;
 using static mjc_dev.forms.sku.SKUInformation;
 using System.Xml.Linq;
-using mjc_dev.forms.customer;
 
 namespace mjc_dev.forms.orders
 {
-    public partial class OrderEntry : GlobalLayout
+    public partial class ProcessOrder : GlobalLayout
     {
 
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
@@ -53,9 +52,8 @@ namespace mjc_dev.forms.orders
 
         private CustomersModel CustomersModelObj = new CustomersModel();
         private OrderItemsModel OrderItemsModalObj = new OrderItemsModel();
-        private SKUModel SKUModelObj = new SKUModel();
 
-        public OrderEntry() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
+        public ProcessOrder() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
         {
             InitializeComponent();
             _initBasicSize();
@@ -152,35 +150,14 @@ namespace mjc_dev.forms.orders
             OEGridRefer.Columns["skuId"].Visible = false;
 
             DataGridViewComboBoxColumn skuColumn = new DataGridViewComboBoxColumn();
+
+            skuColumn.Items.Add("fff");
+            skuColumn.Items.Add("ggg");
+
+            //DataGridViewCellStyle style = new DataGridViewCellStyle(); style.BackColor = Color.LightBlue; skuColumn.DefaultCellStyle = style;
             skuColumn.Name = "sku"; 
             skuColumn.HeaderText = "SK#"; 
-            skuColumn.Width = 300;
-
-            skuColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox; // Set display style to ComboBox
-            skuColumn.DisplayStyleForCurrentCellOnly = true; // Apply display style only for current cell
-
-            // Modify ComboBox appearance
-            skuColumn.DefaultCellStyle.BackColor = Color.White;
-            skuColumn.DefaultCellStyle.ForeColor = Color.Black;
-
-            // Set ComboBox column properties
-            skuColumn.FlatStyle = FlatStyle.Flat;
-            skuColumn.MaxDropDownItems = 10;
-
-            BindingList<FComboBoxItem> skuItemList = new BindingList<FComboBoxItem>();
-            List<KeyValuePair<int, string>> skuList = new List<KeyValuePair<int, string>>();
-            skuList = SKUModelObj.GetSKUItems();
-            foreach (KeyValuePair<int, string> item in skuList)
-            {
-                int id = item.Key;
-                string name = item.Value;
-                skuItemList.Add(new FComboBoxItem(id, name));
-            }
-
-            skuColumn.DataSource = skuItemList;
-            skuColumn.DisplayMember = "Text"; // Set the property name to display as the text
-            skuColumn.ValueMember = "Id"; // Set the property name to use as the value
-
+            skuColumn.Width = 300; 
             OEGridRefer.Columns.Add(skuColumn);
 
             OEGridRefer.Columns.Add("quantity", "Quantity");
@@ -206,8 +183,6 @@ namespace mjc_dev.forms.orders
 
             OEGridRefer.Columns.Add("SC", "SC");
             OEGridRefer.Columns["SC"].Width = 200;
-
-            OEGridRefer.EditingControlShowing += OEGridRefer_EditingControlShowing;
 
             this.Controls.Add(OEGridRefer);
 
@@ -281,14 +256,5 @@ namespace mjc_dev.forms.orders
             OEGridRefer.Rows.Add();
         }
 
-        private void OEGridRefer_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            DataGridViewComboBoxEditingControl comboBoxEditingControl = e.Control as DataGridViewComboBoxEditingControl;
-
-            if (comboBoxEditingControl != null)
-            {
-                comboBoxEditingControl.DropDownHeight = 300; // Set the desired height for the drop-down menu
-            }
-        }
     }
 }

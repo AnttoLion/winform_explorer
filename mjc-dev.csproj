@@ -124,11 +124,11 @@
     <Compile Include="forms\invoice\LookupInvocie.Designer.cs">
       <DependentUpon>LookupInvocie.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\orders\OrderEntry.cs">
+    <Compile Include="forms\orders\ProcessOrder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\orders\OrderEntry.Designer.cs">
-      <DependentUpon>OrderEntry.cs</DependentUpon>
+    <Compile Include="forms\orders\ProcessOrder.Designer.cs">
+      <DependentUpon>ProcessOrder.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\price\PriceChange.cs">
       <SubType>Form</SubType>
