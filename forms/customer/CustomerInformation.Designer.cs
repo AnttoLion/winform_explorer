@@ -1,6 +1,6 @@
 ﻿namespace mjc_dev.forms.customer
 {
-    partial class CustomerDetail
+    partial class CustomerInformation
     {
         /// <summary>
         /// Required designer variable.

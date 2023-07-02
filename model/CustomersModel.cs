@@ -88,7 +88,7 @@ namespace mjc_dev.model
                 {
                     command.Connection = connection;
 
-                    command.CommandText = "INSERT INTO dbo.Customers (active, customerNumber, customerName, address1, address2, city, state, zipcode, businessPhone, businessPhoneExtension, fax, homePhone, email, dateOpened, salesman, resale, taxable, sendStatements, statementCustomerNumber, statementName, priceTierId, terms, limit, coreTracking, coreBalance, priceCoreTotal, accountType, poRequired, creditCodeId, interestRate, accountBalance, yearToDatePurchases, yearToDateInterest, dateLastPurchased, memo, archived, createdAt, createdBy, updatedAt, updatedBy) VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31, @Value32, @Value33, @Value34, @Value35, @Value36, @Value37, @Value38, @Value39, @Value40)";
+                    command.CommandText = "INSERT INTO dbo.Customers (active, customerNumber, customerName, address1, address2, city, state, zipcode, businessPhone, businessPhoneExtension, fax, homePhone, email, dateOpened, salesman, resale, taxable, sendStatements, statementCustomerNumber, statementName, priceTierId, terms, limit, coreTracking, coreBalance, printCoreTotal, accountType, poRequired, creditCodeId, interestRate, accountBalance, yearToDatePurchases, yearToDateInterest, dateLastPurchased, memo, archived, createdAt, createdBy, updatedAt, updatedBy) VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7, @Value8, @Value9, @Value10, @Value11, @Value12, @Value13, @Value14, @Value15, @Value16, @Value17, @Value18, @Value19, @Value20, @Value21, @Value22, @Value23, @Value24, @Value25, @Value26, @Value27, @Value28, @Value29, @Value30, @Value31, @Value32, @Value33, @Value34, @Value35, @Value36, @Value37, @Value38, @Value39, @Value40)";
                     command.Parameters.AddWithValue("@Value1", 1);
                     command.Parameters.AddWithValue("@Value2", customer_num);
                     command.Parameters.AddWithValue("@Value3", customer_name);
@@ -149,7 +149,7 @@ namespace mjc_dev.model
                 using (var command = new SqlCommand())
                 {
                     command.Connection = connection;
-                    command.CommandText = @"UPDATE dbo.Customers SET customerNumber = @Value1, customerName = @Value2, address1 = @Value3, address2 = @Value4, city = @Value5, state = @Value6, zipcode = @Value7, businessPhone = @Value8, fax = @Value9, email = @Value10, dateOpened = @Value11, salesman = @Value12, resale = @Value13, statementCustomerNumber = @Value14, statementName = @Value15, priceTierId = @Value16, terms = @Value17, limit = @Value18, memo = @Value19, taxable = @Value20, sendStatements = @Value21, coreTracking = @Value22, coreBalance = @Value23, priceCoreTotal = @Value24, accountType = @Value25,poRequired = @Value26, creditCodeId = @Value27, interestRate = @Value28, accountBalance = @Value29, yearToDatePurchases = @Value30, yearToDateInterest = @Value31, dateLastPurchased = @Value32 WHERE id = @Value33";
+                    command.CommandText = @"UPDATE dbo.Customers SET customerNumber = @Value1, customerName = @Value2, address1 = @Value3, address2 = @Value4, city = @Value5, state = @Value6, zipcode = @Value7, businessPhone = @Value8, fax = @Value9, email = @Value10, dateOpened = @Value11, salesman = @Value12, resale = @Value13, statementCustomerNumber = @Value14, statementName = @Value15, priceTierId = @Value16, terms = @Value17, limit = @Value18, memo = @Value19, taxable = @Value20, sendStatements = @Value21, coreTracking = @Value22, coreBalance = @Value23, printCoreTotal = @Value24, accountType = @Value25,poRequired = @Value26, creditCodeId = @Value27, interestRate = @Value28, accountBalance = @Value29, yearToDatePurchases = @Value30, yearToDateInterest = @Value31, dateLastPurchased = @Value32 WHERE id = @Value33";
                     command.Parameters.AddWithValue("@Value1", customer_num);
                     command.Parameters.AddWithValue("@Value2", customer_name);
                     command.Parameters.AddWithValue("@Value3", address1);
@@ -281,6 +281,39 @@ namespace mjc_dev.model
 
                     // no rows returned
                     return null;
+                }
+            }
+        }
+
+        public dynamic GetCustomerDataById(int id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    SqlDataReader reader;
+                    List<dynamic> returnList = new List<dynamic>();
+                    command.Connection = connection;
+                    command.CommandText = @"select * from dbo.Customers where id = @id";
+                    command.Parameters.AddWithValue("@id", id);
+
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var row = new ExpandoObject() as IDictionary<string, object>;
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row.Add(reader.GetName(i), reader[i]);
+                        }
+
+                        returnList.Add(row);
+                    }
+                    reader.Close();
+
+                    // no rows returned
+                    return returnList;
                 }
             }
         }

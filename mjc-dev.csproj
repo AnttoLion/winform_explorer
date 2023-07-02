@@ -88,11 +88,11 @@
     <Compile Include="forms\category\CategoryMargin.Designer.cs">
       <DependentUpon>CategoryMargin.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\customer\CustomerDetail.cs">
+    <Compile Include="forms\customer\CustomerInformation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\customer\CustomerDetail.Designer.cs">
-      <DependentUpon>CustomerDetail.cs</DependentUpon>
+    <Compile Include="forms\customer\CustomerInformation.Designer.cs">
+      <DependentUpon>CustomerInformation.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\customer\CustomerList.cs">
       <SubType>Form</SubType>
@@ -321,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="forms\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\sku\SKUInformation.resx">
+      <DependentUpon>SKUInformation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="forms\sku\SKUMemo.resx">
       <DependentUpon>SKUMemo.cs</DependentUpon>
