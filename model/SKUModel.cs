@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -91,6 +92,39 @@ namespace mjc_dev.model
             return true;
         }
 
+        public List<KeyValuePair<int, double>> LoadPriceTierDataBySKUId(int skuId)
+        {
+            List<KeyValuePair<int, double>> priceTierList = new List<KeyValuePair<int, double>>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using ( var command = new SqlCommand())
+                {
+                    SqlDataReader reader;
+
+                    command.Connection = connection;
+                    // Get PriceTierList by SKUId
+                    command.CommandText = @"select priceTierId, price 
+                                            from dbo.SKUPrices
+                                            where skuId = @Value1";
+                    command.Parameters.AddWithValue("@Value1", skuId);
+
+                    reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        int.TryParse(reader[0].ToString(), out int priceTierId);
+                        double.TryParse(reader[1].ToString(), out double price);
+
+                        priceTierList.Add(new KeyValuePair<int, double>(priceTierId, price));
+                    }
+                }
+
+                return priceTierList;
+            }
+        }
+
         public bool AddSKUPrice(int skuId, int priceTierId, double price)
         {
 
@@ -113,6 +147,27 @@ namespace mjc_dev.model
                     command.ExecuteNonQuery();
                 }
                 return true;
+            }
+        }
+        
+        public bool UpdateSKUPrice(int skuId, int priceTierId, double price)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    // Get PriceTierList by SKUId
+                    command.CommandText = "Update dbo.SKUPrices SET price =@Value1  WHERE skuId = @Value2 AND priceTierId = @Value3";
+                    command.Parameters.AddWithValue("@Value1", price);
+                    command.Parameters.AddWithValue("@Value2", skuId);
+                    command.Parameters.AddWithValue("@Value3", priceTierId);
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected > 0) return true;
+                    else return false;
+                }
             }
         }
 
@@ -273,7 +328,17 @@ namespace mjc_dev.model
 
                     command.ExecuteNonQuery();
 
-                    MessageBox.Show("The Vendor updated successfully.");
+                    foreach (KeyValuePair<int, double> pair in priceTierDict)
+                    {
+                        int key = pair.Key;
+                        double value = pair.Value;
+
+                        if(!UpdateSKUPrice(id, key, value)) AddSKUPrice(id, key, value);
+
+                        //                        AddSKUPrice(id, key, value);
+                    }
+
+                    MessageBox.Show("The SKU updated successfully.");
                 }
 
                 return true;

@@ -234,6 +234,16 @@ namespace mjc_dev.forms.sku
 
             this.coreCost.GetTextBox().Text = data[0].coreCost.ToString();
             this.invValue.GetTextBox().Text = data[0].inventoryValue.ToString();
+
+            List<KeyValuePair<int, double>> skuPriceData = new List<KeyValuePair<int, double>>();
+            skuPriceData = SKUModelObj.LoadPriceTierDataBySKUId(id);
+
+            foreach (KeyValuePair<int, double> pair in skuPriceData)
+            {
+                for(int i=0;i< priceTiers.Length;i++)
+                    if (priceTiers[i].GetId() == pair.Key)
+                        priceTiers[i].GetTextBox().Text = pair.Value.ToString();
+            }
         }
 
         private void Add_Load(object sender, EventArgs e)
