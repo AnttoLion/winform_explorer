@@ -1,5 +1,6 @@
 ﻿using mjc_dev.common;
 using mjc_dev.common.components;
+using mjc_dev.forms.sku;
 using mjc_dev.model;
 using System;
 using System.Collections.Generic;
@@ -52,11 +53,13 @@ namespace mjc_dev.forms.customer
         {
             hkAdds.GetButton().Click += (sender, e) =>
             {
-                CustomerDetail detailModal = new CustomerDetail();
-                if (detailModal.ShowDialog() == DialogResult.OK)
-                {
-                    LoadCustomerList();
-                }
+                this.Hide();
+                CustomerInformation detailModal = new CustomerInformation();
+                _navigateToForm(sender, e, detailModal);
+//                if (detailModal.ShowDialog() == DialogResult.OK)
+//                {
+//                    LoadCustomerList();
+//                }
             };
             hkDeletes.GetButton().Click += (sender, e) =>
             {
@@ -76,7 +79,7 @@ namespace mjc_dev.forms.customer
             };
             hkSelects.GetButton().Click += (sender, e) =>
             {
-                updateCustomer();
+                updateCustomer(sender, e);
             };
         }
 
@@ -89,7 +92,7 @@ namespace mjc_dev.forms.customer
             this.Controls.Add(CLGridRefer);
             this.CLGridRefer.CellDoubleClick += (sender, e) =>
             {
-                updateCustomer();
+                updateCustomer(sender, e);
             };
 
             LoadCustomerList();
@@ -119,22 +122,24 @@ namespace mjc_dev.forms.customer
             }
         }
 
-        private void updateCustomer()
+        private void updateCustomer(object sender, EventArgs e)
         {
-            CustomerDetail detailModal = new CustomerDetail();
+            CustomerInformation detailModal = new CustomerInformation();
 
             int rowIndex = CLGridRefer.CurrentCell.RowIndex;
 
             DataGridViewRow row = CLGridRefer.Rows[rowIndex];
 
-            int vendorId = (int)row.Cells[0].Value;
-            
-            detailModal.setDetails(vendorId);
+            int id = (int)row.Cells[0].Value;
 
-            if (detailModal.ShowDialog() == DialogResult.OK)
-            {
-                LoadCustomerList();
-            }
+            this.Hide();
+            _navigateToForm(sender, e, detailModal);
+            detailModal.setDetails(id);
+
+//            if (detailModal.ShowDialog() == DialogResult.OK)
+  //          {
+    //            LoadCustomerList();
+      //      }
         }
     }
 }

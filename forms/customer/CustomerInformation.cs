@@ -1,5 +1,6 @@
 ﻿using mjc_dev.common;
 using mjc_dev.common.components;
+using mjc_dev.forms.sku;
 using mjc_dev.model;
 using System;
 using System.Collections.Generic;
@@ -13,22 +14,29 @@ using System.Windows.Forms;
 
 namespace mjc_dev.forms.customer
 {
-    public partial class CustomerDetail : BasicModal
+    public partial class CustomerInformation : GlobalLayout
     {
-        private ModalButton MBOk = new ModalButton("(Enter) OK", Keys.Enter);
-        private Button MBOk_button;
+        //        private ModalButton MBOk = new ModalButton("(Enter) OK", Keys.Enter);
+        //        private Button MBOk_button;
+        private HotkeyButton hkCustomerMemo = new HotkeyButton("F2", "Customer Memo", Keys.F2);
+        private HotkeyButton hkPriceLevels = new HotkeyButton("F3", "Price Levels", Keys.F3);
+        private HotkeyButton hkShipToInfo = new HotkeyButton("F4", "Ship-to Info", Keys.F4);
+        private HotkeyButton hkCreditCards = new HotkeyButton("F6", "Credit Cards", Keys.F6);
+        private HotkeyButton hkSetArchived = new HotkeyButton("F2", "Set Archived", Keys.F9);
 
         private FGroupLabel CustomerInfo = new FGroupLabel("CustomerInfo");
         private FInputBox CustomerNum = new FInputBox("Cust #");
         private FInputBox CustomerName = new FInputBox("Customer Name");
         private FInputBox AddressLine1 = new FInputBox("Address Line 1");
         private FInputBox AddressLine2 = new FInputBox("Address Line 2");
-        private FInputBox City = new FInputBox("City");
-        private FInputBox State = new FInputBox("State");
-        private FInputBox Zip = new FInputBox("Zip");
+
+        private FInputBox City = new FInputBox("City", 200);
+        private FInputBox State = new FInputBox("State", 80);
+        private FInputBox Zip = new FInputBox("Zip", 80);
+
         private FInputBox BusPhone = new FInputBox("Bus.Phone");
         private FInputBox EMail = new FInputBox("E-mail");
-        private FInputBox Fax = new FInputBox("Fax");
+        private FInputBox Fax = new FInputBox("Fax", 100);
         private FDateTime DateOpened = new FDateTime("Date opened");
         private FInputBox Salesman = new FInputBox("Salesman");
         private FInputBox Resale = new FInputBox("Resale");
@@ -59,238 +67,140 @@ namespace mjc_dev.forms.customer
         private int customerId;
         private int selectId = 0;
 
-        public CustomerDetail()
+        public CustomerInformation() : base("Customer Information", "Manage details of Customer")
         {
+            this.Text = "Customer Detail";
             InitializeComponent();
-            this.Size = new Size(1200, 950);
-            this.StartPosition = FormStartPosition.CenterScreen;
+            _initBasicSize();
+            this.KeyDown += (s, e) => Form_KeyDown(s, e);
+
+            HotkeyButton[] hkButtons = new HotkeyButton[5] { hkCustomerMemo, hkPriceLevels, hkShipToInfo, hkCreditCards, hkSetArchived };
+            _initializeHKButtons(hkButtons, false);
+            AddHotKeyEvents();
 
             this.Load += new System.EventHandler(this.CustomerDetail_Load);
-            InitMBOKButton();
-            InitInputBox();
+//            InitMBOKButton();
+            InitForms();
+        }
+
+        private void AddHotKeyEvents()
+        {
+            hkSetArchived.GetButton().Click += (sender, e) =>
+            {
+                DialogResult result = MessageBox.Show("Do you want to set archived?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+//                    SKUModelObj.UpdateSKUArchived(true, this.skuId);
+                }
+                else if (result == DialogResult.No)
+                {
+//                    SKUModelObj.UpdateSKUArchived(false, this.skuId);
+                }
+            };
         }
 
         private void InitMBOKButton()
         {
-            ModalButton_HotKeyDown(MBOk);
-            MBOk_button = MBOk.GetButton();
-            MBOk_button.Location = new Point(1025, this.Height - 115);
-            MBOk_button.Click += (sender, e) => ok_button_Click(sender, e);
-            this.Controls.Add(MBOk_button);
+//            ModalButton_HotKeyDown(MBOk);
+//            MBOk_button = MBOk.GetButton();
+//            MBOk_button.Location = new Point(1025, this.Height - 115);
+//            MBOk_button.Click += (sender, e) => ok_button_Click(sender, e);
+//            this.Controls.Add(MBOk_button);
         }
 
-        private void InitInputBox()
+        private void InitForms()
         {
-            {/*
-                CustomerInfo.SetPosition(new Point(30, 30));
-                this.Controls.Add(CustomerInfo.GetLabel());
+            Panel _panel = new System.Windows.Forms.Panel();
+            _panel.BackColor = System.Drawing.Color.Transparent;
+            _panel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            _panel.Location = new System.Drawing.Point(0, 95);
+            _panel.Size = new Size(this.Width - 15, this.Height - 340);
+            _panel.AutoScroll = true;
+            this.Controls.Add(_panel);
 
-                CustomerNum.SetPosition(new Point(30, 80));
-                this.Controls.Add(CustomerNum.GetLabel());
-                this.Controls.Add(CustomerNum.GetTextBox());
+            List<dynamic> FormComponents = new List<dynamic>();
 
-                AddressLine1.SetPosition(new Point(30, 130));
-                this.Controls.Add(AddressLine1.GetLabel());
-                this.Controls.Add(AddressLine1.GetTextBox());
+            FormComponents.Add(CustomerInfo);
+            FormComponents.Add(CustomerNum);
+            FormComponents.Add(CustomerName);
+            FormComponents.Add(AddressLine1);
+            FormComponents.Add(AddressLine2);
 
-                AddressLine2.SetPosition(new Point(30, 180));
-                this.Controls.Add(AddressLine2.GetLabel());
-                this.Controls.Add(AddressLine2.GetTextBox());
+            List<dynamic> LineComponents = new List<dynamic>();
 
-                City.SetPosition(new Point(30, 230));
-                this.Controls.Add(City.GetLabel());
-                this.Controls.Add(City.GetTextBox());
+            City.GetTextBox().Width = 200;
+            LineComponents.Add(City);
+            State.GetTextBox().Width = 100;
+            LineComponents.Add(State);
+            Zip.GetTextBox().Width = 80;
+            LineComponents.Add(Zip);
+            FormComponents.Add(LineComponents);
 
-                State.SetPosition(new Point(30, 280));
-                this.Controls.Add(State.GetLabel());
-                this.Controls.Add(State.GetTextBox());
 
-                Zip.SetPosition(new Point(30, 330));
-                this.Controls.Add(Zip.GetLabel());
-                this.Controls.Add(Zip.GetTextBox());
+            List<dynamic> LineComponents2 = new List<dynamic>();
 
-                BusPhone.SetPosition(new Point(30, 380));
-                this.Controls.Add(BusPhone.GetLabel());
-                this.Controls.Add(BusPhone.GetTextBox());
+            LineComponents2.Add(BusPhone);
+            Fax.GetTextBox().Width = 160;
+            LineComponents2.Add(Fax);
+            FormComponents.Add(LineComponents2);
 
-                EMail.SetPosition(new Point(30, 430));
-                this.Controls.Add(EMail.GetLabel());
-                this.Controls.Add(EMail.GetTextBox());
 
-                DateOpened.SetPosition(new Point(30, 480));
-                this.Controls.Add(DateOpened.GetLabel());
-                this.Controls.Add(DateOpened.GetTextBox());
+            FormComponents.Add(EMail);
+            FormComponents.Add(DateOpened);
+            FormComponents.Add(Salesman);
+            FormComponents.Add(Resale);
+            FormComponents.Add(StmtCust);
+            FormComponents.Add(StmtName);
+            FormComponents.Add(PriceTier);
+            FormComponents.Add(Terms);
 
-                Salesman.SetPosition(new Point(30, 530));
-                this.Controls.Add(Salesman.GetLabel());
-                this.Controls.Add(Salesman.GetTextBox());
+            List<dynamic> LineComponents3 = new List<dynamic>();
 
-                Resale.SetPosition(new Point(30, 580));
-                this.Controls.Add(Resale.GetLabel());
-                this.Controls.Add(Resale.GetTextBox());
+            Limit.GetTextBox().Width = 120;
+            Limit.GetLabel().Width = 80;
+            LineComponents3.Add(Limit);
+            Memo.GetLabel().Width = 100;
+            Memo.GetTextBox().Width = 320;
+            LineComponents3.Add(Memo);
+            FormComponents.Add(LineComponents3);
 
-                StmtCust.SetPosition(new Point(30, 630));
-                this.Controls.Add(StmtCust.GetLabel());
-                this.Controls.Add(StmtCust.GetTextBox());
+            _addFormInputs(FormComponents, 30, 20, 800, 43, int.MaxValue, _panel.Controls);
 
-                StmtName.SetPosition(new Point(30, 680));
-                this.Controls.Add(StmtName.GetLabel());
-                this.Controls.Add(StmtName.GetTextBox());
+            List<dynamic> FormComponents2 = new List<dynamic>();
 
-                PriceTier.SetPosition(new Point(30, 730));
-                this.Controls.Add(PriceTier.GetLabel());
-                this.Controls.Add(PriceTier.GetTextBox());
+            List<dynamic> LineComponents4 = new List<dynamic>();
 
-                Terms.SetPosition(new Point(30, 780));
-                this.Controls.Add(Terms.GetLabel());
-                this.Controls.Add(Terms.GetTextBox());
+            LineComponents4.Add(Taxable);
+            LineComponents4.Add(SendStatements);
+            FormComponents2.Add(LineComponents4);
 
-                Limit.SetPosition(new Point(30, 830));
-                this.Controls.Add(Limit.GetLabel());
-                this.Controls.Add(Limit.GetTextBox());
+            FormComponents2.Add(CoreTracking);
+            FormComponents2.Add(CoreBalance);
+            FormComponents2.Add(PrintCoreTot);
+            FormComponents2.Add(AccountType);
+            FormComponents2.Add(PORequired);
+            FormComponents2.Add(CreditCode);
+            FormComponents2.Add(InterestRate);
+            FormComponents2.Add(AcctBalance);
+            FormComponents2.Add(YTDPurchases);
+            FormComponents2.Add(YTDInterest);
+            FormComponents2.Add(DateLastPurch);
 
-                Memo.SetPosition(new Point(30, 880));
-                this.Controls.Add(Memo.GetLabel());
-                this.Controls.Add(Memo.GetTextBox());*/
-            }
-            {
-                CustomerNum.SetPosition(new Point(30, 30));
-                this.Controls.Add(CustomerNum.GetLabel());
-                this.Controls.Add(CustomerNum.GetTextBox());
-
-                CustomerName.SetPosition(new Point(30, 80));
-                this.Controls.Add(CustomerName.GetLabel());
-                this.Controls.Add(CustomerName.GetTextBox());
-
-                AddressLine1.SetPosition(new Point(30, 130));
-                this.Controls.Add(AddressLine1.GetLabel());
-                this.Controls.Add(AddressLine1.GetTextBox());
-
-                AddressLine2.SetPosition(new Point(30, 180));
-                this.Controls.Add(AddressLine2.GetLabel());
-                this.Controls.Add(AddressLine2.GetTextBox());
-
-                City.SetPosition(new Point(30, 230));
-                this.Controls.Add(City.GetLabel());
-                this.Controls.Add(City.GetTextBox());
-
-                State.SetPosition(new Point(30, 280));
-                this.Controls.Add(State.GetLabel());
-                this.Controls.Add(State.GetTextBox());
-
-                Zip.SetPosition(new Point(30, 330));
-                this.Controls.Add(Zip.GetLabel());
-                this.Controls.Add(Zip.GetTextBox());
-
-                BusPhone.SetPosition(new Point(30, 380));
-                this.Controls.Add(BusPhone.GetLabel());
-                this.Controls.Add(BusPhone.GetTextBox());
-
-                EMail.SetPosition(new Point(30, 430));
-                this.Controls.Add(EMail.GetLabel());
-                this.Controls.Add(EMail.GetTextBox());
-
-                Fax.SetPosition(new Point(30, 480));
-                this.Controls.Add(Fax.GetLabel());
-                this.Controls.Add(Fax.GetTextBox());
-
-                DateOpened.SetPosition(new Point(30, 530));
-                this.Controls.Add(DateOpened.GetLabel());
-                this.Controls.Add(DateOpened.GetDateTimePicker());
-
-                Salesman.SetPosition(new Point(30, 580));
-                this.Controls.Add(Salesman.GetLabel());
-                this.Controls.Add(Salesman.GetTextBox());
-
-                Resale.SetPosition(new Point(30, 630));
-                this.Controls.Add(Resale.GetLabel());
-                this.Controls.Add(Resale.GetTextBox());
-
-                StmtCust.SetPosition(new Point(30, 680));
-                this.Controls.Add(StmtCust.GetLabel());
-                this.Controls.Add(StmtCust.GetTextBox());
-
-                StmtName.SetPosition(new Point(30, 730));
-                this.Controls.Add(StmtName.GetLabel());
-                this.Controls.Add(StmtName.GetTextBox());
-
-                PriceTier.SetPosition(new Point(30, 780));
-                this.Controls.Add(PriceTier.GetLabel());
-                this.Controls.Add(PriceTier.GetComboBox());
-
-                Terms.SetPosition(new Point(30, 830));
-                this.Controls.Add(Terms.GetLabel());
-                this.Controls.Add(Terms.GetTextBox());
-            }
-            {
-                Limit.SetPosition(new Point(630, 30));
-                this.Controls.Add(Limit.GetLabel());
-                this.Controls.Add(Limit.GetTextBox());
-
-                Memo.SetPosition(new Point(630, 80));
-                this.Controls.Add(Memo.GetLabel());
-                this.Controls.Add(Memo.GetTextBox());
-
-                Taxable.SetPosition(new Point(630, 130));
-                this.Controls.Add(Taxable.GetCheckBox());
-
-                SendStatements.SetPosition(new Point(830, 130));
-                this.Controls.Add(SendStatements.GetCheckBox());
-
-                CoreTracking.SetPosition(new Point(630, 180));
-                this.Controls.Add(CoreTracking.GetLabel());
-                this.Controls.Add(CoreTracking.GetTextBox());
-
-                CoreBalance.SetPosition(new Point(630, 230));
-                this.Controls.Add(CoreBalance.GetLabel());
-                this.Controls.Add(CoreBalance.GetTextBox());
-
-                PrintCoreTot.SetPosition(new Point(630, 280));
-                this.Controls.Add(PrintCoreTot.GetLabel());
-                this.Controls.Add(PrintCoreTot.GetTextBox());
-
-                AccountType.SetPosition(new Point(630, 330));
-                this.Controls.Add(AccountType.GetLabel());
-                this.Controls.Add(AccountType.GetTextBox());
-
-                PORequired.SetPosition(new Point(630, 380));
-                this.Controls.Add(PORequired.GetLabel());
-                this.Controls.Add(PORequired.GetTextBox());
-
-                CreditCode.SetPosition(new Point(630, 430));
-                this.Controls.Add(CreditCode.GetLabel());
-                this.Controls.Add(CreditCode.GetTextBox());
-
-                InterestRate.SetPosition(new Point(630, 480));
-                this.Controls.Add(InterestRate.GetLabel());
-                this.Controls.Add(InterestRate.GetTextBox());
-
-                AcctBalance.SetPosition(new Point(630, 530));
-                this.Controls.Add(AcctBalance.GetLabel());
-                this.Controls.Add(AcctBalance.GetTextBox());
-
-                YTDPurchases.SetPosition(new Point(630, 580));
-                this.Controls.Add(YTDPurchases.GetLabel());
-                this.Controls.Add(YTDPurchases.GetTextBox());
-
-                YTDInterest.SetPosition(new Point(630, 630));
-                this.Controls.Add(YTDInterest.GetLabel());
-                this.Controls.Add(YTDInterest.GetTextBox());
-
-                DateLastPurch.SetPosition(new Point(630, 680));
-                this.Controls.Add(DateLastPurch.GetLabel());
-                this.Controls.Add(DateLastPurch.GetDateTimePicker());
-            }
+            _addFormInputs(FormComponents2, 1000, 20, 800, 43, int.MaxValue, _panel.Controls);
         }
 
-        public void setDetails(int vendorId)
+        public void setDetails(int _id)
         {
-            var customerData = CustomersModelObj.GetCustomerData(vendorId);
+            List<dynamic> data = new List<dynamic>();
+            data = CustomersModelObj.GetCustomerDataById(_id);
+
+            var customerData = data[0];
 
             this.customerId = customerData.id;
 
             this.CustomerNum.GetTextBox().Text = customerData.customerNumber.ToString();
-            this.CustomerNum.GetTextBox().Text = customerData.customerName.ToString();
+            this.CustomerName.GetTextBox().Text = customerData.customerName.ToString();
+
             this.AddressLine1.GetTextBox().Text = customerData.address1.ToString();
             this.AddressLine2.GetTextBox().Text = customerData.address2.ToString();
             this.City.GetTextBox().Text = customerData.city.ToString();
@@ -312,22 +222,22 @@ namespace mjc_dev.forms.customer
             this.Memo.GetTextBox().Text = customerData.memo.ToString();
             this.Taxable.GetCheckBox().Checked = customerData.taxable.ToString() == "True" ? true : false;
             this.SendStatements.GetCheckBox().Checked = customerData.sendStatements.ToString() == "True" ? true : false;
-
+       
             this.CoreTracking.GetTextBox().Text = customerData.coreTracking.ToString();
             this.CoreBalance.GetTextBox().Text = customerData.coreBalance.ToString();
-            this.PrintCoreTot.GetTextBox().Text = customerData.priceCoreTotal.ToString();
+            this.PrintCoreTot.GetTextBox().Text = customerData.printCoreTotal.ToString();
             this.AccountType.GetTextBox().Text = customerData.accountType.ToString();
             this.PORequired.GetTextBox().Text = customerData.poRequired.ToString();
             this.CreditCode.GetTextBox().Text = customerData.creditCodeId.ToString();
             this.InterestRate.GetTextBox().Text = customerData.interestRate.ToString();
             this.AcctBalance.GetTextBox().Text = customerData.accountBalance.ToString();
-            this.YTDPurchases.GetTextBox().Text = customerData.yearToDatePurchases.ToString();
+          
             this.YTDInterest.GetTextBox().Text = customerData.yearToDateInterest.ToString();
             this.DateLastPurch.GetDateTimePicker().Value = customerData.dateLastPurchased.ToLocalTime();
 
         }
 
-        private void ok_button_Click(object sender, EventArgs e)
+        private void SaveCustomer(object sender, KeyEventArgs e)
         {
             string customer_num = CustomerNum.GetTextBox().Text;
             string customer_name = CustomerName.GetTextBox().Text;
@@ -352,12 +262,6 @@ namespace mjc_dev.forms.customer
             string stmt_num = StmtCust.GetTextBox().Text;
             string stmt_name = StmtName.GetTextBox().Text;
 
-            if (PriceTier.GetComboBox().SelectedItem == null)
-            {
-                MessageBox.Show("please select PriceTier");
-                //PriceTier.GetComboBox().Select();
-                return;
-            }
             PriceTierComboBoxItem selectedItem = (PriceTierComboBoxItem)PriceTier.GetComboBox().SelectedItem;
             int pricetier = selectedItem.Id;
 
@@ -388,6 +292,7 @@ namespace mjc_dev.forms.customer
 
             DateTime last_date_purch = DateLastPurch.GetDateTimePicker().Value;
 
+
             if (customer_num == "" || customer_name == "")
             {
                 MessageBox.Show("Please fill String field.");
@@ -400,7 +305,19 @@ namespace mjc_dev.forms.customer
                 return;
             }
 
-            //            if (!is_pricetier || !is_corebalance || !is_credit_card || is_acct_balance || is_ytd_purch || is_ytd_purch || is_interest_rate || is_ytd_interest)
+            if (state.Length > 2)
+            {
+                MessageBox.Show("State Field mustn't limit 3.");
+                return;
+            }
+
+            if (PriceTier.GetComboBox().SelectedItem == null)
+            {
+                MessageBox.Show("please select PriceTier");
+                //PriceTier.GetComboBox().Select();
+                return;
+            }
+
             bool refreshData = false;
 
             if (customerId == 0) refreshData = CustomersModelObj.AddCustomer(customer_num, customer_name, address1, address2, city, state, zipcode, business_phone, fax, email, date_opened, salesman, resale, stmt_num, stmt_name, pricetier, terms, limit, memo, taxable, send_stm, core_tracking, core_balance, print_core_tot, acct_type, porequired, credit_card, interest_rate, acct_balance, ytd_purch, ytd_interest, last_date_purch);
@@ -411,7 +328,7 @@ namespace mjc_dev.forms.customer
             if (refreshData)
             {
                 this.DialogResult = DialogResult.OK;
-                this.Close();
+                this._navigateToPrev(sender, e);
             }
             else MessageBox.Show("An Error occured while " + modeText + " the customer.");
         }
@@ -440,6 +357,23 @@ namespace mjc_dev.forms.customer
                 {
                     PriceTier.GetComboBox().SelectedItem = item;
                     break;
+                }
+            }
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    SaveCustomer(sender, e);
+                }
+                else if (result == DialogResult.No)
+                {
+                    _navigateToPrev(sender, e);
                 }
             }
         }

@@ -259,6 +259,8 @@ namespace mjc_dev.common
                         {
                             FInputBox inputBox = (FInputBox)LineComponents[j];
                             inputBox.SetPosition(new Point(posX + prevWidth, posY));
+                            prevWidth += inputBox.GetLabel().Width + inputBox.GetTextBox().Width + 40;
+
                             _controls.Add(inputBox.GetLabel());
                             _controls.Add(inputBox.GetTextBox());
                             inputBox.GetTextBox().KeyDown += (s, e) => {
@@ -274,12 +276,13 @@ namespace mjc_dev.common
                                 }
                             };
 
-                            prevWidth += inputBox.GetLabel().Width + inputBox.GetTextBox().Width + 50;
                         }
                         else if (LineComponents[j] is FCheckBox)
                         {
                             FCheckBox checkBox = (FCheckBox)LineComponents[j];
                             checkBox.SetPosition(new Point(posX + 5 + prevWidth, posY));
+                            prevWidth += checkBox.GetCheckBox().Width + 40;
+
                             _controls.Add(checkBox.GetCheckBox());
                             checkBox.GetCheckBox().KeyDown += (s, e) => {
                                 if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
@@ -294,7 +297,6 @@ namespace mjc_dev.common
                                 }
                             };
 
-                            prevWidth += checkBox.GetCheckBox().Width + 50;
                         }
                     }
                 }
