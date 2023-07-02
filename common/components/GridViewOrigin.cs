@@ -33,7 +33,7 @@ namespace mjc_dev.common.components
             dataGridView.RowsDefaultCellStyle.Font = new Font("Segoe UI", 18F, FontStyle.Regular);
             dataGridView.RowsDefaultCellStyle.ForeColor = Color.FromArgb(31, 63, 96);
             dataGridView.RowsDefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
-            dataGridView.RowsDefaultCellStyle.BackColor = Color.FromArgb(215, 231, 246);
+            dataGridView.RowsDefaultCellStyle.BackColor = Color.FromArgb(201, 223, 243);
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(231, 240, 249);
             dataGridView.RowHeadersVisible = false;
 

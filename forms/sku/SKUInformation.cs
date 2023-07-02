@@ -234,6 +234,16 @@ namespace mjc_dev.forms.sku
 
             this.coreCost.GetTextBox().Text = data[0].coreCost.ToString();
             this.invValue.GetTextBox().Text = data[0].inventoryValue.ToString();
+
+            List<KeyValuePair<int, double>> skuPriceData = new List<KeyValuePair<int, double>>();
+            skuPriceData = SKUModelObj.LoadPriceTierDataBySKUId(id);
+
+            foreach (KeyValuePair<int, double> pair in skuPriceData)
+            {
+                for(int i=0;i< priceTiers.Length;i++)
+                    if (priceTiers[i].GetId() == pair.Key)
+                        priceTiers[i].GetTextBox().Text = pair.Value.ToString();
+            }
         }
 
         private void Add_Load(object sender, EventArgs e)
@@ -251,10 +261,10 @@ namespace mjc_dev.forms.sku
                     selectId = id;
                     initFlag = false;
                 }
-                categoryCombo.GetComboBox().Items.Add(new CategoryComboBoxItem(id, name));
+                categoryCombo.GetComboBox().Items.Add(new FComboBoxItem(id, name));
             }
 
-            foreach (CategoryComboBoxItem item in categoryCombo.GetComboBox().Items)
+            foreach (FComboBoxItem item in categoryCombo.GetComboBox().Items)
             {
                 if (item.Id == selectId)
                 {
@@ -278,7 +288,7 @@ namespace mjc_dev.forms.sku
                 MessageBox.Show("please select a category");
                 return;
             }
-            CategoryComboBoxItem seletedItem = (CategoryComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
+            FComboBoxItem seletedItem = (FComboBoxItem)categoryCombo.GetComboBox().SelectedItem;
 
             int i_category = seletedItem.Id;
 
@@ -355,23 +365,6 @@ namespace mjc_dev.forms.sku
                 this._navigateToPrev(sender, e);
             }
             else MessageBox.Show("An Error occured while " + modeText + " the vendor.");
-        }
-
-        public class CategoryComboBoxItem
-        {
-            public int Id { get; set; }
-            public string Text { get; set; }
-
-            public CategoryComboBoxItem(int id, string text)
-            {
-                Id = id;
-                Text = text;
-            }
-
-            public override string ToString()
-            {
-                return Text;
-            }
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
