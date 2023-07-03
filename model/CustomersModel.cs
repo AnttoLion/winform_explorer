@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Globalization;
@@ -75,6 +77,28 @@ namespace mjc_dev.model
             }
 
             return true;
+        }
+
+        public DataTable LoadCustomerTable()
+        {
+            DataTable dataTable = new DataTable();
+
+            // TODO: Replace with your database connection code
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = "SELECT id, customerNumber, customerName, address1, city, state, zipcode FROM dbo.Customers";
+                    command.Connection = connection;
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            return dataTable;
         }
 
         public bool AddCustomer(string customer_num, string customer_name, string address1, string address2, string city, string state, string zipcode, string business_phone, string fax, string email, DateTime date_opened, string salesman, bool resale, string stmt_num, string stmt_name, int pricetier, string terms, string limit, string memo, bool taxable, bool send_stm, string core_tracking, double core_balance, bool print_core_tot, string acct_type, bool porequired, int credit_card, double interest_rate, double acct_balance, int ytd_purch, double ytd_interest, DateTime last_date_purch)

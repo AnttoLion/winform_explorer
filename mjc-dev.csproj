@@ -226,6 +226,12 @@
     <Compile Include="forms\sku\CrossReference.Designer.cs">
       <DependentUpon>CrossReference.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\sku\SKUListForProcessOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\sku\SKUListForProcessOrder.Designer.cs">
+      <DependentUpon>SKUListForProcessOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\sku\SKUMemo.cs">
       <SubType>Form</SubType>
     </Compile>

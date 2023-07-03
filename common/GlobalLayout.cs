@@ -327,6 +327,19 @@ namespace mjc_dev.common
             }
             foreach (HotkeyButton button in hkButtons)
             {
+                if(button.GetAdditionalKey() != null)
+                {
+                    switch (button.GetAdditionalKey())
+                    {
+                        case "alt":
+                            if (!e.Alt) return;
+                            break;
+                        default:
+                            return;
+                            break;
+                    }
+                    //MessageBox.Show("alt");
+                }
                 if (e.KeyCode == button.GetKeys() && e.KeyCode != Keys.Escape)
                 {
                     button.GetButton().PerformClick();

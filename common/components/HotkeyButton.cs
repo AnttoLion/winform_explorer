@@ -13,10 +13,12 @@ namespace mjc_dev.common.components
         private Button button;
         private Label label;
         protected Keys hotKey;
+        protected string addtionalKey;
 
-        public HotkeyButton(string text, string labeltext, Keys hotKey)
+        public HotkeyButton(string text, string labeltext, Keys hotKey, string addtionalKey = null)
         {
             this.hotKey = hotKey;
+            this.addtionalKey = addtionalKey;
 
             button = new Button();
             button.Text = text;
@@ -57,6 +59,10 @@ namespace mjc_dev.common.components
         public Keys GetKeys()
         {
             return hotKey;
+        }
+        public string GetAdditionalKey()
+        {
+            return addtionalKey;
         }
 
         public void SetPosition(Point location)
