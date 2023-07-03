@@ -18,7 +18,7 @@ namespace mjc_dev.forms
         private HotkeyButton hkCloseProgramButton = new HotkeyButton("Esc", "Close Program", Keys.Escape);
         private HotkeyButton hkOpenSelection = new HotkeyButton("Enter", "Open Selection", Keys.Enter);
 
-        private NavigationButton OrderEntry = new NavigationButton("Order Entry", new ProcessOrder());
+        private NavigationButton OrderEntry = new NavigationButton("Order Entry", new OrderEntry());
         private NavigationButton Inventory = new NavigationButton("Inventory", new InventoryDashboard());
         private NavigationButton Receivables = new NavigationButton("Receivables", new ReceivableDashboard());
         private NavigationButton Users = new NavigationButton("Users", new Users());

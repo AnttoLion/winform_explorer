@@ -225,7 +225,6 @@ namespace mjc_dev.forms.sku
             this.SKUGridRefer.SelectionChanged += (s, e) => SKUGridRefer_SelectionChanged(s, e);
         }
 
-
         public void LoadSKUList(bool archivedView = false, bool keepSelection = true)
         {
             if(this.searchKey == "")

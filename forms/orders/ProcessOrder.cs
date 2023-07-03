@@ -15,6 +15,7 @@ using System.Reflection.Emit;
 using mjc_dev.model;
 using static mjc_dev.forms.sku.SKUInformation;
 using System.Xml.Linq;
+using mjc_dev.forms.sku;
 
 namespace mjc_dev.forms.orders
 {
@@ -22,11 +23,12 @@ namespace mjc_dev.forms.orders
     {
 
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
-        private HotkeyButton hkSelect = new HotkeyButton("Enter", "Selects", Keys.Enter);
-        private HotkeyButton hkSwitchColumn = new HotkeyButton("Alt + S", "Switch column", Keys.S);
-        private HotkeyButton hkOpenCustomer = new HotkeyButton("F5", "Open Customer", Keys.F5);
-        private HotkeyButton hkCheckStok = new HotkeyButton("F6", "Stok", Keys.F6);
-        private HotkeyButton hkHeldOrders = new HotkeyButton("F7", "Held Orders", Keys.F7);
+        private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
+        private HotkeyButton hkSelect = new HotkeyButton("Enter", "Edits", Keys.Enter);
+        private HotkeyButton hkAddMessage = new HotkeyButton("F2", "Add message", Keys.F2);
+        private HotkeyButton hkCustomerProfiler = new HotkeyButton("F4", "Customer Profiler", Keys.F4);
+        private HotkeyButton hkSKUInfo = new HotkeyButton("F5", "SKU Info", Keys.F5);
+        private HotkeyButton hkSortLines = new HotkeyButton("Alt+S", "Sort lines", Keys.S, "alt");
         private HotkeyButton hkProfiler = new HotkeyButton("F8", "Profiler", Keys.F8);
         private HotkeyButton hkHeldOrdersForCustomer = new HotkeyButton("F9", "Held Orders for Customer", Keys.F9);
 
@@ -45,8 +47,8 @@ namespace mjc_dev.forms.orders
         private FlabelConstant TaxPercent = new FlabelConstant("7.250% Tax");
         private FlabelConstant TotalSale = new FlabelConstant("Total Sale");
 
-        private DataGridView OEGridRefer;
-        private int OEGridSelectedIndex = 0;
+        private DataGridView POGridRefer;
+        private int POGridSelectedIndex = 0;
 
         private string searchKey;
 
@@ -54,17 +56,17 @@ namespace mjc_dev.forms.orders
         private SKUModel SKUModelObj = new SKUModel();
         private OrderItemsModel OrderItemsModalObj = new OrderItemsModel();
 
-        public ProcessOrder() : base("Order Entry - Select a Customer", "Select a customer to start an order for")
+        public ProcessOrder(int customerId) : base("Process an Order", "Fill out the customer order")
         {
             InitializeComponent();
             _initBasicSize();
 
-            HotkeyButton[] hkButtons = new HotkeyButton[8] { hkAdds, hkSelect, hkSwitchColumn, hkOpenCustomer, hkCheckStok, hkHeldOrders, hkProfiler, hkHeldOrdersForCustomer };
+            HotkeyButton[] hkButtons = new HotkeyButton[9] { hkAdds, hkDeletes, hkSelect, hkAddMessage, hkCustomerProfiler, hkSKUInfo, hkSortLines, hkProfiler, hkHeldOrdersForCustomer };
             _initializeHKButtons(hkButtons);
             //_addComingSoon();
 
             InitHKButtonEvents();
-            InitCustomerInfo();
+            InitCustomerInfo(customerId);
             InitOrderItemsList();
 
             InitGridFooter();
@@ -75,9 +77,13 @@ namespace mjc_dev.forms.orders
         private void InitHKButtonEvents()
         {
             hkAdds.GetButton().Click += (s, e) => insertButton_Click(s, e);
+            hkSortLines.GetButton().Click += (s, e) =>
+            {
+                MessageBox.Show("");
+            };
         }
 
-        private void InitCustomerInfo()
+        private void InitCustomerInfo(int customerId = 0)
         {
             List<dynamic> FormComponents = new List<dynamic>();
 
@@ -100,8 +106,17 @@ namespace mjc_dev.forms.orders
 
             Customer.GetComboBox().SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);
 
-            Customer.GetComboBox().SelectedIndex = 0;
-            ComboBox_SelectedIndexChanged(Customer.GetComboBox(), EventArgs.Empty);
+            if(customerId == 0)
+            {
+                Customer.GetComboBox().SelectedIndex = 0;
+                ComboBox_SelectedIndexChanged(Customer.GetComboBox(), EventArgs.Empty);
+            }
+            else
+            {
+                int index = Customer.GetComboBox().Items.Cast<FComboBoxItem>().ToList().FindIndex(item => item.Id == customerId);
+                Customer.GetComboBox().SelectedIndex = index;
+                ComboBox_SelectedIndexChanged(Customer.GetComboBox(), EventArgs.Empty);
+            }
         }
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -129,26 +144,26 @@ namespace mjc_dev.forms.orders
         private void InitOrderItemsList()
         {
             GridViewOrigin OrderEntryLookupGrid = new GridViewOrigin();
-            OEGridRefer = OrderEntryLookupGrid.GetGrid();
-            OEGridRefer.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(157, 196, 235);
-            OEGridRefer.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(31, 63, 96);
-            OEGridRefer.ColumnHeadersDefaultCellStyle.Padding = new Padding(12);
-            OEGridRefer.Location = new Point(0, 200);
-            OEGridRefer.Width = this.Width;
-            OEGridRefer.Height = 490;
-            OEGridRefer.ReadOnly = false;
+            POGridRefer = OrderEntryLookupGrid.GetGrid();
+            POGridRefer.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(157, 196, 235);
+            POGridRefer.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(31, 63, 96);
+            POGridRefer.ColumnHeadersDefaultCellStyle.Padding = new Padding(12);
+            POGridRefer.Location = new Point(0, 200);
+            POGridRefer.Width = this.Width;
+            POGridRefer.Height = 490;
+            POGridRefer.ReadOnly = false;
 
-            OEGridRefer.ReadOnly = false;
-            OEGridRefer.EditMode = DataGridViewEditMode.EditOnEnter;
+            POGridRefer.ReadOnly = false;
+            POGridRefer.EditMode = DataGridViewEditMode.EditOnEnter;
 
-            OEGridRefer.Columns.Add("id", "id");
-            OEGridRefer.Columns["id"].Visible = false;
+            POGridRefer.Columns.Add("id", "id");
+            POGridRefer.Columns["id"].Visible = false;
 
-            OEGridRefer.Columns.Add("orderId", "orderId");
-            OEGridRefer.Columns["orderId"].Visible = false;
+            POGridRefer.Columns.Add("orderId", "orderId");
+            POGridRefer.Columns["orderId"].Visible = false;
 
-            OEGridRefer.Columns.Add("skuId", "skuId");
-            OEGridRefer.Columns["skuId"].Visible = false;
+            POGridRefer.Columns.Add("skuId", "skuId");
+            POGridRefer.Columns["skuId"].Visible = false;
 
             DataGridViewComboBoxColumn skuColumn = new DataGridViewComboBoxColumn();
             skuColumn.Name = "sku";
@@ -180,35 +195,35 @@ namespace mjc_dev.forms.orders
             skuColumn.DisplayMember = "Text";
             skuColumn.ValueMember = "Id";
 
-            OEGridRefer.Columns.Add(skuColumn);
+            POGridRefer.Columns.Add(skuColumn);
 
-            OEGridRefer.Columns.Add("quantity", "Quantity");
-            OEGridRefer.Columns["quantity"].Width = 200;
-            OEGridRefer.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            POGridRefer.Columns.Add("quantity", "Quantity");
+            POGridRefer.Columns["quantity"].Width = 200;
+            POGridRefer.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            OEGridRefer.Columns.Add("description", "Description");
-            OEGridRefer.Columns["description"].Width = 400;
+            POGridRefer.Columns.Add("description", "Description");
+            POGridRefer.Columns["description"].Width = 400;
 
-            OEGridRefer.Columns.Add("tax", "Tax");
-            OEGridRefer.Columns["tax"].Width = 200;
+            POGridRefer.Columns.Add("tax", "Tax");
+            POGridRefer.Columns["tax"].Width = 200;
 
-            OEGridRefer.Columns.Add("disc", "Disc%");
-            OEGridRefer.Columns["disc"].Width = 200;
+            POGridRefer.Columns.Add("disc", "Disc%");
+            POGridRefer.Columns["disc"].Width = 200;
 
-            OEGridRefer.Columns.Add("unitPrice", "Unit Price");
-            OEGridRefer.Columns["unitPrice"].Width = 200;
-            OEGridRefer.Columns["unitPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            POGridRefer.Columns.Add("unitPrice", "Unit Price");
+            POGridRefer.Columns["unitPrice"].Width = 200;
+            POGridRefer.Columns["unitPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            OEGridRefer.Columns.Add("lineTotal", "Line Total");
-            OEGridRefer.Columns["lineTotal"].Width = 200;
-            OEGridRefer.Columns["lineTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            POGridRefer.Columns.Add("lineTotal", "Line Total");
+            POGridRefer.Columns["lineTotal"].Width = 200;
+            POGridRefer.Columns["lineTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            OEGridRefer.Columns.Add("SC", "SC");
-            OEGridRefer.Columns["SC"].Width = 200;
+            POGridRefer.Columns.Add("SC", "SC");
+            POGridRefer.Columns["SC"].Width = 200;
 
-            OEGridRefer.EditingControlShowing += OEGridRefer_EditingControlShowing;
+            POGridRefer.EditingControlShowing += POGridRefer_EditingControlShowing;
 
-            this.Controls.Add(OEGridRefer);
+            this.Controls.Add(POGridRefer);
 
             //LoadSKUList();
         }
@@ -239,48 +254,54 @@ namespace mjc_dev.forms.orders
             var refreshData = OrderItemsModalObj.LoadOrderItemsList(this.searchKey);
             if (refreshData)
             {
-                OEGridRefer.DataSource = OrderItemsModalObj.OIList;
+                POGridRefer.DataSource = OrderItemsModalObj.OIList;
             }
 
-            OEGridRefer.Columns[0].Visible = false;
-            OEGridRefer.Columns[1].HeaderText = "orderId";
-            OEGridRefer.Columns[1].Visible = false;
-            OEGridRefer.Columns[2].HeaderText = "skuId";
-            OEGridRefer.Columns[2].Visible = false;
-            OEGridRefer.Columns[3].HeaderText = "SKU#";
-            OEGridRefer.Columns[3].Width = 300;
-            OEGridRefer.Columns[4].HeaderText = "Quantity";
-            OEGridRefer.Columns[4].Width = 200;
-            OEGridRefer.Columns[5].HeaderText = "Description";
-            OEGridRefer.Columns[5].Width = 400;
-            OEGridRefer.Columns[6].HeaderText = "Tax";
-            OEGridRefer.Columns[6].Width = 200;
-            OEGridRefer.Columns[7].HeaderText = "Disc%";
-            OEGridRefer.Columns[7].Width = 200;
-            OEGridRefer.Columns[8].HeaderText = "Unit Price";
-            OEGridRefer.Columns[8].Width = 200;
-            OEGridRefer.Columns[9].HeaderText = "Line Total";
-            OEGridRefer.Columns[9].Width = 200;
-            OEGridRefer.Columns[10].HeaderText = "SC";
-            OEGridRefer.Columns[10].Width = 200;
+            POGridRefer.Columns[0].Visible = false;
+            POGridRefer.Columns[1].HeaderText = "orderId";
+            POGridRefer.Columns[1].Visible = false;
+            POGridRefer.Columns[2].HeaderText = "skuId";
+            POGridRefer.Columns[2].Visible = false;
+            POGridRefer.Columns[3].HeaderText = "SKU#";
+            POGridRefer.Columns[3].Width = 300;
+            POGridRefer.Columns[4].HeaderText = "Quantity";
+            POGridRefer.Columns[4].Width = 200;
+            POGridRefer.Columns[5].HeaderText = "Description";
+            POGridRefer.Columns[5].Width = 400;
+            POGridRefer.Columns[6].HeaderText = "Tax";
+            POGridRefer.Columns[6].Width = 200;
+            POGridRefer.Columns[7].HeaderText = "Disc%";
+            POGridRefer.Columns[7].Width = 200;
+            POGridRefer.Columns[8].HeaderText = "Unit Price";
+            POGridRefer.Columns[8].Width = 200;
+            POGridRefer.Columns[9].HeaderText = "Line Total";
+            POGridRefer.Columns[9].Width = 200;
+            POGridRefer.Columns[10].HeaderText = "SC";
+            POGridRefer.Columns[10].Width = 200;
         }
 
         private void insertButton_Click(object sender, EventArgs e)
         {
-            DataGridViewRow lastRow = OEGridRefer.Rows[OEGridRefer.Rows.Count - 1];
-            string lastRowValue = lastRow.Cells[OEGridRefer.Columns["sku"].Index].Value?.ToString(); // Assuming the first cell of each row should have a value
+            /*
+            DataGridViewRow lastRow = POGridRefer.Rows[POGridRefer.Rows.Count - 1];
+            string lastRowValue = lastRow.Cells[POGridRefer.Columns["sku"].Index].Value?.ToString(); // Assuming the first cell of each row should have a value
 
             if (string.IsNullOrEmpty(lastRowValue))
             {
-                OEGridRefer.CurrentCell = OEGridRefer[OEGridRefer.Columns["sku"].Index, lastRow.Index];
+                POGridRefer.CurrentCell = POGridRefer[POGridRefer.Columns["sku"].Index, lastRow.Index];
                 // Last row is empty, do not add a new row
                 return;
             }
 
-            OEGridRefer.Rows.Add();
+            POGridRefer.Rows.Add();
+            */
+
+            SKUListForProcessOrder SLFPOForm = new SKUListForProcessOrder();
+            _navigateToForm(sender, e, SLFPOForm);
+            this.Hide();
         }
 
-        private void OEGridRefer_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void POGridRefer_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             DataGridViewComboBoxEditingControl comboBoxEditingControl = e.Control as DataGridViewComboBoxEditingControl;
 
