@@ -78,7 +78,7 @@ namespace mjc_dev.forms.orders
             hkAdds.GetButton().Click += (s, e) => insertButton_Click(s, e);
             hkSortLines.GetButton().Click += (s, e) =>
             {
-                MessageBox.Show("");
+                //MessageBox.Show("");
             };
             hkSelect.GetButton().Click += (s, e) =>
             {
@@ -93,7 +93,7 @@ namespace mjc_dev.forms.orders
                 {
                     this.Enabled = true;
                     int saveFlag = CloseOrderActionsModal.GetSaveFlage();
-                    MessageBox.Show(saveFlag.ToString());
+                    //MessageBox.Show(saveFlag.ToString());
                 };
             };
             hkDeletes.GetButton().Click += (s, e) =>

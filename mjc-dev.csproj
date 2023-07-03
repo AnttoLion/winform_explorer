@@ -136,6 +136,12 @@
     <Compile Include="forms\invoice\LookupInvocie.Designer.cs">
       <DependentUpon>LookupInvocie.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\orders\CloseOrderActions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\orders\CloseOrderActions.Designer.cs">
+      <DependentUpon>CloseOrderActions.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\orders\OrderEntry.cs">
       <SubType>Form</SubType>
     </Compile>
