@@ -27,6 +27,9 @@ namespace mjc_dev.forms.sku
         private int SKUGridSelectedIndex = 0;
 
         private string searchKey = "";
+        public bool SelectFlag = false;
+        private int selectedSKUId;
+        private string selectedSKUName;
 
         private SKUModel SKUModelObj = new SKUModel();
 
@@ -141,18 +144,21 @@ namespace mjc_dev.forms.sku
 
         private void selectSKU(object sender, EventArgs e)
         {
+            this.selectedSKUId = (int)SKUGridRefer.SelectedRows[0].Cells[0].Value;
+            this.selectedSKUName = (string)SKUGridRefer.SelectedRows[0].Cells[1].Value;
+            SelectFlag = true;
             this.Hide();
             _navigateToPrev(sender, e);   
         }
 
         public int GetSelectedSKUId()
         {
-            return (int)SKUGridRefer.SelectedRows[0].Cells[0].Value;
+            return this.selectedSKUId;
         }
 
         public string GetSelectedSKUName()
         {
-            return (string)SKUGridRefer.SelectedRows[0].Cells[1].Value;
+            return this.selectedSKUName;
         }
 
         private void SKUGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
