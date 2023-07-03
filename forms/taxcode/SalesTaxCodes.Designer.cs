@@ -1,6 +1,6 @@
-﻿namespace mjc_dev.forms
+﻿namespace mjc_dev.forms.taxcode
 {
-    partial class CreditCodes
+    partial class SalesTaxCodes
     {
         /// <summary>
         /// Required designer variable.

@@ -169,5 +169,35 @@ namespace mjc_dev.model
             }
             return PriceTierList;
         }
+        public List<KeyValuePair<string, double>> GetPriceTierMargin(int _categoryId)
+        {
+            List <KeyValuePair<string, double>> PriceTierList = new List<KeyValuePair<string, double>>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    SqlDataReader reader;
+
+                    command.CommandText = @"select t1.name,t2.margin
+                                            from dbo.PriceTiers as t1
+                                            LEFT JOIN dbo.CategoryPriceTiers as t2 ON t2.priceTierId = t1.id
+                                            where t2.categoryId = @categoryId";
+                    command.Parameters.AddWithValue("@categoryId", _categoryId);
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        PriceTierList.Add(
+                            new KeyValuePair<string, double>(reader[0].ToString(), Convert.ToDouble(reader[1]))
+                        );
+                    }
+                    reader.Close();
+                }
+            }
+            return PriceTierList;
+        }
     }
 }

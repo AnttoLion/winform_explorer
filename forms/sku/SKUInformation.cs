@@ -65,6 +65,7 @@ namespace mjc_dev.forms.sku
 
         private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
         private CategoriesModel CategoriesModelObj = new CategoriesModel();
+        private SKUPricesModel SKUPricesModelObj = new SKUPricesModel();
         private SKUModel SKUModelObj = new SKUModel();
 
         private int selectId = 0;
@@ -236,7 +237,7 @@ namespace mjc_dev.forms.sku
             this.invValue.GetTextBox().Text = data[0].inventoryValue.ToString();
 
             List<KeyValuePair<int, double>> skuPriceData = new List<KeyValuePair<int, double>>();
-            skuPriceData = SKUModelObj.LoadPriceTierDataBySKUId(id);
+            skuPriceData = SKUPricesModelObj.LoadPriceTierDataBySKUId(id);
 
             foreach (KeyValuePair<int, double> pair in skuPriceData)
             {
