@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using mjc_dev.forms.customer;
 using mjc_dev.forms.price;
 using mjc_dev.forms.invoice;
+using mjc_dev.forms.salescostcode;
+using mjc_dev.forms.taxcode;
 
 
 namespace mjc_dev.forms
