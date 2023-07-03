@@ -20,13 +20,16 @@ namespace mjc_dev.forms.sku
     {
         private HotkeyButton hkSelects = new HotkeyButton("Enter", "Selects", Keys.Enter);
         private HotkeyButton hkCrossRefLookup = new HotkeyButton("F2", "Cross Ref Lookup", Keys.F2);
-        private HotkeyButton hkView = new HotkeyButton("F3", "Adjust Qty", Keys.F3);
+        private HotkeyButton hkView = new HotkeyButton("F3", "View", Keys.F3);
 
         private GridViewOrigin SKUListGrid = new GridViewOrigin();
         private DataGridView SKUGridRefer;
         private int SKUGridSelectedIndex = 0;
 
         private string searchKey = "";
+        public bool SelectFlag = false;
+        private int selectedSKUId;
+        private string selectedSKUName;
 
         private SKUModel SKUModelObj = new SKUModel();
 
@@ -73,7 +76,7 @@ namespace mjc_dev.forms.sku
         {
             hkSelects.GetButton().Click += (sender, e) =>
             {
-                updateSKU(sender, e);
+                selectSKU(sender, e);
             };
             hkCrossRefLookup.GetButton().Click += (sender, e) =>
             {
@@ -139,28 +142,28 @@ namespace mjc_dev.forms.sku
             }
         }
 
-        private void updateSKU(object sender, EventArgs e)
+        private void selectSKU(object sender, EventArgs e)
         {
-            SKUInformation detailModal = new SKUInformation();
-
-            int rowIndex = SKUGridRefer.SelectedRows[0].Index;
-
-            this.SKUGridSelectedIndex = rowIndex;
-
-            DataGridViewRow row = SKUGridRefer.Rows[rowIndex];
-            int skuId = (int)row.Cells[0].Value;
-
-            List<dynamic> skuData = new List<dynamic>();
-            skuData = SKUModelObj.GetSKUData(skuId);
-            detailModal.setDetails(skuData, skuData[0].id);
-
+            this.selectedSKUId = (int)SKUGridRefer.SelectedRows[0].Cells[0].Value;
+            this.selectedSKUName = (string)SKUGridRefer.SelectedRows[0].Cells[1].Value;
+            SelectFlag = true;
             this.Hide();
-            _navigateToForm(sender, e, detailModal);
+            _navigateToPrev(sender, e);   
+        }
+
+        public int GetSelectedSKUId()
+        {
+            return this.selectedSKUId;
+        }
+
+        public string GetSelectedSKUName()
+        {
+            return this.selectedSKUName;
         }
 
         private void SKUGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            updateSKU(sender, e);
+            selectSKU(sender, e);
         }
 
         private void SKUGridRefer_SelectionChanged(object sender, EventArgs e)
