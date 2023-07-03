@@ -20,6 +20,9 @@ namespace mjc_dev.forms.category
 
         private FInputBox categoryName = new FInputBox("Name");
         private FInputBox calculateAs = new FInputBox("calculateAs");
+        private FInputBox[] priceTiers;
+
+        private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
 
         private int categoryId;
         private CategoriesModel CategoriesModelObj = new CategoriesModel();
@@ -27,7 +30,6 @@ namespace mjc_dev.forms.category
         public CategoryDetail() : base("Add Category")
         {
             InitializeComponent();
-            this.Size = new Size(600, 260);
             this.StartPosition = FormStartPosition.CenterScreen;
 
             InitMBOKButton();
@@ -45,7 +47,7 @@ namespace mjc_dev.forms.category
         {
             ModalButton_HotKeyDown(MBOk);
             MBOk_button = MBOk.GetButton();
-            MBOk_button.Location = new Point(425, 150);
+//            MBOk_button.Location = new Point(425, 150);
             MBOk_button.Click += (sender, e) => ok_button_Click(sender, e);
             this.Controls.Add(MBOk_button);
         }
@@ -59,6 +61,26 @@ namespace mjc_dev.forms.category
             calculateAs.SetPosition(new Point(30, 80));
             this.Controls.Add(calculateAs.GetLabel());
             this.Controls.Add(calculateAs.GetTextBox());
+
+            string filter = "";
+            var refreshData = PriceTiersModelObj.LoadPriceTierData(filter);
+            if (refreshData)
+            {
+                List<PriceTierData> pDatas = PriceTiersModelObj.PriceTierDataList;
+
+                this.Size = new Size(600, 260 + pDatas.Count * 50);
+                MBOk_button.Location = new Point(425, pDatas.Count * 50 + 150);
+
+                priceTiers = new FInputBox[pDatas.Count];
+                for (int i = 0; i < pDatas.Count; i++)
+                {
+                    priceTiers[i] = new FInputBox(pDatas[i].name.ToString(), 200, pDatas[i].id);
+
+                    priceTiers[i].SetPosition(new Point(30, 130 + 50 * i));
+                    this.Controls.Add(priceTiers[i].GetLabel());
+                    this.Controls.Add(priceTiers[i].GetTextBox());
+                }
+            }
         }
 
         private void ok_button_Click(object sender, EventArgs e)
@@ -78,10 +100,18 @@ namespace mjc_dev.forms.category
                 return;
             }
 
+            Dictionary<int, double> priceTierDict = new Dictionary<int, double>();
+
+            for (int i = 0; i < priceTiers.Length; i++)
+            {
+                double priceData; bool parse_succeed = double.TryParse(priceTiers[i].GetTextBox().Text, out priceData);
+                if (parse_succeed) priceTierDict.Add(priceTiers[i].GetId(), priceData);
+            }
+
             bool refreshData = false;
             if (categoryId == 0)
-                refreshData = CategoriesModelObj.AddCategory(name, calculateAs);
-            else refreshData = CategoriesModelObj.UpdateCategory(name, calculateAs, categoryId);
+                refreshData = CategoriesModelObj.AddCategory(name, calculateAs, priceTierDict);
+            else refreshData = CategoriesModelObj.UpdateCategory(name, calculateAs, priceTierDict, categoryId);
 
             string modeText = categoryId == 0 ? "creating" : "updating";
 
@@ -98,6 +128,15 @@ namespace mjc_dev.forms.category
             this.calculateAs.GetTextBox().Text = calculateAs.ToString();
             this.categoryId = category_id;
 
+            List<KeyValuePair<string, double>> priceTierData = new List<KeyValuePair<string, double>>();
+            priceTierData = PriceTiersModelObj.GetPriceTierMargin(category_id);
+
+            foreach (KeyValuePair<string, double> pair in priceTierData)
+            {
+                for (int i = 0; i < priceTiers.Length; i++)
+                    if (priceTiers[i].GetLabel().Text == pair.Key)
+                        priceTiers[i].GetTextBox().Text = pair.Value.ToString();
+            }
         }
     }
 }

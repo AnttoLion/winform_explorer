@@ -24,6 +24,7 @@ namespace mjc_dev.forms.category
         private GridViewOrigin categoryListGrid = new GridViewOrigin();
         private DataGridView CLGridRefer;
         private CategoriesModel CategoriesModelObj = new CategoriesModel();
+        private PriceTiersModel PriceTiersModelObj = new PriceTiersModel();
 
         public CategoryMargin() : base("Category Margins", "Manage category margins used to calcuate prices")
         {
@@ -76,10 +77,25 @@ namespace mjc_dev.forms.category
 
         private void InitCategoryListGrid()
         {
+            List<KeyValuePair<int, string>> PriceTierHeaderData = PriceTiersModelObj.GetPriceTierItems();
+
             CLGridRefer = categoryListGrid.GetGrid();
             CLGridRefer.Location = new Point(0, 95);
             CLGridRefer.Width = this.Width;
             CLGridRefer.Height = this.Height - 295;
+
+            CLGridRefer.Columns.Add("id", "id");
+            CLGridRefer.Columns[0].Visible = false;
+            CLGridRefer.Columns.Add("category", "Category");
+            CLGridRefer.Columns[1].Width = 300;
+            CLGridRefer.Columns.Add("calculateAs", "Cal As");
+            CLGridRefer.Columns[2].Width = 300;
+            int index = 0;
+            foreach (KeyValuePair<int, string> pair in PriceTierHeaderData)
+            {
+                CLGridRefer.Columns.Add(pair.Value, pair.Value);
+                CLGridRefer.Columns[3 + index++].Width = 300;
+            }
             this.Controls.Add(CLGridRefer);
             this.CLGridRefer.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.addcategory_btn_Click);
         }
@@ -87,15 +103,28 @@ namespace mjc_dev.forms.category
         private void LoadCategoryList()
         {
             string filter = "";
+            CLGridRefer.Rows.Clear();
             var refreshData = CategoriesModelObj.LoadCategoryData(filter);
             if (refreshData)
             {
-                CLGridRefer.DataSource = CategoriesModelObj.CategoryDataList;
-                CLGridRefer.Columns[0].Visible = false;
-                CLGridRefer.Columns[1].HeaderText = "Category";
-                CLGridRefer.Columns[1].Width = 300;
-                CLGridRefer.Columns[2].HeaderText = "Cal As";
-                CLGridRefer.Columns[2].Width = 300;
+                List<CategoryData> categoryDatas = new List<CategoryData>();
+                categoryDatas = CategoriesModelObj.CategoryDataList;
+
+                foreach (CategoryData categoryData in categoryDatas)
+                {
+                    List<KeyValuePair<string, double>> priceTierData = new List<KeyValuePair<string, double>>();
+                    priceTierData = PriceTiersModelObj.GetPriceTierMargin(categoryData.id);
+                    int rowIndex = CLGridRefer.Rows.Add();
+                    DataGridViewRow newRow = CLGridRefer.Rows[rowIndex];
+                    newRow.Cells["id"].Value = categoryData.id;
+                    newRow.Cells["category"].Value = categoryData.categoryName;
+                    newRow.Cells["calculateAs"].Value = categoryData.calculateAs;
+
+                    foreach(KeyValuePair<string, double> pair in priceTierData)
+                    {
+                        newRow.Cells[pair.Key].Value = pair.Value;
+                    }
+                }
             }
         }
 
@@ -125,7 +154,9 @@ namespace mjc_dev.forms.category
 
         private void addcategory_btn_Click(object sender, DataGridViewCellEventArgs e)
         {
-            updateCategory();
+            DataGridViewRow selectedRow = CLGridRefer.SelectedRows[0];
+            if (selectedRow.Cells[0].Value !=null)
+                updateCategory();
         }
     }
 }
