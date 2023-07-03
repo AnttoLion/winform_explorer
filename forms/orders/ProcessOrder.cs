@@ -151,10 +151,8 @@ namespace mjc_dev.forms.orders
             POGridRefer.Location = new Point(0, 200);
             POGridRefer.Width = this.Width;
             POGridRefer.Height = 490;
-            POGridRefer.ReadOnly = false;
 
-            POGridRefer.ReadOnly = false;
-            POGridRefer.EditMode = DataGridViewEditMode.EditOnEnter;
+            POGridRefer.AllowUserToAddRows = false;
 
             POGridRefer.Columns.Add("id", "id");
             POGridRefer.Columns["id"].Visible = false;
@@ -299,6 +297,15 @@ namespace mjc_dev.forms.orders
             SKUListForProcessOrder SLFPOForm = new SKUListForProcessOrder();
             _navigateToForm(sender, e, SLFPOForm);
             this.Hide();
+
+            SLFPOForm.FormClosed += (ss, ee) =>
+            {
+                int rowIndex = POGridRefer.Rows.Add();
+                DataGridViewRow newRow = POGridRefer.Rows[rowIndex];
+                newRow.Cells["skuId"].Value = SLFPOForm.GetSelectedSKUId();
+                newRow.Cells["sku"].Value = SLFPOForm.GetSelectedSKUName();
+                this.Show();
+            };
         }
 
         private void POGridRefer_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
