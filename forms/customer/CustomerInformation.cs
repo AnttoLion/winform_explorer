@@ -16,13 +16,11 @@ namespace mjc_dev.forms.customer
 {
     public partial class CustomerInformation : GlobalLayout
     {
-        //        private ModalButton MBOk = new ModalButton("(Enter) OK", Keys.Enter);
-        //        private Button MBOk_button;
         private HotkeyButton hkCustomerMemo = new HotkeyButton("F2", "Customer Memo", Keys.F2);
         private HotkeyButton hkPriceLevels = new HotkeyButton("F3", "Price Levels", Keys.F3);
         private HotkeyButton hkShipToInfo = new HotkeyButton("F4", "Ship-to Info", Keys.F4);
         private HotkeyButton hkCreditCards = new HotkeyButton("F6", "Credit Cards", Keys.F6);
-        private HotkeyButton hkSetArchived = new HotkeyButton("F2", "Set Archived", Keys.F9);
+        private HotkeyButton hkSetArchived = new HotkeyButton("F9", "Set Archived", Keys.F9);
 
         private FGroupLabel CustomerInfo = new FGroupLabel("CustomerInfo");
         private FInputBox CustomerNum = new FInputBox("Cust #");
@@ -66,6 +64,7 @@ namespace mjc_dev.forms.customer
 
         private int customerId;
         private int selectId = 0;
+        private string memo = "";
 
         public CustomerInformation() : base("Customer Information", "Manage details of Customer")
         {
@@ -90,12 +89,24 @@ namespace mjc_dev.forms.customer
                 DialogResult result = MessageBox.Show("Do you want to set archived?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
-//                    SKUModelObj.UpdateSKUArchived(true, this.skuId);
+                    CustomersModelObj.UpdateCustomerArchived(true, this.customerId);
                 }
                 else if (result == DialogResult.No)
                 {
-//                    SKUModelObj.UpdateSKUArchived(false, this.skuId);
+                    CustomersModelObj.UpdateCustomerArchived(false, this.customerId);
                 }
+            };
+            hkCustomerMemo.GetButton().Click += (sender, e) =>
+            {
+                CustomerMemo MemoModal = new CustomerMemo(customerId, memo);
+                this.Enabled = false;
+                MemoModal.Show();
+                MemoModal.FormClosed += (ss, sargs) =>
+                {
+                    this.memo = MemoModal.getMemo();
+                    this.Enabled = true;
+                };
+
             };
         }
 
@@ -193,6 +204,7 @@ namespace mjc_dev.forms.customer
         {
             List<dynamic> data = new List<dynamic>();
             data = CustomersModelObj.GetCustomerDataById(_id);
+            if (data[0].memo != null && !data[0].memo.Equals(DBNull.Value)) this.memo = data[0].memo;
 
             var customerData = data[0];
 

@@ -106,6 +106,12 @@
     <Compile Include="forms\customer\CustomerList.Designer.cs">
       <DependentUpon>CustomerList.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\customer\CustomerMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\customer\CustomerMemo.Designer.cs">
+      <DependentUpon>CustomerMemo.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\DepleteInventory.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -335,6 +341,7 @@
       <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="model\CategoriesModel.cs" />
+    <Compile Include="model\CategoryPriceTierModel.cs" />
     <Compile Include="model\CreditCodeModel.cs" />
     <Compile Include="model\CustomersModel.cs" />
     <Compile Include="model\OrderItemsModel.cs" />
@@ -343,6 +350,7 @@
     <Compile Include="model\SalesTaxCodeModel.cs" />
     <Compile Include="model\SKUCrossRefModel.cs" />
     <Compile Include="model\SKUModel.cs" />
+    <Compile Include="model\SKUPricesModel.cs" />
     <Compile Include="model\VendorsModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

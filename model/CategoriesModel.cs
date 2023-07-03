@@ -27,6 +27,8 @@ namespace mjc_dev.model
     {
         public List<CategoryData> CategoryDataList { get; private set; }
 
+        private CategoryPriceTierModel CategoryPriceTierModelObj = new CategoryPriceTierModel();
+
         public bool LoadCategoryData(string filter)
         {
             CategoryDataList = new List<CategoryData>();
@@ -64,7 +66,7 @@ namespace mjc_dev.model
             return true;
         }
 
-        public bool AddCategory(string category_name, int calc)
+        public bool AddCategory(string category_name, int calc, Dictionary<int, double> priceTierDict)
         {
             using (var connection = GetConnection())
             {
@@ -74,7 +76,7 @@ namespace mjc_dev.model
                 {
                     command.Connection = connection;
                     //Get Total Number of Customers
-                    command.CommandText = "INSERT INTO dbo.Categories (categoryName, calculateAs, createdAt, createdBy, updatedAt, updatedBy) VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6)";
+                    command.CommandText = "INSERT INTO dbo.Categories (categoryName, calculateAs, createdAt, createdBy, updatedAt, updatedBy) OUTPUT INSERTED.ID VALUES (@Value1, @Value2, @Value3, @Value4, @Value5, @Value6)";
                     command.Parameters.AddWithValue("@Value1", category_name);
                     command.Parameters.AddWithValue("@Value2", calc);
                     command.Parameters.AddWithValue("@Value3", DateTime.Now);
@@ -82,7 +84,15 @@ namespace mjc_dev.model
                     command.Parameters.AddWithValue("@Value5", DateTime.Now);
                     command.Parameters.AddWithValue("@Value6", 1);
 
-                    command.ExecuteNonQuery();
+                    int newId = (int)command.ExecuteScalar();
+
+                    foreach (KeyValuePair<int, double> pair in priceTierDict)
+                    {
+                        int key = pair.Key;
+                        double value = pair.Value;
+
+                        CategoryPriceTierModelObj.AddCategoryPriceTier(newId, key, value);
+                    }
 
                     MessageBox.Show("New Category inserted successfully.");
                 }
@@ -91,7 +101,7 @@ namespace mjc_dev.model
             }
         }
 
-        public bool UpdateCategory(string category_name, int calc, int id)
+        public bool UpdateCategory(string category_name, int calc, Dictionary<int, double> priceTierDict, int id)
         {
             using (var connection = GetConnection())
             {
@@ -106,6 +116,14 @@ namespace mjc_dev.model
                     command.Parameters.AddWithValue("@Value3", id);
 
                     command.ExecuteNonQuery();
+
+                    foreach (KeyValuePair<int, double> pair in priceTierDict)
+                    {
+                        int key = pair.Key;
+                        double value = pair.Value;
+
+                        if (!CategoryPriceTierModelObj.UpdateCategoryPriceTier(id, key, value)) CategoryPriceTierModelObj.AddCategoryPriceTier(id, key, value);
+                    }
 
                     MessageBox.Show("The Category updated successfully.");
                 }
