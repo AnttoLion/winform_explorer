@@ -88,6 +88,12 @@
     <Compile Include="forms\category\CategoryMargin.Designer.cs">
       <DependentUpon>CategoryMargin.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\creditcode\CreditCodesDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\creditcode\CreditCodesDetail.Designer.cs">
+      <DependentUpon>CreditCodesDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\customer\CustomerInformation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,10 +112,10 @@
     <Compile Include="forms\DepleteInventory.Designer.cs">
       <DependentUpon>DepleteInventory.cs</DependentUpon>
     </Compile>
-    <Compile Include="forms\CreditCodes.cs">
+    <Compile Include="forms\creditcode\CreditCodes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="forms\CreditCodes.Designer.cs">
+    <Compile Include="forms\creditcode\CreditCodes.Designer.cs">
       <DependentUpon>CreditCodes.cs</DependentUpon>
     </Compile>
     <Compile Include="forms\CustomerProfile.cs">
@@ -323,6 +329,7 @@
       <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="model\CategoriesModel.cs" />
+    <Compile Include="model\CreditCodeModel.cs" />
     <Compile Include="model\CustomersModel.cs" />
     <Compile Include="model\OrderItemsModel.cs" />
     <Compile Include="model\PriceTiersModel.cs" />

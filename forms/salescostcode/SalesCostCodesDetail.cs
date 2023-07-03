@@ -96,7 +96,7 @@ namespace mjc_dev.forms.salescostcode
             }
             if (scCode.Length>2)
             {
-                MessageBox.Show("SC Code Length must be small than 3.");
+                MessageBox.Show("The length of the SC Code must be less than 3 characters.");
                 this.ScCode.GetTextBox().Select();
                 return;
             }
