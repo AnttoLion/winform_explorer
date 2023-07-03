@@ -15,6 +15,7 @@ using mjc_dev.forms.price;
 using mjc_dev.forms.invoice;
 using mjc_dev.forms.salescostcode;
 using mjc_dev.forms.taxcode;
+using mjc_dev.forms.creditcode;
 
 
 namespace mjc_dev.forms

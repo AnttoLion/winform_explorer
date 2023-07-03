@@ -10,21 +10,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using mjc_dev.model;
+using mjc_dev.forms.taxcode;
 
-namespace mjc_dev.forms.taxcode
+namespace mjc_dev.forms.creditcode
 {
-    public partial class SalesTaxCodes : GlobalLayout
+    public partial class CreditCodes : GlobalLayout
     {
-
         private HotkeyButton hkAdds = new HotkeyButton("Ins", "Adds", Keys.Insert);
         private HotkeyButton hkDeletes = new HotkeyButton("Del", "Deletes", Keys.Delete);
         private HotkeyButton hkEdits = new HotkeyButton("Enter", "Edits", Keys.Enter);
         private HotkeyButton hkPreviousScreen = new HotkeyButton("Esc", "Previous Screen", Keys.Escape);
 
-        private GridViewOrigin salesTaxCodeListGrid = new GridViewOrigin();
-        private DataGridView STCLGridRefer;
-        private SalesTaxCodeModel SalesTaxCodesModelObj = new SalesTaxCodeModel();
-        public SalesTaxCodes() : base("Sales Tax Codes", "Manage sales tax codes used by the system")
+        private GridViewOrigin creditCodeListGrid = new GridViewOrigin();
+        private DataGridView CCLGridRefer;
+        private CreditCodeModel CreditCodesModelObj = new CreditCodeModel();
+
+        public CreditCodes() : base("Credit Codes", "Manage credit codes on record")
         {
             InitializeComponent();
             _initBasicSize();
@@ -33,38 +34,37 @@ namespace mjc_dev.forms.taxcode
             _initializeHKButtons(hkButtons);
             AddHotKeyEvents();
 
-            InitSalesTaxCodeListGrid();
+            InitCreditCodeListGrid();
 
             this.Load += (s, e) =>
             {
-                this.LoadSalesTaxCodeList();
+                this.LoadCreditCodeList();
             };
         }
-
         private void AddHotKeyEvents()
         {
             hkAdds.GetButton().Click += (sender, e) =>
             {
-                SalesTaxCodesDetail detailModal = new SalesTaxCodesDetail();
+                CreditCodesDetail detailModal = new CreditCodesDetail();
                 if (detailModal.ShowDialog() == DialogResult.OK)
                 {
-                    LoadSalesTaxCodeList();
+                    LoadCreditCodeList();
                 }
             };
             hkDeletes.GetButton().Click += (sender, e) =>
             {
                 int selectedSalesTaxCodeId = 0;
-                if (STCLGridRefer.SelectedRows.Count > 0)
+                if (CCLGridRefer.SelectedRows.Count > 0)
                 {
-                    foreach (DataGridViewRow row in STCLGridRefer.SelectedRows)
+                    foreach (DataGridViewRow row in CCLGridRefer.SelectedRows)
                     {
                         selectedSalesTaxCodeId = (int)row.Cells[0].Value;
                     }
                 }
-                bool refreshData = SalesTaxCodesModelObj.DeleteSalesTaxCode(selectedSalesTaxCodeId);
+                bool refreshData = CreditCodesModelObj.DeleteCreditCode(selectedSalesTaxCodeId);
                 if (refreshData)
                 {
-                    LoadSalesTaxCodeList();
+                    LoadCreditCodeList();
                 }
             };
             hkEdits.GetButton().Click += (sender, e) =>
@@ -73,41 +73,41 @@ namespace mjc_dev.forms.taxcode
             };
         }
 
-        private void InitSalesTaxCodeListGrid()
+        private void InitCreditCodeListGrid()
         {
-            STCLGridRefer = salesTaxCodeListGrid.GetGrid();
-            STCLGridRefer.Location = new Point(0, 95);
-            STCLGridRefer.Width = this.Width;
-            STCLGridRefer.Height = this.Height - 295;
-            this.Controls.Add(STCLGridRefer);
-            this.STCLGridRefer.CellDoubleClick += (sender, e) =>
+            CCLGridRefer = creditCodeListGrid.GetGrid();
+            CCLGridRefer.Location = new Point(0, 95);
+            CCLGridRefer.Width = this.Width;
+            CCLGridRefer.Height = this.Height - 295;
+            this.Controls.Add(CCLGridRefer);
+            this.CCLGridRefer.CellDoubleClick += (sender, e) =>
             {
                 updateSalesTaxCode(sender, e);
             };
         }
-        private void LoadSalesTaxCodeList()
+        private void LoadCreditCodeList()
         {
             string filter = "";
-            var refreshData = SalesTaxCodesModelObj.LoadSalesTaxCodeData(filter);
+            var refreshData = CreditCodesModelObj.LoadCreditCodeData(filter);
             if (refreshData)
             {
-                STCLGridRefer.DataSource = SalesTaxCodesModelObj.SalesTaxCodeDataList;
-                STCLGridRefer.Columns[0].Visible = false;
-                STCLGridRefer.Columns[1].HeaderText = "Tax Identifier";
-                STCLGridRefer.Columns[1].Width = 400;
-                STCLGridRefer.Columns[2].HeaderText = "Classification";
-                STCLGridRefer.Columns[2].Width = 400;
-                STCLGridRefer.Columns[3].HeaderText = "Rate";
-                STCLGridRefer.Columns[3].Width = 400;
+                CCLGridRefer.DataSource = CreditCodesModelObj.CreditCodeDataList;
+                CCLGridRefer.Columns[0].Visible = false;
+                CCLGridRefer.Columns[1].HeaderText = "Credit Code";
+                CCLGridRefer.Columns[1].Width = 400;
+                CCLGridRefer.Columns[2].HeaderText = "Payment Allowed";
+                CCLGridRefer.Columns[2].Width = 400;
+                CCLGridRefer.Columns[3].HeaderText = "Credit Limit";
+                CCLGridRefer.Columns[3].Width = 400;
             }
         }
         private void updateSalesTaxCode(object sender, EventArgs e)
         {
-            SalesTaxCodesDetail detailModal = new SalesTaxCodesDetail();
+            CreditCodesDetail detailModal = new CreditCodesDetail();
 
-            int rowIndex = STCLGridRefer.CurrentCell.RowIndex;
+            int rowIndex = CCLGridRefer.CurrentCell.RowIndex;
 
-            DataGridViewRow row = STCLGridRefer.Rows[rowIndex];
+            DataGridViewRow row = CCLGridRefer.Rows[rowIndex];
 
             int id = (int)row.Cells[0].Value;
 
@@ -115,7 +115,7 @@ namespace mjc_dev.forms.taxcode
 
             if (detailModal.ShowDialog() == DialogResult.OK)
             {
-                LoadSalesTaxCodeList();
+                LoadCreditCodeList();
             }
         }
     }
