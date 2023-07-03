@@ -106,6 +106,12 @@
     <Compile Include="forms\customer\CustomerList.Designer.cs">
       <DependentUpon>CustomerList.cs</DependentUpon>
     </Compile>
+    <Compile Include="forms\customer\CustomerMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\customer\CustomerMemo.Designer.cs">
+      <DependentUpon>CustomerMemo.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\DepleteInventory.cs">
       <SubType>Form</SubType>
     </Compile>

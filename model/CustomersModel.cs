@@ -309,6 +309,26 @@ namespace mjc_dev.model
             }
         }
 
+        public bool UpdateCustomerArchived(bool archived, int id)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"UPDATE dbo.Customers SET archived = @Value1 WHERE id = @Value2";
+                    command.Parameters.AddWithValue("@Value1", archived);
+                    command.Parameters.AddWithValue("@Value2", id);
+
+                    command.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+        }
+
         public dynamic GetCustomerDataById(int id)
         {
             using (var connection = GetConnection())
