@@ -29,8 +29,7 @@ namespace mjc_dev.forms.orders
         private HotkeyButton hkCustomerProfiler = new HotkeyButton("F4", "Customer Profiler", Keys.F4);
         private HotkeyButton hkSKUInfo = new HotkeyButton("F5", "SKU Info", Keys.F5);
         private HotkeyButton hkSortLines = new HotkeyButton("Alt+S", "Sort lines", Keys.S, "alt");
-        private HotkeyButton hkProfiler = new HotkeyButton("F8", "Profiler", Keys.F8);
-        private HotkeyButton hkHeldOrdersForCustomer = new HotkeyButton("F9", "Held Orders for Customer", Keys.F9);
+        private HotkeyButton hkCloseOrder = new HotkeyButton("ESC", "Close order", Keys.Escape);
 
         private FComboBox Customer = new FComboBox("Customer#", 150);
         private FlabelConstant CustomerName = new FlabelConstant("Name", 150);
@@ -61,8 +60,8 @@ namespace mjc_dev.forms.orders
             InitializeComponent();
             _initBasicSize();
 
-            HotkeyButton[] hkButtons = new HotkeyButton[9] { hkAdds, hkDeletes, hkSelect, hkAddMessage, hkCustomerProfiler, hkSKUInfo, hkSortLines, hkProfiler, hkHeldOrdersForCustomer };
-            _initializeHKButtons(hkButtons);
+            HotkeyButton[] hkButtons = new HotkeyButton[8] { hkAdds, hkDeletes, hkSelect, hkAddMessage, hkCustomerProfiler, hkSKUInfo, hkSortLines, hkCloseOrder };
+            _initializeHKButtons(hkButtons, false);
             //_addComingSoon();
 
             InitHKButtonEvents();
@@ -80,6 +79,31 @@ namespace mjc_dev.forms.orders
             hkSortLines.GetButton().Click += (s, e) =>
             {
                 MessageBox.Show("");
+            };
+            hkSelect.GetButton().Click += (s, e) =>
+            {
+                EditItem(s, e);
+            };
+            hkCloseOrder.GetButton().Click += (sender, e) =>
+            {
+                CloseOrderActions CloseOrderActionsModal = new CloseOrderActions();
+                this.Enabled = false;
+                CloseOrderActionsModal.Show();
+                CloseOrderActionsModal.FormClosed += (ss, sargs) =>
+                {
+                    this.Enabled = true;
+                    int saveFlag = CloseOrderActionsModal.GetSaveFlage();
+                    MessageBox.Show(saveFlag.ToString());
+                };
+            };
+            hkDeletes.GetButton().Click += (s, e) =>
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this row?", "Confirm Delete", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    POGridRefer.Rows.Remove(POGridRefer.SelectedRows[0]);
+                    //e.CancelEvent();
+                }
             };
         }
 
@@ -117,6 +141,8 @@ namespace mjc_dev.forms.orders
                 Customer.GetComboBox().SelectedIndex = index;
                 ComboBox_SelectedIndexChanged(Customer.GetComboBox(), EventArgs.Empty);
             }
+
+            Position.GetLabel().Focus();
         }
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -151,10 +177,11 @@ namespace mjc_dev.forms.orders
             POGridRefer.Location = new Point(0, 200);
             POGridRefer.Width = this.Width;
             POGridRefer.Height = 490;
-            POGridRefer.ReadOnly = false;
 
             POGridRefer.ReadOnly = false;
             POGridRefer.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            POGridRefer.AllowUserToAddRows = false;
 
             POGridRefer.Columns.Add("id", "id");
             POGridRefer.Columns["id"].Visible = false;
@@ -165,37 +192,9 @@ namespace mjc_dev.forms.orders
             POGridRefer.Columns.Add("skuId", "skuId");
             POGridRefer.Columns["skuId"].Visible = false;
 
-            DataGridViewComboBoxColumn skuColumn = new DataGridViewComboBoxColumn();
-            skuColumn.Name = "sku";
-            skuColumn.HeaderText = "SK#";
-            skuColumn.Width = 300;
-
-            skuColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            skuColumn.DisplayStyleForCurrentCellOnly = true;
-
-            // Modify ComboBox appearance
-            skuColumn.DefaultCellStyle.BackColor = Color.White;
-            skuColumn.DefaultCellStyle.ForeColor = Color.Black;
-
-            // Set ComboBox column properties
-            skuColumn.FlatStyle = FlatStyle.Flat;
-            skuColumn.MaxDropDownItems = 10;
-
-            BindingList<FComboBoxItem> itemList = new BindingList<FComboBoxItem>();
-            List<KeyValuePair<int, string>> skuList = new List<KeyValuePair<int, string>>();
-            skuList = SKUModelObj.GetSKUItems();
-            foreach (KeyValuePair<int, string> item in skuList)
-            {
-                int id = item.Key;
-                string name = item.Value;
-                itemList.Add(new FComboBoxItem(id, name));
-            }
-
-            skuColumn.DataSource = itemList;
-            skuColumn.DisplayMember = "Text";
-            skuColumn.ValueMember = "Id";
-
-            POGridRefer.Columns.Add(skuColumn);
+            POGridRefer.Columns.Add("sku", "SKU#");
+            POGridRefer.Columns["sku"].Width = 200;
+            POGridRefer.Columns["sku"].ReadOnly = true;
 
             POGridRefer.Columns.Add("quantity", "Quantity");
             POGridRefer.Columns["quantity"].Width = 200;
@@ -299,6 +298,35 @@ namespace mjc_dev.forms.orders
             SKUListForProcessOrder SLFPOForm = new SKUListForProcessOrder();
             _navigateToForm(sender, e, SLFPOForm);
             this.Hide();
+
+            SLFPOForm.VisibleChanged += (ss, ee) => {
+                if (SLFPOForm.Visible == false && SLFPOForm.SelectFlag == true)
+                {
+                    int rowIndex = POGridRefer.Rows.Add();
+                    DataGridViewRow newRow = POGridRefer.Rows[rowIndex];
+                    //MessageBox.Show(SLFPOForm.GetSelectedSKUName().ToString());
+                    newRow.Cells["skuId"].Value = SLFPOForm.GetSelectedSKUId();
+                    newRow.Cells["sku"].Value = SLFPOForm.GetSelectedSKUName();
+                }
+            };
+        }
+
+        private void EditItem(object sender, EventArgs e)
+        {
+            SKUListForProcessOrder SLFPOForm = new SKUListForProcessOrder();
+            _navigateToForm(sender, e, SLFPOForm);
+            this.Hide();
+
+            SLFPOForm.VisibleChanged += (ss, ee) => {
+                if (SLFPOForm.Visible == false && SLFPOForm.SelectFlag == true)
+                {
+                    //int rowIndex = POGridRefer.SelectedRows[0];
+                    DataGridViewRow newRow = POGridRefer.SelectedRows[0];
+                    //MessageBox.Show(SLFPOForm.GetSelectedSKUName().ToString());
+                    newRow.Cells["skuId"].Value = SLFPOForm.GetSelectedSKUId();
+                    newRow.Cells["sku"].Value = SLFPOForm.GetSelectedSKUName();
+                }
+            };
         }
 
         private void POGridRefer_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
