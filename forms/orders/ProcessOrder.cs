@@ -151,7 +151,8 @@ namespace mjc_dev.forms.orders
             POGridRefer.Location = new Point(0, 200);
             POGridRefer.Width = this.Width;
             POGridRefer.Height = 490;
-
+            
+            POGridRefer.ReadOnly = false;
             POGridRefer.AllowUserToAddRows = false;
 
             POGridRefer.Columns.Add("id", "id");
@@ -163,37 +164,9 @@ namespace mjc_dev.forms.orders
             POGridRefer.Columns.Add("skuId", "skuId");
             POGridRefer.Columns["skuId"].Visible = false;
 
-            DataGridViewComboBoxColumn skuColumn = new DataGridViewComboBoxColumn();
-            skuColumn.Name = "sku";
-            skuColumn.HeaderText = "SK#";
-            skuColumn.Width = 300;
-
-            skuColumn.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            skuColumn.DisplayStyleForCurrentCellOnly = true;
-
-            // Modify ComboBox appearance
-            skuColumn.DefaultCellStyle.BackColor = Color.White;
-            skuColumn.DefaultCellStyle.ForeColor = Color.Black;
-
-            // Set ComboBox column properties
-            skuColumn.FlatStyle = FlatStyle.Flat;
-            skuColumn.MaxDropDownItems = 10;
-
-            BindingList<FComboBoxItem> itemList = new BindingList<FComboBoxItem>();
-            List<KeyValuePair<int, string>> skuList = new List<KeyValuePair<int, string>>();
-            skuList = SKUModelObj.GetSKUItems();
-            foreach (KeyValuePair<int, string> item in skuList)
-            {
-                int id = item.Key;
-                string name = item.Value;
-                itemList.Add(new FComboBoxItem(id, name));
-            }
-
-            skuColumn.DataSource = itemList;
-            skuColumn.DisplayMember = "Text";
-            skuColumn.ValueMember = "Id";
-
-            POGridRefer.Columns.Add(skuColumn);
+            POGridRefer.Columns.Add("sku", "SKU#");
+            POGridRefer.Columns["sku"].Width = 200;
+            POGridRefer.Columns["sku"].ReadOnly = true;
 
             POGridRefer.Columns.Add("quantity", "Quantity");
             POGridRefer.Columns["quantity"].Width = 200;
@@ -298,13 +271,14 @@ namespace mjc_dev.forms.orders
             _navigateToForm(sender, e, SLFPOForm);
             this.Hide();
 
-            SLFPOForm.FormClosed += (ss, ee) =>
-            {
-                int rowIndex = POGridRefer.Rows.Add();
-                DataGridViewRow newRow = POGridRefer.Rows[rowIndex];
-                newRow.Cells["skuId"].Value = SLFPOForm.GetSelectedSKUId();
-                newRow.Cells["sku"].Value = SLFPOForm.GetSelectedSKUName();
-                this.Show();
+            SLFPOForm.VisibleChanged += (ss, ee) => {
+                if (SLFPOForm.Visible == false)
+                {
+                    int rowIndex = POGridRefer.Rows.Add();
+                    DataGridViewRow newRow = POGridRefer.Rows[rowIndex];
+                    newRow.Cells["skuId"].Value = SLFPOForm.GetSelectedSKUId();
+                    newRow.Cells["sku"].Value = SLFPOForm.GetSelectedSKUName();
+                }
             };
         }
 
