@@ -105,6 +105,31 @@ namespace mjc_dev.forms.orders
                     //e.CancelEvent();
                 }
             };
+            hkSelect.GetButton().Click += (s, e) =>
+            {
+                EditItem(s, e);
+            };
+            hkCloseOrder.GetButton().Click += (sender, e) =>
+            {
+                CloseOrderActions CloseOrderActionsModal = new CloseOrderActions();
+                this.Enabled = false;
+                CloseOrderActionsModal.Show();
+                CloseOrderActionsModal.FormClosed += (ss, sargs) =>
+                {
+                    this.Enabled = true;
+                    int saveFlag = CloseOrderActionsModal.GetSaveFlage();
+                    MessageBox.Show(saveFlag.ToString());
+                };
+            };
+            hkDeletes.GetButton().Click += (s, e) =>
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this row?", "Confirm Delete", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    POGridRefer.Rows.Remove(POGridRefer.SelectedRows[0]);
+                    //e.CancelEvent();
+                }
+            };
         }
 
         private void InitCustomerInfo(int customerId = 0)
